@@ -1,18 +1,30 @@
 'use client';
 
+import { ApiInstance, RestaurantInfo } from '../../services';
+import {
+  Widget,
+  TextField,
+  ExploreCard,
+  Button,
+  SimpleLoading,
+} from '../../components';
 import { useEffect, useState } from 'react';
+import { ReservationInput } from './components/reservation-input';
 import { IoFlashOutline } from 'react-icons/io5';
 import { FiStar } from 'react-icons/fi';
 import { HiOutlineSparkles } from 'react-icons/hi';
+import { BookTonight } from './components';
+import { useGetUserLocation } from '../../hooks';
 import { FaLocationArrow } from 'react-icons/fa';
-import { useGetUserLocation } from '@/hooks';
-import { BookTonight, ReservationInput } from '@/modules/homepage/components';
-import { Button, ExploreCard, SimpleLoading, TextField } from '@/components';
-import { RestaurantInfo, ApiInstance } from '@/services';
 
-export default function Home() {
+export const Homepage = () => {
   const { location, fetching, locationSharable, checkGeolocationPermission } =
     useGetUserLocation();
+  // const { dataList, fetching, fetchRestaurantInfo } = useGetRestaurantInfo();
+
+  // useEffect(() => {
+  //   fetchRestaurantInfo();
+  // }, []);
 
   return (
     <div className="flex flex-col items-center divide-y divide-solid divide-gray-100 gap-4">
@@ -61,7 +73,7 @@ export default function Home() {
       </div>
     </div>
   );
-}
+};
 
 const useGetRestaurantInfo = () => {
   const [dataList, setDataList] = useState<RestaurantInfo[]>([]);
