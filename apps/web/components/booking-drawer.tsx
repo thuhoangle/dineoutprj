@@ -5,12 +5,15 @@ import {
   DrawerBody,
   DrawerFooter,
 } from '@nextui-org/drawer';
-import { Link } from '@nextui-org/link';
 import { Button } from '@nextui-org/button';
 import { BsFillPeopleFill } from 'react-icons/bs';
 
 import { TextField } from './text';
 import dayjs from 'dayjs';
+import { Select, SelectItem } from '@nextui-org/select';
+import { useState } from 'react';
+import { Input } from '@nextui-org/input';
+import { toastHelper } from '@/utils';
 
 export const BookingDrawer = ({
   isOpen,
@@ -25,9 +28,15 @@ export const BookingDrawer = ({
   time: string;
   quantity: string;
 }) => {
+  const [occasion, setOccasion] = useState('default');
+  const [request, setRequest] = useState('');
   const currentDay = dayjs().date();
-  const currentTime = dayjs().format('h:mm A');
   const formattedDate = dayjs().format('dddd, MMMM D');
+
+  const _handleConfirm = (onClose: () => void) => {
+    onClose();
+    toastHelper.success('Reservation confirmed');
+  };
 
   return (
     <Drawer
@@ -105,7 +114,7 @@ export const BookingDrawer = ({
                 <TextField preset="h5" weight="b" text="You're almost done!" />
               </div>
               <hr className="border-gray-300 !px-0" />
-              <div className="flex flex-col gap-2 py-4">
+              <div className="flex flex-col gap-2 py-2">
                 <h1 className="text-2xl font-bold leading-7">{data.name}</h1>
                 <p className="text-sm text-default-500">{data.address}</p>
                 <div className="mt-4 flex flex-col gap-3">
@@ -138,7 +147,7 @@ export const BookingDrawer = ({
                       </p>
                     </div>
                   </div>
-                  <div className="flex flex-col mt-4 gap-3 items-start">
+                  <div className="flex flex-col mt-4 gap-5 items-start">
                     <div className="flex flex-col gap-1">
                       <TextField preset="p2" weight="s" text="About" />
                       <TextField
@@ -167,6 +176,28 @@ export const BookingDrawer = ({
                       </TextField>
                       <p>{data.description}</p>
                     </div>
+                    <div className="flex flex-col w-full gap-3">
+                      <TextField
+                        preset="p2"
+                        weight="s"
+                        text="Reservation Details"
+                      />
+                      <Select
+                        defaultSelectedKeys={['default']}
+                        label="Occasion"
+                      >
+                        {EVENTS.map((animal) => (
+                          <SelectItem key={animal.label}>
+                            {animal.value}
+                          </SelectItem>
+                        ))}
+                      </Select>
+                      <Input
+                        label="Request for the venue"
+                        placeholder="Add a special request (optional)"
+                        onChange={(e) => setRequest(e.target.value)}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -176,7 +207,7 @@ export const BookingDrawer = ({
                 className="w-full"
                 size="lg"
                 color="primary"
-                onPress={onClose}
+                onPress={() => _handleConfirm(onClose)}
               >
                 Reserve Now
               </Button>
@@ -187,3 +218,30 @@ export const BookingDrawer = ({
     </Drawer>
   );
 };
+
+const EVENTS = [
+  {
+    label: 'birthday',
+    value: 'Birthday',
+  },
+  {
+    label: 'anniversary',
+    value: 'Anniversary',
+  },
+  {
+    label: 'date_night',
+    value: 'Date Night',
+  },
+  {
+    label: 'business',
+    value: 'Business Meal',
+  },
+  {
+    label: 'celebration',
+    value: 'Celebration',
+  },
+  {
+    label: 'default',
+    value: 'Select an occasion (optional)',
+  },
+];

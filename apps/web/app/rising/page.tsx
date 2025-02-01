@@ -1,7 +1,12 @@
 'use client';
 
 import { Button, TextField } from '@/components';
-import { OverviewSection, BookingSection } from '@/modules/venue/components';
+import {
+  OverviewSection,
+  BookingSection,
+  Carousel,
+} from '@/modules/venue/components';
+import { MiniMap } from '@/modules/venue/components';
 import { useState } from 'react';
 import { FaStar, FaHeart, FaRegHeart } from 'react-icons/fa';
 import { FaRegMessage } from 'react-icons/fa6';
@@ -20,6 +25,7 @@ export default function DocsPage() {
     location,
     route,
     reviews,
+    img,
   } = ITEMS;
 
   return (
@@ -67,7 +73,8 @@ export default function DocsPage() {
         </div>
       </div>
       <div className="flex flex-col gap-4">
-        <div className="flex h-40 bg-red-600"></div>
+        <Carousel data={img} />
+        <MiniMap data={ITEMS} />
         {/* <AdditionalInfo /> */}
       </div>
     </div>
@@ -79,6 +86,9 @@ const ITEMS = {
   description:
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent imperdiet ex placerat, auctor lectus id, varius diam. Sed imperdiet dui nisi, a convallis sapien aliquam sit amet. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent imperdiet ex placerat, auctor lectus id, varius diam. Sed imperdiet dui nisi, a convallis sapien aliquam sit amet. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent imperdiet ex placerat, auctor lectus id, varius diam. Sed imperdiet dui nisi, a convallis sapien aliquam sit amet. ',
   rate: '4.5',
+  phone: '0123456789',
+  long: 106.660172,
+  lat: 10.762622,
   review_counts: '100',
   header: '/test1.svg',
   location: 'Tan Binh District',
@@ -94,5 +104,10 @@ const ITEMS = {
       user: 'Jane Doe',
       msg: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent imperdiet ex placerat, auctor lectus id, varius diam. Sed imperdiet dui nisi, a convallis sapien aliquam sit amet. ',
     },
+  ],
+  img: [
+    'https://resizer.otstatic.com/v2/photos/xlarge/2/42082675.webp',
+    'https://resizer.otstatic.com/v2/photos/xlarge/2/42082675.webp',
+    'https://resizer.otstatic.com/v2/photos/xlarge/2/42082675.webp',
   ],
 };

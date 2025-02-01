@@ -33,7 +33,6 @@ export const ReservationInput = ({ className }: { className?: string }) => {
         aria-label="date-picker"
         // className="border-2 border-gray-200 rounded-sm"
         size="sm"
-        color="secondary"
         variant="bordered"
         defaultValue={today(getLocalTimeZone())}
       />
@@ -44,15 +43,14 @@ export const ReservationInput = ({ className }: { className?: string }) => {
         value={dayjs().format('YYYY-MM-DD').toString()}
       /> */}
       <TextInput
-        className="min-w-max overflow-clip justify-center h-9"
+        className="!min-w-32 overflow-clip justify-center h-9"
         inputContainerClassName="!outline-none !border-none ring-offset-0 ring-0"
         type="time"
         value="13:30"
         step={1800}
       />
-
       <TextInput
-        className="w-40"
+        className="!w-32"
         inputType="number"
         inputContainerClassName="!outline-none !border-none ring-offset-0 ring-0"
         type="number"

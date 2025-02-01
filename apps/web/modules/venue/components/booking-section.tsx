@@ -62,7 +62,7 @@ export const BookingSection = () => {
 };
 
 const SAMPLE_DATA = {
-  name: 'ABC',
+  name: 'ABC Restaurant & Bar',
   quantity: 1,
   position: 'Patio',
   cancellation:

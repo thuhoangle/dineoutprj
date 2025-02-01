@@ -6,7 +6,7 @@ import { FaRegMessage } from 'react-icons/fa6';
 import { GrLocation } from 'react-icons/gr';
 import { IoShareOutline } from 'react-icons/io5';
 import { useState } from 'react';
-import { Button, TextField } from '@/components';
+import { Button, Carousel, TextField } from '@/components';
 import { OverviewSection, BookingSection } from '@/modules/venue/components';
 
 const ITEMS = {
