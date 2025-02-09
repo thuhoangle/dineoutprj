@@ -14,16 +14,25 @@ import { useRouter } from 'next/navigation';
 
 const SECTION_LIST = [
   {
+    title: 'All',
+    value: 'all',
+    icon: IoFlashOutline,
+    preset: 'red',
+  },
+  {
     title: 'Popular',
+    value: 'popular',
     icon: IoFlashOutline,
     preset: 'green',
   },
   {
     title: 'Top Rated',
+    value: 'top-rated',
     icon: FiStar,
   },
   {
     title: 'New',
+    value: 'new',
     icon: HiOutlineSparkles,
   },
 ];
@@ -31,8 +40,13 @@ const numOfVenues = '30';
 
 export default function TodayPage() {
   const [selectedSection, setSelectedSection] = useState<string>(
-    SECTION_LIST[0].title
+    SECTION_LIST[0].value
   );
+
+  const filteredItems = ITEMS.filter((item) => {
+    if (selectedSection === 'all') return true;
+    return item.keywords.includes(selectedSection);
+  });
 
   return (
     <div className="grid grid-cols-1 h-full ipadMini:grid-cols-2">
@@ -43,25 +57,24 @@ export default function TodayPage() {
             preset="h6"
             weight="m"
             color="gray"
-            text={`${numOfVenues} venues`}
+            text={`${filteredItems.length} ${filteredItems.length > 1 ? 'venues' : 'venue'}`}
           />
         </div>
         <div className="flex w-full gap-4">
           {SECTION_LIST.map((section) => (
             <SectionSelector
               size="md"
-              key={section.title}
+              key={section.value}
               title={section.title}
               preset={(section.preset as SectionSelectorPreset) || 'red'}
-              // preset="red"
               HeroIcon={section.icon}
-              active={selectedSection === section.title}
-              onClick={() => setSelectedSection(section.title)}
+              active={selectedSection === section.value}
+              onClick={() => setSelectedSection(section.value)}
             />
           ))}
         </div>
         <div className="flex flex-col gap-4">
-          {ITEMS.map((item) => (
+          {filteredItems.map((item) => (
             <BentoGridItem key={item.title} {...item} href={item.route} />
           ))}
         </div>
@@ -81,6 +94,7 @@ const ITEMS = [
     header: '/mi-sno.jpg',
     location: 'Tan Binh District',
     route: '/rising',
+    keywords: ['rising', 'top-rated'],
   },
   {
     title: 'Top Rated',
@@ -91,6 +105,7 @@ const ITEMS = [
     header: '/mi-sno.jpg',
     location: 'Third District',
     route: '/top-rated',
+    keywords: 'top-rated',
   },
   {
     title: 'New',
@@ -101,5 +116,6 @@ const ITEMS = [
     header: '/mi-sno.jpg',
     location: 'Thu Duc District',
     route: '/new',
+    keywords: 'new',
   },
 ];

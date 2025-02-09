@@ -52,7 +52,7 @@ export const SimpleSectionSelector: FC<SimpleSectionSelectorProps> = (
             <HeroIcon className={clsx('w-10 h-auto', textPreset)} />
           </button>
           {title && (
-            <div className={clsx('text-center font-medium')}>{title}</div>
+            <div className={clsx('text-center font-semibold')}>{title}</div>
           )}
         </div>
       ) : (
@@ -106,14 +106,14 @@ const presetClassName = {
   text: '',
 
   primary:
-    'hover:shadow-[0px_0px_30px_-5px_#396BF8] focus:ring-2 focus:outline-none focus:ring-primary-600/50',
+    'hover:shadow-[0px_0px_30px_-5px_#396BF8] bg-gray-50 focus:ring-2 outline-none hover:ring-2 hover:ring-primary-600 focus:ring-primary-600',
   sgray1:
-    'hover:bg-gray-250 focus:ring-2 focus:outline-none focus:ring-gray-500/50',
+    'hover:bg-gray-250 focus:ring-2 outline-none focus:ring-gray-500 hover:ring-2 hover:ring-gray-500',
   sgray2:
-    'hover:bg-gray-200 focus:ring-2 focus:outline-none focus:ring-gray-500/50',
+    'hover:bg-gray-200 focus:ring-2 outline-none focus:ring-gray-500 hover:ring-2 hover:ring-gray-500',
   green:
-    'hover:shadow-[0px_0px_30px_-5px_#5CED18] focus:ring-2 focus:outline-none focus:ring-green-500/50',
-  red: 'hover:shadow-[0px_0px_30px_-5px_#F04438] focus:ring-2 focus:outline-none focus:ring-red-500/50',
+    'bg-gray-50 focus:ring-2 outline-none focus:ring-green-500 hover:ring-2 hover:ring-green-500',
+  red: 'hover:ring-2 hover:ring-red-500 bg-gray-50 focus:ring-2 outline-none focus:ring-red-500',
 
   // legacy
   secondary:
@@ -128,7 +128,7 @@ const presetTextClassName: {
   base: '',
   text: '',
 
-  primary: 'text-primary-700',
+  primary: 'text-primary-600',
   sgray1: 'text-gray-300',
   sgray2: 'text-gray-500',
   green: 'text-green-700',

@@ -88,14 +88,14 @@ const presetBtClassName = {
   text: '',
 
   primary:
-    'bg-primary-300 hover:shadow-[0px_0px_30px_-5px_#396BF8] focus:ring-4 focus:outline-none focus:ring-primary-600/25',
+    'bg-primary-300 hover:bg-primary-400 focus:ring-2 focus:outline-none focus:ring-primary-600',
   sgray1:
-    'bg-gray-100 hover:bg-gray-250 focus:ring-4 focus:outline-none focus:ring-gray-500/25',
+    'bg-gray-100 hover:bg-gray-250 focus:ring-2 focus:outline-none focus:ring-gray-500',
   sgray2:
-    'bg-gray-400 hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-500/25',
+    'bg-gray-400 hover:bg-gray-200 focus:ring-2 focus:outline-none focus:ring-gray-500',
   green:
-    'bg-green-500 hover:shadow-[0px_0px_30px_-5px_#5CED18] focus:ring-4 focus:outline-none focus:ring-green-500/25',
-  red: 'bg-red-500 hover:shadow-[0px_0px_30px_-5px_#F04438] focus:ring-4 focus:outline-none focus:ring-red-500/25',
+    'bg-green-500 hover:bg-green-600 focus:ring-2 focus:outline-none focus:ring-green-500',
+  red: 'bg-red-500 hover:bg-red-600 focus:ring-2 focus:outline-none focus:ring-red-500',
   tgray1: 'hover:bg-gray-900 hover:text-gray-300',
   tgray2: 'hover:bg-gray-850 hover:text-gray-200',
   tred: 'hover:bg-gray-850 hover:text-red-400',
@@ -112,7 +112,7 @@ const presetBtClassName = {
 
   cancel: 'bg-neutral-900 enabled:hover:bg-neutral-800 disabled:bg-neutral-800',
   square:
-    'bg-transparent hover:bg-gray-850 focus:bg-gray-850 focus:ring-4 focus:outline-none focus:ring-gray-500/20',
+    'bg-transparent hover:bg-gray-850 focus:bg-gray-850 focus:ring-2 focus:outline-none focus:ring-gray-500',
 };
 
 const presetTextClassName: {
