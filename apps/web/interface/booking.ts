@@ -1,9 +1,9 @@
-interface IBooking {
+export interface IBooking {
   id: string;
-  restaurantId: string;
-  tableId: string;
-  customerId: string;
-  bookingTime: string;
+  restaurant_id: string;
+  table_id: string;
+  customer_id: string;
+  booking_time: string;
   status: boolean;
   created_at: string;
 }
