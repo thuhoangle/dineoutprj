@@ -10,6 +10,7 @@ import {
   NavbarMenuItem,
 } from '@nextui-org/navbar';
 import { Button } from '@nextui-org/button';
+import { Button as MyButton } from '../button';
 import { Kbd } from '@nextui-org/kbd';
 import { Link } from '@nextui-org/link';
 import { Input } from '@nextui-org/input';
@@ -179,6 +180,11 @@ export const Navbar: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
         {/* <Link isExternal aria-label="Github" href={siteConfig.links.github}>
           <GithubIcon className="text-default-500" />
         </Link> */}
+        <MyButton
+          color="tred"
+          text="Login"
+          onClick={() => router.push('/login')}
+        />
         <ThemeSwitch />
         {/* <NavbarMenuToggle /> */}
       </NavbarContent>

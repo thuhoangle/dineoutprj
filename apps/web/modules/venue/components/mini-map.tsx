@@ -74,8 +74,8 @@ const DupeMap = ({ long, lat }: { long: number; lat: number }) => {
   };
 
   return (
-    <div className="relative w-full h-1/3">
-      <div ref={mapContainer} className="absolute w-full h-full" />
+    <div className="relative w-full">
+      <div ref={mapContainer} className="absolute w-full h-full " />
     </div>
   );
 };

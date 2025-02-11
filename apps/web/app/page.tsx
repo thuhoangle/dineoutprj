@@ -9,7 +9,7 @@ import { useGetUserLocation } from '@/hooks';
 import { BookTonight, ReservationInput } from '@/modules/homepage/components';
 import { Button, ExploreCard, SimpleLoading, TextField } from '@/components';
 import { RestaurantInfo, ApiInstance } from '@/services';
-import {createClient} from "@/utils/supabase/client";
+import { createClient } from '@/utils/supabase/client';
 
 export default function Home() {
   const supabase = createClient();
@@ -21,13 +21,13 @@ export default function Home() {
   // Fetch bookings inside useEffect
   useEffect(() => {
     const fetchBookings = async () => {
-      console.log("debug")
+      console.log('debug');
       setLoading(true);
       const { data, error } = await supabase.from('bookings').select('id');
       if (error) {
-        console.error("Error fetching bookings:", error);
+        console.error('Error fetching bookings:', error);
       } else {
-        console.log("Data fetched:", data)
+        console.log('Data fetched:', data);
         setBookings(data || []);
       }
       setLoading(false);

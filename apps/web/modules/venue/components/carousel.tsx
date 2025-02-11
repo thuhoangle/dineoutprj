@@ -20,7 +20,7 @@ export const Carousel = ({ data }: { data: any }) => {
       }}
       navigation={true}
       modules={[Pagination, Navigation]}
-      className="justify-center items-center flex overflow-x-hidden max-w-lg"
+      className="justify-center items-center flex overflow-x-hidden"
     >
       {data.map((item: any, index: number) => (
         <SwiperSlide key={index}>
