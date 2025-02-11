@@ -78,8 +78,8 @@ export const BookingDrawer = ({
                   <path d="m13 17 5-5-5-5M6 17l5-5-5-5" />
                 </svg>
               </Button>
-              <div className="w-full flex justify-between gap-2">
-                <Button
+              {/* <div className="w-full flex justify-between gap-2"> */}
+              {/* <Button
                   className="font-medium text-small text-default-500"
                   size="sm"
                   startContent={
@@ -99,19 +99,19 @@ export const BookingDrawer = ({
                   variant="flat"
                 >
                   Copy Link
-                </Button>
-                <Button
-                  className="font-medium text-small text-default-500"
-                  size="sm"
-                  variant="flat"
-                >
-                  Log in
-                </Button>
-              </div>
+                </Button> */}
+              <Button
+                className="font-medium text-small text-default-500"
+                size="sm"
+                variant="flat"
+              >
+                Log in
+              </Button>
+              {/* </div> */}
             </DrawerHeader>
             <DrawerBody className="pt-12">
               <div className="flex w-full justify-start items-center pt-4">
-                <TextField preset="h5" weight="b" text="You're almost done!" />
+                <TextField preset="h3" weight="b" text="You're almost done!" />
               </div>
               <hr className="border-gray-300 !px-0" />
               <div className="flex flex-col gap-2 py-2">

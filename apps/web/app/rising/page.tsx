@@ -72,10 +72,12 @@ export default function DocsPage() {
           <BookingSection />
         </div>
       </div>
-      <div className="flex flex-col gap-4">
-        <Carousel data={img} />
-        <MiniMap data={ITEMS} />
-        {/* <AdditionalInfo /> */}
+      <div className="col-span-2">
+        <div className="flex w-full flex-col gap-4 ">
+          <Carousel data={img} />
+          <MiniMap data={ITEMS} />
+          {/* <AdditionalInfo /> */}
+        </div>
       </div>
     </div>
   );
