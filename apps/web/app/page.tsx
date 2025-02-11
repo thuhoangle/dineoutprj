@@ -9,8 +9,33 @@ import { useGetUserLocation } from '@/hooks';
 import { BookTonight, ReservationInput } from '@/modules/homepage/components';
 import { Button, ExploreCard, SimpleLoading, TextField } from '@/components';
 import { RestaurantInfo, ApiInstance } from '@/services';
+import {createClient} from "@/utils/supabase/client";
 
 export default function Home() {
+  const supabase = createClient();
+
+  // State for storing fetched bookings
+  const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch bookings inside useEffect
+  useEffect(() => {
+    const fetchBookings = async () => {
+      console.log("debug")
+      setLoading(true);
+      const { data, error } = await supabase.from('bookings').select('id');
+      if (error) {
+        console.error("Error fetching bookings:", error);
+      } else {
+        console.log("Data fetched:", data)
+        setBookings(data || []);
+      }
+      setLoading(false);
+    };
+
+    fetchBookings();
+  }, []);
+
   const { location, fetching, locationSharable, checkGeolocationPermission } =
     useGetUserLocation();
 
