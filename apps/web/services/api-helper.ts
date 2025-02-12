@@ -1,3 +1,4 @@
+import { toastHelper } from '@/components';
 import type { ApiResponse, PROBLEM_CODE } from 'apisauce';
 import type { AxiosRequestConfig } from 'axios';
 
@@ -58,8 +59,6 @@ function handleApiError<T, U>(
   }
   return { result, error };
 }
-
-import { toastHelper } from '../utils/toast-helper';
 
 export function handleError<T, U>(
   response: ApiResponse<T, U>,

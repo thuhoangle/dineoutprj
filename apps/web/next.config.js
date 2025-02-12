@@ -9,6 +9,16 @@ const nextConfig = {
         pathname: '/v2/photos/xlarge/**',
       },
     ],
+    domains: ['images.unsplash.com'],
+  },
+  async redirects() {
+    return [
+      {
+        source: '/home',
+        destination: '/',
+        permanent: false,
+      },
+    ];
   },
 };
 

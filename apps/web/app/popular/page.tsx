@@ -1,32 +1,51 @@
 'use client';
 
 import { Button, TextField } from '@/components';
+import { RestaurantData } from '@/interface';
 import {
   OverviewSection,
   BookingSection,
   Carousel,
 } from '@/modules/venue/components';
 import { MiniMap } from '@/modules/venue/components';
-import { useState } from 'react';
+import { supabase } from '@/utils';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import { FaStar, FaHeart, FaRegHeart } from 'react-icons/fa';
 import { FaRegMessage } from 'react-icons/fa6';
 import { GrLocation } from 'react-icons/gr';
 import { IoShareOutline } from 'react-icons/io5';
 
-export default function RisingPage() {
-  const [saved, setSaved] = useState(false);
+export default function PopularPage() {
+  const router = useRouter();
+  const { id } = router.query || {};
 
-  const {
-    title,
-    description,
-    rate,
-    review_counts,
-    header,
-    location,
-    route,
-    reviews,
-    img,
-  } = ITEMS;
+  const slug = typeof id === 'string' ? id : '';
+
+  const [saved, setSaved] = useState(false);
+  const [restaurant, setRestaurant] = useState<RestaurantData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchRestaurant = async () => {
+      setLoading(true);
+
+      const { data, error } = await supabase
+        .from('restaurants')
+        .select('*')
+        .eq('slug', slug)
+        .single();
+
+      if (error) {
+        console.error('Error fetching restaurant:', error);
+      } else {
+        setRestaurant(data);
+      }
+      setLoading(false);
+    };
+
+    fetchRestaurant();
+  }, [slug]);
 
   return (
     <div className="grid grid-cols-5 gap-5 p-4">
@@ -37,18 +56,18 @@ export default function RisingPage() {
             <div className="flex flex-col gap-1">
               <div className="flex items-center text-center text-red-500 gap-1">
                 <FaStar className="text-inherit w-5" />
-                {rate}
-                {!!review_counts && (
-                  <span className="text-gray-500">{`(${review_counts})`}</span>
+                {restaurant?.rating}
+                {!!restaurant?.review_count && (
+                  <span className="text-gray-500">{`(${restaurant?.review_count})`}</span>
                 )}
               </div>
-              <div className="flex items-center text-center gap-1">
+              {/* <div className="flex items-center text-center gap-1">
                 <FaRegMessage className="text-inherit w-5" />
                 {reviews.length} {reviews.length > 1 ? 'Reviews' : 'Review'}
-              </div>
+              </div> */}
               <div className="flex items-center text-gray-600 gap-0.5">
                 <GrLocation className="text-inherit w-5" />
-                {location}
+                {restaurant?.locations.address}
               </div>
             </div>
             <div className="flex justify-between">
@@ -68,13 +87,13 @@ export default function RisingPage() {
             </div>
           </div>
           <hr className="h-1.5 my-2 border-t border-gray-400" />
-          <OverviewSection description={description} />
+          {restaurant && <OverviewSection description={restaurant.overview} />}
           <BookingSection />
         </div>
       </div>
       <div className="col-span-2">
         <div className="flex w-full flex-col gap-4 ">
-          <Carousel data={img} />
+          <Carousel data={restaurant?.images.image_url} />
           <MiniMap data={ITEMS} />
           {/* <AdditionalInfo /> */}
         </div>

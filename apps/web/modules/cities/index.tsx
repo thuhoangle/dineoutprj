@@ -1,15 +1,11 @@
-import {
-  BentoGridItem,
-  Button,
-  ButtonPreset,
-  TextField,
-} from '../../components';
+'use client';
+
+import { BentoGridItem, TextField } from '../../components';
 import { useState } from 'react';
 import {
   SectionSelector,
   SectionSelectorPreset,
 } from './components/section-selector';
-import { TiStarOutline } from 'react-icons/ti';
 import { IoFlashOutline } from 'react-icons/io5';
 import { HiOutlineSparkles } from 'react-icons/hi2';
 import { useRouter } from 'next/navigation';

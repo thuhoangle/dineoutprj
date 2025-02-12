@@ -1,3 +1,5 @@
+'use client';
+
 import { MdOutlinePeopleAlt } from 'react-icons/md';
 import dayjs from 'dayjs';
 import { today, getLocalTimeZone, DateValue } from '@internationalized/date';
@@ -6,8 +8,9 @@ import { useEffect, useState } from 'react';
 import { BookingDrawer, Button } from '@/components';
 import { DatePicker } from '@nextui-org/date-picker';
 import { Select, SelectItem, useDisclosure } from '@nextui-org/react';
+import { RestaurantData } from '@/interface';
 
-export const BookingSection = () => {
+export const BookingSection = ({ data }: { data: RestaurantData }) => {
   const [selectedDate, setSelectedDate] = useState<
     DateValue | null | undefined
   >(today(getLocalTimeZone()));
@@ -28,6 +31,14 @@ export const BookingSection = () => {
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
+  const formatTime = (time: string): string => {
+    if (!time || !time.includes(':')) {
+      return '00:00:00'; // Default to midnight if time is invalid
+    }
+    const [hours, minutes] = time.split(':');
+    return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}:00`;
+  };
+
   return (
     <div className="flex flex-col gap-8 justify-start">
       <div className="flex bg-neutral-100 rounded-full w-full">
@@ -47,13 +58,17 @@ export const BookingSection = () => {
       </div>
       <BookItem
         timeOptions={filteredTimeOptions}
-        onClick={onOpen}
+        onClick={() => {
+          if (selectedTime !== 'All Day') {
+            onOpen();
+          }
+        }}
         setSelectedTime={(time) => setSelectedTime(time)}
       />
       <BookingDrawer
         quantity={selectedGuest}
         time={selectedTime}
-        data={SAMPLE_DATA}
+        data={data}
         isOpen={isOpen}
         onOpenChange={onOpenChange}
       />

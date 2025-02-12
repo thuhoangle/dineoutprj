@@ -1,30 +1,43 @@
-import { IoRestaurant } from 'react-icons/io5';
-
-interface IRestaurant {
+export interface RestaurantData {
   id: string;
-  imageUrl: IImage[];
+  images: string[];
   name: string;
-  location: ILocate[];
+  slug: string;
+  locations: Locations;
   rating: number;
-  reviewCount: number;
-  shortOverview: string;
+  review_count: number;
+  short_overview: string;
   overview: string;
+  keywords: string[];
+  price_range: number;
+  phone?: string;
+  website?: string;
+  cancellation_policy?: string;
+  reservation_policy: Reservationpolicy[];
 }
 
-interface ILocate {
+interface Locations {
+  geo: Geo;
   address: string;
-  city: string;
-  state: string;
-  country: string;
-  geoLocation: IGeoLocation;
+}
+interface Geo {
+  lat: number;
+  long: number;
+}
+export interface Reservationpolicy {
+  body: string;
+  name: string;
 }
 
-interface IImage {
-  title: string;
-  url: string;
-}
+// interface ILocate {
+//   address: string;
+//   city: string;
+//   state: string;
+//   country: string;
+//   geoLocation: IGeoLocation;
+// }
 
-interface IGeoLocation {
-  longtitute: string;
-  latitude: string;
-}
+// interface IGeoLocation {
+//   longtitute: string;
+//   latitude: string;
+// }

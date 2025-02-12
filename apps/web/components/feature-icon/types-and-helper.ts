@@ -1,12 +1,18 @@
 import type { BgPatternProps } from '../bg-pattern';
 
 export type SizePreset = 'sm' | 'md' | 'lg';
-export type ColorPreset = 'primary' | 'gray' | 'red' | 'yellow' | 'green';
+export type ColorPreset =
+  | 'primary'
+  | 'gray'
+  | 'red'
+  | 'yellow'
+  | 'green'
+  | 'blue';
 export type SizeModePreset = 'full' | 'icon';
 export interface FeatureCoreIconProps {
   Icon: (props: React.SVGProps<SVGSVGElement>) => JSX.Element;
   size: SizePreset;
-  color: ColorPreset;
+  color: ColorPreset | string;
 }
 export interface FeatureIconProps extends FeatureCoreIconProps {
   preset: 'round' | 'square' | 'roundStroke' | 'outline';
@@ -48,7 +54,7 @@ export const getIconSizeClassName = (size: SizePreset) =>
         : 'w-6 h-6';
 
 export const getIconColorClassName = (color: ColorPreset) =>
-  color === 'primary'
+  color === 'primary' || color === 'blue'
     ? 'text-primary-500'
     : color === 'red'
       ? 'text-red-500'

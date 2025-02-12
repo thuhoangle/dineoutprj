@@ -9,33 +9,56 @@ import { useGetUserLocation } from '@/hooks';
 import { BookTonight, ReservationInput } from '@/modules/homepage/components';
 import { Button, ExploreCard, SimpleLoading, TextField } from '@/components';
 import { RestaurantInfo, ApiInstance } from '@/services';
-import {createClient} from "@/utils/supabase/client";
+import { createClient } from '@/utils/supabase/client';
+import { RestaurantData } from '@/interface';
 
 export default function Home() {
   const supabase = createClient();
 
   // State for storing fetched bookings
   const [bookings, setBookings] = useState([]);
+  const [restaurantList, setRestaurantList] = useState<RestaurantData[]>([]);
   const [loading, setLoading] = useState(true);
+  // const [fetching, setFetching] = useState(false);
 
-  // Fetch bookings inside useEffect
   useEffect(() => {
-    const fetchBookings = async () => {
-      console.log("debug")
+    // const fetchBookings = async () => {
+    //   console.log('debug');
+    //   setLoading(true);
+    //   const { data, error } = await supabase.from('bookings').select('id');
+    //   if (error) {
+    //     console.error('Error fetching bookings:', error);
+    //   } else {
+    //     console.log('Data fetched:', data);
+    //     setBookings(data || []);
+    //   }
+    //   setLoading(false);
+    // };
+    // fetchBookings();
+    const fetchRestaurant = async () => {
       setLoading(true);
-      const { data, error } = await supabase.from('bookings').select('id');
+      const { data, error } = await supabase.from('restaurants').select('*');
       if (error) {
-        console.error("Error fetching bookings:", error);
+        console.error('Error fetching restaurant:', error);
       } else {
-        console.log("Data fetched:", data)
-        setBookings(data || []);
+        console.log('Data fetched:', data);
+        setRestaurantList(data || []);
       }
       setLoading(false);
     };
 
-    fetchBookings();
+    fetchRestaurant();
   }, []);
 
+  const risingData = restaurantList.filter((restaurant) =>
+    restaurant.keywords.includes('rising')
+  );
+  const popularData = restaurantList.filter((restaurant) =>
+    restaurant.keywords.includes('popular')
+  );
+  const newData = restaurantList.filter((restaurant) =>
+    restaurant.keywords.includes('new')
+  );
   const { location, fetching, locationSharable, checkGeolocationPermission } =
     useGetUserLocation();
 
@@ -69,18 +92,18 @@ export default function Home() {
         </div>
         <BookTonight />
       </div>
-      <div className="w-full max-w-6xl flex-1 py-28">
+      <div className="w-full max-w-7xl flex-1 py-28">
         <div className="flex flex-col gap-8 ipadMini:flex-row">
           <ExploreCard
             Icon={IoFlashOutline}
             title="Rising"
-            dataList={TEST_DATA}
+            dataList={risingData}
           />
-          <ExploreCard Icon={FiStar} title="Popular" dataList={TEST_DATA} />
+          <ExploreCard Icon={FiStar} title="Popular" dataList={popularData} />
           <ExploreCard
             Icon={HiOutlineSparkles}
             title="New"
-            dataList={TEST_DATA}
+            dataList={newData}
           />
         </div>
       </div>
@@ -88,28 +111,28 @@ export default function Home() {
   );
 }
 
-const useGetRestaurantInfo = () => {
-  const [dataList, setDataList] = useState<RestaurantInfo[]>([]);
-  const [fetching, setFetching] = useState(false);
+// const useGetRestaurantInfo = () => {
+//   const [dataList, setDataList] = useState<RestaurantInfo[]>([]);
+//   const [fetching, setFetching] = useState(false);
 
-  const fetchRestaurantInfo = async () => {
-    setFetching(true);
+//   const fetchRestaurantInfo = async () => {
+//     setFetching(true);
 
-    try {
-      const res = await ApiInstance.getRestaurantInfo();
-      const data = res?.data as RestaurantInfo[] | undefined;
-      if (data) {
-        setDataList(data);
-      }
-    } catch (error) {
-      console.error(error);
-      console.log(error);
-    } finally {
-      setFetching(false);
-    }
-  };
-  return { dataList, fetching, fetchRestaurantInfo };
-};
+//     try {
+//       const res = await ApiInstance.getRestaurantInfo();
+//       const data = res?.data as RestaurantInfo[] | undefined;
+//       if (data) {
+//         setDataList(data);
+//       }
+//     } catch (error) {
+//       console.error(error);
+//       console.log(error);
+//     } finally {
+//       setFetching(false);
+//     }
+//   };
+//   return { dataList, fetching, fetchRestaurantInfo };
+// };
 
 const DiscoverSection = ({ city }: { city: string }) => {
   const SECTIONS = [

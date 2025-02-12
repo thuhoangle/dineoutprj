@@ -65,7 +65,9 @@ const presetFontColor = {
   base: '',
   red: 'text-red-500',
   green: 'text-green-500',
-  g50: 'text-gray-50',
+  g50: 'text-gray-950',
+  g500: 'text-gray-500',
+  g400: 'text-gray-600',
   gray: 'text-gray-800',
 };
 export type TextFontColors = keyof typeof presetFontColor;

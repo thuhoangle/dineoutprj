@@ -3,7 +3,7 @@
 import { useState, useEffect, use } from 'react';
 import { ApiInstance } from '../services';
 import { useLocationStore } from '../stores';
-import { toastHelper } from '../utils';
+import { toastHelper } from '@/components';
 
 export const useGetUserLocation = () => {
   const [fetching, setFetching] = useState(false);

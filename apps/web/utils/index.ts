@@ -1,2 +1,2 @@
 export * from './hydration-zustand';
-export * from './toast-helper';
+export * from './supabase';

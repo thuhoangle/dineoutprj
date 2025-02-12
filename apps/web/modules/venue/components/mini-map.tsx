@@ -1,14 +1,15 @@
 import { TextField } from '@/components';
+import { RestaurantData } from '@/interface';
 import { Link } from '@nextui-org/link';
 import maplibregl from 'maplibre-gl';
 import { useEffect, useRef } from 'react';
 
-export const MiniMap = ({ data }: { data: any }) => {
-  const { long, lat, location, phone, website, title } = data;
+export const MiniMap = ({ data }: { data: RestaurantData }) => {
+  const { locations, phone, website, name } = data;
 
   return (
     <div className="flex bg-gray-200 flex-col max-w-lg">
-      <DupeMap long={long} lat={lat} />
+      <DupeMap long={locations.geo.long} lat={locations.geo.lat} />
       <div className="flex z-50 rounded-b flex-col gap-1 px-2">
         <Link
           isExternal
@@ -33,11 +34,11 @@ export const MiniMap = ({ data }: { data: any }) => {
           href="https://www.google.com/maps/place/555+California+St,+San+Francisco,+CA+94103"
           rel="noreferrer noopener"
         >
-          {title}
+          {name}
         </Link>
         {/* <TextField preset="h2" weight="b" text={name} /> */}
-        <TextField preset="p4" text={location} />
-        <TextField preset="p4" text={phone} />
+        <TextField preset="p4" text={locations.address} />
+        {phone && <TextField preset="p4" text={phone} />}
         {website && <TextField preset="p4" text={website} />}
       </div>
     </div>
@@ -74,8 +75,8 @@ const DupeMap = ({ long, lat }: { long: number; lat: number }) => {
   };
 
   return (
-    <div className="relative w-full h-1/3">
-      <div ref={mapContainer} className="absolute w-full h-full" />
+    <div className="relative w-full">
+      <div ref={mapContainer} className="absolute w-full h-full " />
     </div>
   );
 };

@@ -84,7 +84,7 @@ export const TextInput: FC<SimpleTextInputProps> = ({
       <div className="flex">
         <div
           className={clsx(
-            'flex flex-1 items-center gap-1 overflow-hidden rounded-lg border ipadMini:gap-2.5',
+            'flex flex-1 items-center gap-1 overflow-hidden rounded-lg border ipadMini:gap-2.5 bg-gray-100',
             rightButtonProps ? 'rounded-r-none' : '',
             inputSize === 'sm' ? 'px-3' : 'px-4',
             isFocused
@@ -107,7 +107,7 @@ export const TextInput: FC<SimpleTextInputProps> = ({
           {multiline ? (
             <textarea
               className={clsx(
-                'min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-gray-700',
+                'min-w-0 flex-1 bg-gray-100 text-sm outline-none placeholder:text-gray-700',
                 inputClassName
               )}
               onChange={_onChange}
@@ -116,7 +116,7 @@ export const TextInput: FC<SimpleTextInputProps> = ({
           ) : (
             <input
               className={clsx(
-                'min-w-0 flex-1 bg-transparent text-[15px] leading-4 outline-none placeholder:text-gray-600 disabled:cursor-not-allowed',
+                'min-w-0 flex-1 bg-gray-100 text-[15px] leading-4 outline-none placeholder:text-gray-600 disabled:cursor-not-allowed',
                 inputSize === 'sm' ? 'py-2' : 'py-2.5',
                 inputClassName
               )}

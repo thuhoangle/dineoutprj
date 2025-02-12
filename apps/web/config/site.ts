@@ -1,8 +1,9 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  // name: "Next.js + NextUI",
-  // description: "Make beautiful websites regardless of your design experience.",
+  name: 'DineOut-building',
+  description:
+    'Transforming Vietnam’s Dining Landscape with a Comprehensive Digital Platform for Reservations and Engagement.',
   navItems: [
     {
       label: 'Home',
@@ -14,7 +15,7 @@ export const siteConfig = {
     },
     {
       label: 'All Days',
-      href: '/all-days',
+      href: '/venues',
     },
   ],
   navMenuItems: [

@@ -3,13 +3,11 @@
 import {
   Navbar as NextUINavbar,
   NavbarContent,
-  NavbarMenu,
-  NavbarMenuToggle,
   NavbarBrand,
   NavbarItem,
-  NavbarMenuItem,
 } from '@nextui-org/navbar';
 import { Button } from '@nextui-org/button';
+import { Button as MyButton } from '../button';
 import { Kbd } from '@nextui-org/kbd';
 import { Link } from '@nextui-org/link';
 import { Input } from '@nextui-org/input';
@@ -21,19 +19,15 @@ import Image from 'next/image';
 
 import { siteConfig } from '@/config/site';
 import { ThemeSwitch } from '@/components/theme-switch';
-import {
-  TwitterIcon,
-  GithubIcon,
-  DiscordIcon,
-  HeartFilledIcon,
-  SearchIcon,
-  Logo,
-} from '@/components/icons';
+import { GithubIcon, HeartFilledIcon, SearchIcon } from '@/components/icons';
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/navigation';
-import { FC, useState, useCallback } from 'react';
+import { FC, useState, useCallback, use, useEffect } from 'react';
 import { getNavItems, NavItemType } from './menu-data';
 import axios from 'axios';
+import { createSerClient } from '@/utils/supabase/server';
+import { useUserStore } from '@/stores/useUserStore';
+import { useLoginSignup } from '@/hooks';
 
 interface HeaderMenuProps {
   onGoSamePath?: () => void;
@@ -48,10 +42,17 @@ export const Navbar: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
   const pathname = usePathname();
   const router = useRouter();
   // const [numberOfPeople, setNumberOfPeople] = useState('2');
+  const authInfo = useUserStore((state) => state.authInfo);
+  console.log('🚀 ~ authInfo:', authInfo);
+  const { onLogout } = useLoginSignup();
 
   const [fetching, setFetching] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [recommendations, setRecommendations] = useState<MoviesProps[]>([]);
+
+  useEffect(() => {
+    useUserStore.getState().getAuthInfo();
+  }, []);
 
   const options = getNavItems();
   const _onItemClick = (navItem: NavItemType) => {
@@ -179,6 +180,15 @@ export const Navbar: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
         {/* <Link isExternal aria-label="Github" href={siteConfig.links.github}>
           <GithubIcon className="text-default-500" />
         </Link> */}
+        {!authInfo ? (
+          <MyButton
+            color="tred"
+            text="Login"
+            onClick={() => router.push('/login')}
+          />
+        ) : (
+          <MyButton text={authInfo.email} onClick={onLogout} />
+        )}
         <ThemeSwitch />
         {/* <NavbarMenuToggle /> */}
       </NavbarContent>

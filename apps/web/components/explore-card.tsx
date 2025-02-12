@@ -1,7 +1,9 @@
+/* eslint-disable @next/next/no-img-element */
 import { GrLocation } from 'react-icons/gr';
 import { TextField } from './text';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { Button } from './button';
+import { RestaurantData } from '@/interface';
 
 export const ExploreCard = ({
   Icon,
@@ -11,11 +13,11 @@ export const ExploreCard = ({
 }: {
   Icon: any;
   title: string;
-  dataList: { img: string; name: string; location: string; saved?: boolean }[];
+  dataList: RestaurantData[];
   onClick?: () => void;
 }) => {
   return (
-    <div className="relative z-0 flex w-[415px] flex-col rounded-3xl border border-gray-200 bg-gray-50/50 pt-8">
+    <div className="relative z-0 flex w-[500px] flex-col rounded-3xl border border-gray-200 bg-gray-50/50 pt-8">
       <div className="absolute flex justify-center items-center -top-8 left-1/2 aspect-square w-16 -translate-x-1/2 rounded-full border border-gray-200 bg-gray-50">
         <Icon className="w-9 h-auto text-red-500" />
       </div>
@@ -26,10 +28,10 @@ export const ExploreCard = ({
         text={title}
       />
       <div className="flex flex-col border-gray-200 border-t-1 flex-1 justify-start divide-y divide-solid divide-gray-200">
-        {dataList?.map((data, index) => (
+        {dataList.slice(0, 5).map((data, index) => (
           <div key={index} className="flex px-5 py-2 gap-3">
             <img
-              src={data.img || '/images/hero.jpg'}
+              src={data.images[0] || '/images/hero.jpg'}
               alt={data.name}
               className="object-cover object-center w-20 rounded-md aspect-square"
             />
@@ -39,16 +41,23 @@ export const ExploreCard = ({
                 <Button
                   preset="linkRed"
                   size="sm"
-                  RightHeroIcon={data.saved ? FaHeart : FaRegHeart}
+                  RightHeroIcon={FaRegHeart}
+                  // RightHeroIcon={data.saved ? FaHeart : FaRegHeart}
                   // onClick={(e) => {
                   //   e.stopPropagation();
                   //   setSaved(!saved);
                   // }}
                 />
               </div>
-              <div className="flex items-center text-gray-500 gap-0.5">
-                <GrLocation className="text-inherit w-5" />
-                <TextField preset="p3" text={data.location} />
+              <TextField
+                preset="p3"
+                color="g500"
+                className="pl-0.5"
+                text={'$'.repeat(data.price_range)}
+              />
+              <div className="flex items-start text-gray-500 gap-0.5">
+                <GrLocation className="text-inherit w-5 h-5" />
+                <TextField preset="p3" text={data.locations.address} />
               </div>
             </div>
           </div>
