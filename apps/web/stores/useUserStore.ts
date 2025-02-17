@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { type User } from '@supabase/supabase-js';
 import { createClient } from '@/utils/supabase/client';
 
 interface UserStoreState {

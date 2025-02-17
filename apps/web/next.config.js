@@ -18,6 +18,11 @@ const nextConfig = {
         destination: '/',
         permanent: false,
       },
+      {
+        source: '/account',
+        destination: '/account/profile',
+        permanent: false,
+      },
     ];
   },
 };

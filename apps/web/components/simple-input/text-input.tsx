@@ -107,7 +107,7 @@ export const TextInput: FC<SimpleTextInputProps> = ({
           {multiline ? (
             <textarea
               className={clsx(
-                'min-w-0 flex-1 bg-gray-100 text-sm outline-none placeholder:text-gray-700',
+                'min-w-0 py-1 flex-1 bg-gray-100 text-sm outline-none placeholder:text-gray-500',
                 inputClassName
               )}
               onChange={_onChange}

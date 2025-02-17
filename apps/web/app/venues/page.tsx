@@ -1,13 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
 
-import { BentoGridItem, Button, TextField } from '../../components';
+import { Button, TextField } from '../../components';
 import clsx from 'clsx';
-import Image from 'next/image';
 import { FaHeart, FaRegHeart, FaStar } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import { GrLocation } from 'react-icons/gr';
-import NextLink from 'next/link';
 import { IoFlashOutline } from 'react-icons/io5';
 import { HiOutlineSparkles } from 'react-icons/hi2';
 import { FiStar } from 'react-icons/fi';
@@ -17,9 +15,8 @@ import {
   SectionSelectorPreset,
 } from '@/modules/cities/components';
 import { useRouter } from 'next/navigation';
-import { usePathname } from 'next/navigation';
 import { RestaurantData } from '@/interface';
-import { supabase } from '@/utils';
+import { useGetRestaurantInfo } from '@/hooks';
 
 const SECTION_LIST = [
   {
@@ -50,29 +47,17 @@ export default function VenuesPage() {
   const [selectedSection, setSelectedSection] = useState<string>(
     SECTION_LIST[0].value
   );
-  const [restaurantList, setRestaurantList] = useState<RestaurantData[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  const pathname = usePathname();
-  console.log('🚀 ~ VenuesPage ~ router:', pathname);
+  const {
+    getData,
+    dataList,
+    fetching: fetchingVenues,
+  } = useGetRestaurantInfo();
 
   useEffect(() => {
-    const fetchRestaurant = async () => {
-      setLoading(true);
-      const { data, error } = await supabase.from('restaurants').select('*');
-      if (error) {
-        console.error('Error fetching restaurant:', error);
-      } else {
-        console.log('Data fetched:', data);
-        setRestaurantList(data || []);
-      }
-      setLoading(false);
-    };
-
-    fetchRestaurant();
+    getData();
   }, []);
 
-  const filteredItems = restaurantList.filter((item) => {
+  const filteredItems = dataList.filter((item) => {
     if (selectedSection === 'all') return true;
     return item.keywords.includes(selectedSection);
   });
@@ -112,42 +97,6 @@ export default function VenuesPage() {
     </div>
   );
 }
-
-const ITEMS = [
-  {
-    title: 'Rising',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent imperdiet ex placerat, auctor lectus id, varius diam. Sed imperdiet dui nisi, a convallis sapien aliquam sit amet. ',
-    rate: '4.5',
-    review_counts: '100',
-    header: '/mi-sno.jpg',
-    location: 'Tan Binh District',
-    route: '/rising',
-    keywords: ['rising', 'top-rated'],
-  },
-  {
-    title: 'Top Rated',
-    description:
-      'Nulla aliquam quam sed tempor dignissim. Aenean blandit pulvinar tortor in pulvinar. Suspendisse sed rutrum lorem. Ut id sagittis diam. Mauris scelerisque nibh quis nibh maximus, eu mattis justo aliquam',
-    rate: '4.5',
-    review_counts: '100',
-    header: '/mi-sno.jpg',
-    location: 'Third District',
-    route: '/top-rated',
-    keywords: 'top-rated',
-  },
-  {
-    title: 'New',
-    description:
-      'Etiam nisi ante, lobortis vel iaculis sed, varius sed justo. Cras egestas elit vitae metus tincidunt porta. Pellentesque feugiat felis vel mauris fermentum vestibulum. Donec venenatis lorem nec lectus auctor luctus. ',
-    rate: '4.5',
-    review_counts: '100',
-    header: '/mi-sno.jpg',
-    location: 'Thu Duc District',
-    route: '/new',
-    keywords: 'new',
-  },
-];
 
 const BentoItem = ({
   className,

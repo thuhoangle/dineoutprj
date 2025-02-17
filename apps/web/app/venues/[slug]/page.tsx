@@ -24,7 +24,6 @@ const VenueDetailPage = () => {
 
   const [saved, setSaved] = useState(false);
   const [restaurant, setRestaurant] = useState<RestaurantData | null>(null);
-  console.log('🚀 ~ VenueDetailPage ~ restaurant:', restaurant);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

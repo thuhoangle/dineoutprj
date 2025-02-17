@@ -18,6 +18,9 @@ module.exports = {
       },
     ],
   },
+  images: {
+    domains: ['plus.unsplash.com', 'placebear.com"'],
+  },
   overrides: [
     // Configuration for TypeScript files
     {

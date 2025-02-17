@@ -1,12 +1,18 @@
-import AccountForm from './account-form';
-import { createSerClient } from '@/utils/supabase/server';
+// import AccountForm from './account-form';
+// import { createSerClient } from '@/utils/supabase/server';
 
-export default async function Account() {
-  const supabase = await createSerClient();
+import { ProfilePanel } from '@/components';
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+// export default async function Account() {
+//   const supabase = await createSerClient();
 
-  return <AccountForm user={user} />;
+//   const {
+//     data: { user },
+//   } = await supabase.auth.getUser();
+
+//   return <AccountForm user={user} />;
+// }
+
+export default function AccountPage() {
+  return <ProfilePanel />;
 }

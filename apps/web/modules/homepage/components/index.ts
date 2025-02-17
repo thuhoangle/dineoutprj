@@ -1,2 +1,2 @@
 export * from './reservation-input';
-export * from './book-tonight';
+export * from './horizontal-section';

@@ -14,6 +14,7 @@ export interface RestaurantData {
   website?: string;
   cancellation_policy?: string;
   reservation_policy: Reservationpolicy[];
+  favorite?: boolean;
 }
 
 interface Locations {

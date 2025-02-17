@@ -41,7 +41,6 @@ interface MoviesProps {
 export const Navbar: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
   const pathname = usePathname();
   const router = useRouter();
-  // const [numberOfPeople, setNumberOfPeople] = useState('2');
   const authInfo = useUserStore((state) => state.authInfo);
   console.log('🚀 ~ authInfo:', authInfo);
   const { onLogout } = useLoginSignup();
@@ -188,6 +187,12 @@ export const Navbar: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
           />
         ) : (
           <MyButton text={authInfo.email} onClick={onLogout} />
+        )}
+        {authInfo && (
+          <MyButton
+            text="Profile"
+            onClick={() => router.push('/account/profile')}
+          />
         )}
         <ThemeSwitch />
         {/* <NavbarMenuToggle /> */}

@@ -14,6 +14,7 @@ module.exports = {
   rules: {
     '@next/next/no-html-link-for-pages': ['error', 'apps/www/src/pages/'],
     'no-bitwise': 'off',
+    '@next/next/no-img-element': 'off', // We currently not using next/image because it isn't supported with SSG mode
   },
   settings: {
     'import/resolver': {

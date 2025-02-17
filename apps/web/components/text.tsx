@@ -63,6 +63,7 @@ export type TextFontWeights = keyof typeof presetFontWeight;
 
 const presetFontColor = {
   base: '',
+  g100: 'text-gray-100',
   red: 'text-red-500',
   green: 'text-green-500',
   g50: 'text-gray-950',

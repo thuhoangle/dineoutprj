@@ -16,3 +16,4 @@ export * from './bg-pattern';
 export * from './feature-icon';
 export * from './simple-loading';
 export * from './toast-helper';
+export * from './pages';

@@ -61,7 +61,7 @@ export const useGetUserLocation = () => {
         }
       );
     } else {
-      console.log('Geolocation is not supported by this browser');
+      toastHelper.error('Geolocation is not supported by this browser');
       setFetching(false);
       setLocationSharable(false);
     }
@@ -74,7 +74,7 @@ export const useGetUserLocation = () => {
         name: 'geolocation',
       });
       if (permissionStatus.state === 'denied') {
-        console.log(
+        toastHelper.error(
           'Geolocation access has been denied. Please enable it in your browser settings.'
         );
       } else {
