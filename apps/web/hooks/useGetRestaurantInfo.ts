@@ -1,20 +1,18 @@
 'use client';
 
 import { RestaurantData } from '@/interface';
-import { createClient } from '@/utils/supabase/client';
+import { supaApiInstance } from '@/services';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
 export const useGetRestaurantInfo = () => {
-  const supabase = createClient();
-
   const [dataList, setDataList] = useState<RestaurantData[]>([]);
   const [fetching, setFetching] = useState(false);
 
   const getData = async () => {
     setFetching(true);
     try {
-      const { data, error } = await supabase.from('restaurants').select('*');
+      const { data, error } = await supaApiInstance.getRestaurantsList();
       if (error) {
         toast.error(error.message);
       } else {

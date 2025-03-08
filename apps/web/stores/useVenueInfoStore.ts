@@ -1,150 +1,141 @@
-import { ApiInstance, RestaurantInfo, handleError } from '@/services';
+import { handleError, RestaurantInfo, supaApiInstance } from '@/services';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { createSelector } from 'reselect';
+import { toastHelper } from '@/components';
+import { useUserStore } from '.';
 
 interface VenueInfoState {
-  rehydrated: boolean;
-  setRehydrated: () => void;
+  // rehydrated: boolean;
+  // setRehydrated: () => void;
 
-  productList: RestaurantInfo[];
-  productDetail: { [key: string]: RestaurantInfo };
-  getProductList: () => void;
+  restaurantList: RestaurantInfo[];
+  restaurantDetail: { [key: string]: RestaurantInfo };
+  getRestaurantList: () => void;
 
-  currentVenue: RestaurantInfo | null;
-  setCurrentVenue: (locationId: string) => void;
+  currentRestaurant: RestaurantInfo | null;
+  setCurrentRestaurant: (resId: string) => void;
 
-  // positionList: PositionData[];
-  // portfolioDetail: PortfolioDetailSummary | undefined;
-  // portfolioStats: PortfolioStats | undefined;
-  // portfolioFee: PortfolioFee;
-  getPortfolioDetail: () => Promise<void>;
-  clearUserData: () => void;
-
-  favProduct: { [key: string]: boolean };
-  setFavProduct: (productId: string) => void;
+  getFavRestaurants: () => void;
+  favRestaurant: { [key: string]: boolean };
+  clearFavRestaurants: () => void;
+  toggleFavRestaurant: (restaurantId: string) => void;
 }
 
 export const useVenueInfoStore = create<VenueInfoState>()(
   persist(
     (set, get) => ({
-      rehydrated: false,
-      setRehydrated: () => set({ rehydrated: true }),
+      // rehydrated: false,
+      // setRehydrated: () => set({ rehydrated: true }),
 
-      productList: [],
-      productDetail: {},
-      getProductList: async () => {
-        const res = await ApiInstance.getProductList();
-        const { result, error } = handleError(res, true);
-        if (error) return;
-        const productDetailObject =
-          result?.products?.reduce((acc: any, item: any) => {
-            acc[item.product_id] = item;
-            return acc;
-          }, {}) || {};
-      },
+      restaurantList: [],
+      restaurantDetail: {},
+      getRestaurantList: async () => {
+        try {
+          const { data, error } = await supaApiInstance.getRestaurantsList();
+          if (error) {
+            handleError(error);
+          } else {
+            set({
+              restaurantList: data || [],
+              restaurantDetail: data.reduce(
+                (
+                  acc: { [key: string]: RestaurantInfo },
+                  item: RestaurantInfo
+                ) => {
+                  acc[item.id] = item;
+                  return acc;
+                },
+                {}
+              ),
+            });
 
-      currentVenue: null,
-      setCurrentVenue: (productId: string) => {
-        const { currentVenue, productDetail } = get();
-        if (!productId) return;
-        if (currentVenue?.locationId === productId) return;
-        const findProduct = productDetail?.[productId];
-        if (!findProduct) return;
-        set({
-          currentVenue: findProduct,
-        });
-      },
-
-      positionList: [],
-      portfolioDetail: undefined,
-      portfolioStats: undefined,
-      portfolioFee: { maker_fee: 0, taker_fee: 0 },
-      getPortfolioDetail: async () => {
-        if (!ApiInstance.checkHaveAuth()) return;
-        const res = await ApiInstance.getPortfolioDetail();
-        const { result, error } = handleError(res, true);
-        if (error) return;
-        const { summary, positions, stats } = result || {};
-
-        if (
-          anyToFloat(summary?.total_initial_margin) >
-          anyToFloat(summary?.total_account_value)
-        )
-          NotiController.showWarning('marginUsage100');
-        else NotiController.closeWarning('marginUsage100');
-
-        if (summary?.in_liquidation)
-          NotiController.showWarning('inLiquidation');
-        else NotiController.closeWarning('inLiquidation');
-
-        set({
-          portfolioDetail: summary,
-          portfolioStats: stats,
-          positionList:
-            positions?.sort(
-              (a, b) =>
-                anyToFloat(b.net_size) * anyToFloat(b.mark_price) -
-                anyToFloat(a.net_size) * anyToFloat(a.mark_price)
-            ) || [],
-          portfolioFee: {
-            maker_fee: result?.maker_fee || 0,
-            taker_fee: result?.taker_fee || 0,
-          },
-        });
-      },
-
-      clearUserData: () => {
-        set({
-          positionList: [],
-          portfolioDetail: undefined,
-          portfolioStats: undefined,
-          portfolioFee: { maker_fee: 0, taker_fee: 0 },
-        });
-      },
-
-      favProduct: {},
-      setFavProduct: (productId: string) =>
-        set((state) => ({
-          favProduct: {
-            ...state.favProduct,
-            [productId]: !state.favProduct[productId],
-          },
-        })),
-    }),
-    {
-      version: 8,
-      name: 'currentTradingInfo-storage',
-      skipHydration: true,
-      onRehydrateStorage: () => (state, error) => {
-        if (error) {
-          // console.log('an error happened during hydration', error);
-        } else {
-          if (state) state.setRehydrated();
-          const { productList } = state || {};
-          if (productList?.length) TradingSymbolList.setList(productList);
+            if (useUserStore.getState().authInfo) {
+              get().getFavRestaurants();
+            }
+          }
+        } catch (error: any) {
+          handleError(error);
         }
       },
-      partialize: (state) =>
-        Object.fromEntries(
-          Object.entries(state).filter(
-            ([key]) => !['oraclePrices'].includes(key)
-          )
-        ), // omit oraclePrices
-    }
-  ),
-  Object.is
-);
 
-export const selectCurrentPosition = createSelector(
-  [
-    (state: CurrentTradingInfoState) => state.positionList,
-    (state: CurrentTradingInfoState) => state.currentTrade,
-  ],
-  (positionList, currentTrade) => {
-    const findPosition = positionList?.find(
-      (item) => item.product_id === currentTrade?.product_id
-    );
-    return findPosition;
-  }
+      currentRestaurant: null,
+      setCurrentRestaurant: (resId: string) => {
+        set({
+          currentRestaurant: get().restaurantDetail[resId],
+        });
+      },
+
+      favRestaurant: {},
+      getFavRestaurants: async () => {
+        if (!useUserStore.getState().authInfo) {
+          return;
+        }
+        const { data, error } = await supaApiInstance.getFavRestaurants();
+        if (error) {
+          handleError(error);
+          return;
+        }
+        const favRestaurant =
+          data?.map((item: any) => item.restaurant_id) || [];
+        const favRestaurantObject = favRestaurant.reduce(
+          (acc: any, item: any) => {
+            acc[item] = true;
+            return acc;
+          },
+          {}
+        );
+        set({ favRestaurant: favRestaurantObject });
+      },
+
+      clearFavRestaurants: () => {
+        set({ favRestaurant: {} });
+      },
+
+      toggleFavRestaurant: async (restaurantId: string) => {
+        const state = get();
+        const isFav = state.favRestaurant[restaurantId];
+
+        set({
+          favRestaurant: {
+            ...state.favRestaurant,
+            [restaurantId]: !isFav,
+          },
+        });
+
+        if (!isFav) {
+          // Add favorite
+          const { error } =
+            await supaApiInstance.setFavRestaurant(restaurantId);
+
+          if (error) {
+            toastHelper.error(error.message);
+            // Revert UI state if API call fails
+            set({
+              favRestaurant: {
+                ...state.favRestaurant,
+                [restaurantId]: isFav,
+              },
+            });
+          }
+        } else {
+          // Remove favorite
+          const { error } =
+            await supaApiInstance.setUnFavRestaurant(restaurantId);
+          if (error) {
+            toastHelper.error(error.message);
+            set({
+              favRestaurant: {
+                ...state.favRestaurant,
+                [restaurantId]: isFav,
+              },
+            });
+          }
+        }
+      },
+    }),
+
+    {
+      name: 'venue-info-store',
+    }
+  )
 );

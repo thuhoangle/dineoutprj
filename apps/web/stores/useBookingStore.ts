@@ -7,12 +7,10 @@ interface BookingState {
   fetchBookings: () => Promise<void>;
   addBooking: (data: {
     restaurant_id: string;
-    // booking_time: string;
     table_id: string;
     customer_id: string;
-    status: boolean;
-    date: string;
-    time: string;
+    status: string;
+    time_slot: string;
     guest_num: number;
     occasion?: string;
     additional_info?: string;

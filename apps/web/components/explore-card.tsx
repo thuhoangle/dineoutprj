@@ -3,18 +3,24 @@ import { GrLocation } from 'react-icons/gr';
 import { TextField } from './text';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { Button } from './button';
-import { RestaurantData } from '@/interface';
+import { RestaurantInfo } from '@/services';
 
 export const ExploreCard = ({
   Icon,
   title,
   dataList,
+  isFav,
+  onSetFav,
   onClick,
 }: {
   Icon: any;
   title: string;
-  dataList: RestaurantData[];
+  dataList: RestaurantInfo[];
   onClick?: () => void;
+  isFav: {
+    [key: string]: boolean;
+  };
+  onSetFav: (resId: string) => void;
 }) => {
   return (
     <div className="relative z-0 flex w-[500px] flex-col rounded-3xl border border-gray-200 bg-gray-50/50 pt-8">
@@ -41,12 +47,12 @@ export const ExploreCard = ({
                 <Button
                   preset="linkRed"
                   size="sm"
-                  RightHeroIcon={FaRegHeart}
-                  // RightHeroIcon={data.saved ? FaHeart : FaRegHeart}
-                  // onClick={(e) => {
-                  //   e.stopPropagation();
-                  //   setSaved(!saved);
-                  // }}
+                  // RightHeroIcon={FaRegHeart}
+                  RightHeroIcon={isFav[data.id] ? FaHeart : FaRegHeart}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onSetFav(data.id);
+                  }}
                 />
               </div>
               <TextField
@@ -57,7 +63,7 @@ export const ExploreCard = ({
               />
               <div className="flex items-start text-gray-500 gap-0.5">
                 <GrLocation className="text-inherit w-5 h-5" />
-                <TextField preset="p3" text={data.locations.address} />
+                <TextField preset="p3" text={data.locations.neighborhood} />
               </div>
             </div>
           </div>

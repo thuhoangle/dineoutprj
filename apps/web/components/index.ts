@@ -1,4 +1,5 @@
 export * from './menu';
+export * from './avatar';
 export * from './text';
 export * from './simple-loading';
 export * from './tab-select';

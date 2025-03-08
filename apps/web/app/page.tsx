@@ -5,37 +5,39 @@ import { IoFlashOutline } from 'react-icons/io5';
 import { FiStar } from 'react-icons/fi';
 import { HiOutlineSparkles } from 'react-icons/hi';
 import { FaLocationArrow } from 'react-icons/fa';
-import { useGetRestaurantInfo, useGetUserLocation } from '@/hooks';
+import { useGetUserLocation } from '@/hooks';
 import {
   HorizontalSection,
   ReservationInput,
 } from '@/modules/homepage/components';
 import { Button, ExploreCard, SimpleLoading, TextField } from '@/components';
+import { useUserStore, useVenueInfoStore } from '@/stores';
 
 export default function Home() {
-  // State for storing fetched bookings
-  const [bookings, setBookings] = useState([]);
-  const {
-    getData,
-    dataList,
-    fetching: fetchingVenues,
-  } = useGetRestaurantInfo();
+  const restaurantList = useVenueInfoStore((state) => state.restaurantList);
+  const favRestaurant = useVenueInfoStore((state) => state.favRestaurant);
+  const toggleFavRestaurant = useVenueInfoStore(
+    (state) => state.toggleFavRestaurant
+  );
 
-  useEffect(() => {
-    getData();
-  }, []);
-
-  const risingData = dataList.filter((restaurant) =>
-    restaurant.keywords.includes('rising')
-  );
-  const popularData = dataList.filter((restaurant) =>
-    restaurant.keywords.includes('popular')
-  );
-  const newData = dataList.filter((restaurant) =>
-    restaurant.keywords.includes('new')
-  );
   const { location, fetching, locationSharable, checkGeolocationPermission } =
     useGetUserLocation();
+
+  useEffect(() => {
+    useVenueInfoStore.getState().getRestaurantList();
+    useVenueInfoStore.getState().getFavRestaurants();
+    useUserStore.getState().getPortfolioDetail();
+  }, []);
+
+  const risingData = restaurantList.filter((restaurant) =>
+    restaurant.keywords?.includes('rising')
+  );
+  const popularData = restaurantList.filter((restaurant) =>
+    restaurant.keywords?.includes('popular')
+  );
+  const newData = restaurantList.filter((restaurant) =>
+    restaurant.keywords?.includes('new')
+  );
 
   return (
     <div className="flex flex-col items-center gap-4">
@@ -70,12 +72,22 @@ export default function Home() {
       <div className="w-full max-w-7xl flex-1 py-28">
         <div className="flex flex-col gap-8 ipadMini:flex-row">
           <ExploreCard
+            isFav={favRestaurant}
+            onSetFav={toggleFavRestaurant}
             Icon={IoFlashOutline}
             title="Rising"
             dataList={risingData}
           />
-          <ExploreCard Icon={FiStar} title="Popular" dataList={popularData} />
           <ExploreCard
+            isFav={favRestaurant}
+            onSetFav={toggleFavRestaurant}
+            Icon={FiStar}
+            title="Popular"
+            dataList={popularData}
+          />
+          <ExploreCard
+            isFav={favRestaurant}
+            onSetFav={toggleFavRestaurant}
             Icon={HiOutlineSparkles}
             title="New"
             dataList={newData}
@@ -86,44 +98,44 @@ export default function Home() {
   );
 }
 
-const DiscoverSection = ({ city }: { city: string }) => {
-  const SECTIONS = [
-    {
-      label: 'The Hit List',
-      route: '/hit-list',
-    },
-    {
-      label: 'The Best',
-      route: '/best',
-    },
-    {
-      label: 'The Newcomers',
-      route: '/newcomers',
-    },
-  ];
-  return (
-    <div className="flex flex-col gap-3">
-      <TextField
-        preset="h3"
-        weight="b"
-        text={`Discover restaurants to love in ${city}.`}
-      />
-      <TextField
-        preset="h6"
-        color="gray"
-        text="Be the first to know with Dine out’s insider guides, deep dives on old standbys, and vital intel on all the latest and greatest new openings."
-      />
-      <div className="flex items-start flex-col gap-2">
-        {SECTIONS.map((section) => (
-          <button
-            className="text-left hover:underline"
-            key={section.label}
-            // onClick={() => console.log(section.route)}
-          >
-            <TextField preset="h6" weight="m" text={section.label} />
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-};
+// const DiscoverSection = ({ city }: { city: string }) => {
+//   const SECTIONS = [
+//     {
+//       label: 'The Hit List',
+//       route: '/hit-list',
+//     },
+//     {
+//       label: 'The Best',
+//       route: '/best',
+//     },
+//     {
+//       label: 'The Newcomers',
+//       route: '/newcomers',
+//     },
+//   ];
+//   return (
+//     <div className="flex flex-col gap-3">
+//       <TextField
+//         preset="h3"
+//         weight="b"
+//         text={`Discover restaurants to love in ${city}.`}
+//       />
+//       <TextField
+//         preset="h6"
+//         color="gray"
+//         text="Be the first to know with Dine out’s insider guides, deep dives on old standbys, and vital intel on all the latest and greatest new openings."
+//       />
+//       <div className="flex items-start flex-col gap-2">
+//         {SECTIONS.map((section) => (
+//           <button
+//             className="text-left hover:underline"
+//             key={section.label}
+//             // onClick={() => console.log(section.route)}
+//           >
+//             <TextField preset="h6" weight="m" text={section.label} />
+//           </button>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// };

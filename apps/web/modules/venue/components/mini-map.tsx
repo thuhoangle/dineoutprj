@@ -1,15 +1,19 @@
 import { TextField } from '@/components';
-import { RestaurantData } from '@/interface';
+import { RestaurantInfo } from '@/services';
 import { Link } from '@nextui-org/link';
 import maplibregl from 'maplibre-gl';
 import { useEffect, useRef } from 'react';
+import { anyToFloat } from '@/utils';
 
-export const MiniMap = ({ data }: { data: RestaurantData }) => {
-  const { locations, phone, website, name } = data;
+export const MiniMap = ({ data }: { data: RestaurantInfo }) => {
+  const { locations, name } = data;
 
   return (
     <div className="flex bg-gray-200 flex-col max-w-lg">
-      <DupeMap long={locations.geo.long} lat={locations.geo.lat} />
+      <DupeMap
+        long={anyToFloat(locations.long)}
+        lat={anyToFloat(locations.lat)}
+      />
       <div className="flex z-50 rounded-b flex-col gap-1 px-2">
         <Link
           isExternal
@@ -38,8 +42,6 @@ export const MiniMap = ({ data }: { data: RestaurantData }) => {
         </Link>
         {/* <TextField preset="h2" weight="b" text={name} /> */}
         <TextField preset="p4" text={locations.address} />
-        {phone && <TextField preset="p4" text={phone} />}
-        {website && <TextField preset="p4" text={website} />}
       </div>
     </div>
   );

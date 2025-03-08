@@ -15,79 +15,44 @@ import { Select, SelectItem } from '@nextui-org/select';
 import { useState } from 'react';
 import { Input } from '@nextui-org/input';
 import { toastHelper } from './toast-helper';
-import { Reservationpolicy, RestaurantData } from '@/interface';
 import { useUserStore } from '@/stores/useUserStore';
 import { useBookingStore } from '@/stores/useBookingStore';
 import toast from 'react-hot-toast';
 import { Button as MyButton } from './button';
 import { Button } from '@nextui-org/button';
+import { RestaurantInfo } from '@/services';
+import { time } from 'console';
 
 export const BookingDrawer = ({
   isOpen,
   onOpenChange,
   data,
-  time,
+  timeSlot,
   quantity,
+  setOccasion,
+  setAdditionalInfo,
+  fetching,
+  onReserver,
 }: {
   isOpen: boolean;
   onOpenChange: () => void;
-  data: RestaurantData;
-  time: string;
+  data: RestaurantInfo;
+  timeSlot: string;
   quantity: string;
+  setOccasion: (value: string) => void;
+  setAdditionalInfo: (value: string) => void;
+  fetching: boolean;
+  onReserver: (resId: string, tableId: string) => void;
 }) => {
-  const [occasion, setOccasion] = useState('');
-  const [request, setRequest] = useState('');
-  const currentDay = dayjs().date();
-  const formattedDate = dayjs().format('dddd, MMMM D');
-  const [loading, setLoading] = useState(false);
-  const addBooking = useBookingStore((state) => state.addBooking);
-
   const authInfo = useUserStore((state) => state.authInfo);
 
-  const formatTime = (time: string): string => {
-    const [timePart, period] = time.split(' ');
-    let [hours, minutes] = timePart.split(':');
-    if (period === 'PM' && hours !== '12') {
-      hours = (parseInt(hours, 10) + 12).toString();
+  const _onReserve = async ({ onClose }: { onClose: () => void }) => {
+    if (!authInfo) {
+      toastHelper.error('Please login to continue');
+      return;
     }
-    if (period === 'AM' && hours === '12') {
-      hours = '00';
-    }
-    return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}:00`;
-  };
-
-  const _onReserve = async ({
-    restaurant_id,
-    table_id,
-    onClose,
-  }: {
-    restaurant_id: string;
-    table_id: string;
-    onClose: () => void;
-  }) => {
-    setLoading(true);
-    const data = {
-      restaurant_id,
-      table_id,
-      customer_id: authInfo?.id || '0f3f7b84-1620-4a3f-b0e0-71cf8eb5f02a',
-      date: dayjs().format('YYYY-MM-DD').toString(),
-      time: formatTime(time),
-      guest_num: parseInt(quantity),
-      occasion,
-      additional_info: request,
-      status: true,
-    };
-    try {
-      await addBooking(data);
-      onClose();
-      setTimeout(() => {
-        toastHelper.success('Reservation confirmed');
-      }, 500);
-      console.log('🚀_onReserve ~ data:', data);
-    } catch (error) {
-      toastHelper.error('Failed to make a reservation.');
-    }
-    setLoading(false);
+    await onReserver(data.id, data.table_id);
+    onClose();
   };
 
   return (
@@ -130,28 +95,6 @@ export const BookingDrawer = ({
                   <path d="m13 17 5-5-5-5M6 17l5-5-5-5" />
                 </svg>
               </Button>
-              {/* <div className="w-full flex justify-between gap-2"> */}
-              {/* <Button
-                  className="font-medium text-small text-default-500"
-                  size="sm"
-                  startContent={
-                    <svg
-                      height="16"
-                      viewBox="0 0 16 16"
-                      width="16"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M3.85.75c-.908 0-1.702.328-2.265.933-.558.599-.835 1.41-.835 2.29V7.88c0 .801.23 1.548.697 2.129.472.587 1.15.96 1.951 1.06a.75.75 0 1 0 .185-1.489c-.435-.054-.752-.243-.967-.51-.219-.273-.366-.673-.366-1.19V3.973c0-.568.176-.993.433-1.268.25-.27.632-.455 1.167-.455h4.146c.479 0 .828.146 1.071.359.246.215.43.54.497.979a.75.75 0 0 0 1.483-.23c-.115-.739-.447-1.4-.99-1.877C9.51 1 8.796.75 7.996.75zM7.9 4.828c-.908 0-1.702.326-2.265.93-.558.6-.835 1.41-.835 2.29v3.905c0 .879.275 1.69.833 2.289.563.605 1.357.931 2.267.931h4.144c.91 0 1.705-.326 2.268-.931.558-.599.833-1.41.833-2.289V8.048c0-.879-.275-1.69-.833-2.289-.563-.605-1.357-.931-2.267-.931zm-1.6 3.22c0-.568.176-.992.432-1.266.25-.27.632-.454 1.168-.454h4.145c.54 0 .92.185 1.17.453.255.274.43.698.43 1.267v3.905c0 .569-.175.993-.43 1.267-.25.268-.631.453-1.17.453H7.898c-.54 0-.92-.185-1.17-.453-.255-.274-.43-.698-.43-1.267z"
-                        fill="currentColor"
-                        fillRule="evenodd"
-                      />
-                    </svg>
-                  }
-                  variant="flat"
-                >
-                  Copy Link
-                </Button> */}
               {/* <Button
                 className="font-medium text-small text-default-500"
                 size="sm"
@@ -177,17 +120,19 @@ export const BookingDrawer = ({
                   <div className="flex gap-3 items-center">
                     <div className="flex-none border-1 border-default-200/50 rounded-small text-center w-11 overflow-hidden">
                       <div className="text-tiny bg-default-100 py-0.5 text-default-500">
-                        Nov
+                        {dayjs(timeSlot).format('MMM')}
                       </div>
                       <div className="flex items-center justify-center font-semibold text-medium h-6 text-default-500">
-                        {currentDay}
+                        {dayjs(timeSlot).date()}
                       </div>
                     </div>
                     <div className="flex flex-col gap-0.5">
                       <p className="text-medium text-foreground font-medium">
-                        {formattedDate}
+                        {dayjs(timeSlot).format('dddd, MMMM D')}
                       </p>
-                      <p className="text-small text-default-500">{time}</p>
+                      <p className="text-small text-default-500">
+                        {dayjs(timeSlot).format('h:mm A')}
+                      </p>
                     </div>
                   </div>
                   <div className="flex gap-3 items-center">
@@ -252,7 +197,7 @@ export const BookingDrawer = ({
                       <Input
                         label="Request for the venue"
                         placeholder="Add a special request (optional)"
-                        onChange={(e) => setRequest(e.target.value)}
+                        onChange={(e) => setAdditionalInfo(e.target.value)}
                       />
                     </div>
                   </div>
@@ -261,20 +206,17 @@ export const BookingDrawer = ({
             </DrawerBody>
             <DrawerFooter>
               <MyButton
-                fetching={loading}
+                fetching={fetching}
                 className="w-full"
                 size="lg"
                 color="primary"
                 onClick={() =>
                   _onReserve({
-                    restaurant_id: data.id,
-                    table_id: '018090b2-cf2c-4ed4-a9ee-b61f780bf1ca',
                     onClose,
                   })
                 }
-              >
-                Reserve Now
-              </MyButton>
+                text="Reserve Now"
+              />
             </DrawerFooter>
           </>
         )}

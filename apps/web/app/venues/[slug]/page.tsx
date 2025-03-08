@@ -15,7 +15,7 @@ import {
   MiniMap,
 } from '@/modules/venue/components';
 import { supabase } from '@/utils';
-import { RestaurantData } from '@/interface';
+import { RestaurantInfo } from '@/services';
 
 const VenueDetailPage = () => {
   const param = useParams();
@@ -23,7 +23,7 @@ const VenueDetailPage = () => {
   const slug = typeof param.slug === 'string' ? param.slug : '';
 
   const [saved, setSaved] = useState(false);
-  const [restaurant, setRestaurant] = useState<RestaurantData | null>(null);
+  const [restaurant, setRestaurant] = useState<RestaurantInfo | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -101,7 +101,10 @@ const VenueDetailPage = () => {
       </div>
       <div className="col-span-2">
         <div className="flex w-full flex-col gap-4 ">
-          <Carousel data={restaurant!.images} />
+          {restaurant!.images && restaurant!.images.length > 0 && (
+            <Carousel data={restaurant!.images} />
+          )}
+          {/* <Carousel data={restaurant!.images} /> */}
           <MiniMap data={restaurant!} />
           {/* <AdditionalInfo /> */}
         </div>

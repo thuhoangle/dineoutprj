@@ -5,46 +5,65 @@ import dayjs from 'dayjs';
 import { today, getLocalTimeZone, DateValue } from '@internationalized/date';
 
 import { useEffect, useState } from 'react';
-import { BookingDrawer, Button } from '@/components';
+import { BookingDrawer, Button, toastHelper } from '@/components';
 import { DatePicker } from '@nextui-org/date-picker';
 import { Select, SelectItem, useDisclosure } from '@nextui-org/react';
-import { RestaurantData } from '@/interface';
+import { RestaurantInfo } from '@/services';
+import { useReservation } from '@/hooks';
 
-export const BookingSection = ({ data }: { data: RestaurantData }) => {
-  const [selectedDate, setSelectedDate] = useState<
-    DateValue | null | undefined
-  >(today(getLocalTimeZone()));
+export const BookingSection = ({ data }: { data: RestaurantInfo }) => {
+  // const [selectedDate, setSelectedDate] = useState<DateValue>(
+  //   today(getLocalTimeZone())
+  // );
 
-  const [selectedGuest, setSelectedGuest] = useState('1 Guest');
+  // const [selectedGuest, setSelectedGuest] = useState('1 Guest');
 
-  const [selectedTime, setSelectedTime] = useState('All Day');
-  const [timeOptions, setTimeOptions] = useState<string[]>(
-    generateTimeOptions(selectedDate)
-  );
+  // const [selectedTime, setSelectedTime] = useState('All Day');
+  // const [timeOptions, setTimeOptions] = useState<string[]>(
+  //   generateTimeOptions(selectedDate)
+  // );
 
-  useEffect(() => {
-    setTimeOptions(generateTimeOptions(selectedDate));
-  }, [selectedDate]);
+  // useEffect(() => {
+  //   setTimeOptions(generateTimeOptions(selectedDate));
+  // }, [selectedDate]);
 
-  const filteredTimeOptions =
-    selectedTime !== 'All Day' ? [selectedTime] : timeOptions;
+  // const filteredTimeOptions =
+  //   selectedTime !== 'All Day' ? [selectedTime] : timeOptions;
+
+  // const getReservationDatetime = () => {
+  //   const formattedDate = dayjs(selectedDate.toString()).format('YYYY-MM-DD');
+  //   const formattedTime = formatTime(selectedTime);
+
+  //   return dayjs(`${formattedDate} ${formattedTime}`).format(
+  //     'YYYY-MM-DD HH:mm:ss'
+  //   );
+  // };
+
+  const {
+    createReservation,
+    fetching,
+    partySize,
+    setPartySize,
+    occasion,
+    setOccasion,
+    additionalInfo,
+    setAdditionalInfo,
+    selectedDate,
+    setSelectedDate,
+    selectedTime,
+    setSelectedTime,
+    timeOptions,
+    filteredTimeOptions,
+  } = useReservation();
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
-  const formatTime = (time: string): string => {
-    if (!time || !time.includes(':')) {
-      return '00:00:00'; // Default to midnight if time is invalid
-    }
-    const [hours, minutes] = time.split(':');
-    return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}:00`;
-  };
 
   return (
     <div className="flex flex-col gap-8 justify-start">
       <div className="flex bg-neutral-100 rounded-full w-full">
         <GuestPicker
-          selectedGuest={selectedGuest}
-          setSelectedGuest={setSelectedGuest}
+          selectedGuest={partySize}
+          setSelectedGuest={setPartySize}
         />
         <LocalDatePicker
           selectedDate={selectedDate}
@@ -58,52 +77,32 @@ export const BookingSection = ({ data }: { data: RestaurantData }) => {
       </div>
       <BookItem
         timeOptions={filteredTimeOptions}
-        onClick={() => {
-          if (selectedTime !== 'All Day') {
-            onOpen();
-          }
-        }}
-        setSelectedTime={(time) => setSelectedTime(time)}
+        onClick={() => onOpen()}
+        setSelectedTime={setSelectedTime}
       />
       <BookingDrawer
-        quantity={selectedGuest}
-        time={selectedTime}
+        fetching={fetching}
+        quantity={partySize}
+        timeSlot={getReservationDatetime()}
         data={data}
-        isOpen={isOpen}
+        isOpen={!selectedDate || selectedTime === 'All Day' ? false : isOpen}
         onOpenChange={onOpenChange}
       />
     </div>
   );
 };
 
-const SAMPLE_DATA = {
-  name: 'ABC Restaurant & Bar',
-  quantity: 1,
-  position: 'Patio',
-  cancellation:
-    "While you won't be charged if you need to cancel, we ask that you do so at least 24 hours in advance.",
-  venue: [
-    {
-      name: 'reservation_overview',
-      body: ' We have a 15 minute grace period. Please call us if you are running later than 15 minutes after your reservation time.',
-    },
-    {
-      name: 'need_to_know',
-      body: 'We may contact you about this reservation, so please ensure your email and phone number are up to date. Your table will be reserved for 1 hour 30 minutes.',
-    },
-    {
-      name: 'addtional',
-      body: 'Inform us of your dietary requirements via the "Add a special request" field or by contacting us directly.',
-    },
-  ],
-};
 const GuestPicker = ({
   selectedGuest,
   setSelectedGuest,
 }: {
-  selectedGuest: string;
-  setSelectedGuest: (guest: string) => void;
+  selectedGuest: number;
+  setSelectedGuest: (guest: number) => void;
 }) => {
+  const formatGuestCount = (count: number): string => {
+    return `${count} ${count === 1 ? 'Guest' : 'Guests'}`;
+  };
+
   return (
     <Select
       className="!w-54"
@@ -112,42 +111,31 @@ const GuestPicker = ({
         innerWrapper: 'gap-3',
       }}
       label="Guests"
-      placeholder={GUEST_OPTIONS[0]}
+      placeholder={formatGuestCount(1)}
       radius="full"
       selectedKeys={[selectedGuest]}
       onSelectionChange={(keys) =>
-        setSelectedGuest(Array.from(keys)[0] as string)
+        setSelectedGuest(Number(Array.from(keys)[0]))
       }
       startContent={<MdOutlinePeopleAlt />}
     >
       {GUEST_OPTIONS.map((num) => (
         <SelectItem key={num} className="font-semibold">
-          {num}
+          {formatGuestCount(num)}
         </SelectItem>
       ))}
     </Select>
   );
 };
 
-const GUEST_OPTIONS = [
-  '1 Guest',
-  '2 Guests',
-  '3 Guests',
-  '4 Guests',
-  '5 Guests',
-  '6 Guests',
-  '7 Guests',
-  '8 Guests',
-  '9 Guests',
-  '10+ Guests',
-];
+const GUEST_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 const LocalDatePicker = ({
   selectedDate,
   setSelectedDate,
 }: {
-  selectedDate: DateValue | null | undefined;
-  setSelectedDate: (date: DateValue | null | undefined) => void;
+  selectedDate: DateValue;
+  setSelectedDate: (date: DateValue) => void;
 }) => {
   return (
     <DatePicker
@@ -158,36 +146,12 @@ const LocalDatePicker = ({
       selectorButtonPlacement="start"
       label="Date"
       value={selectedDate}
-      onChange={setSelectedDate}
+      onChange={(value) => value && setSelectedDate(value)}
       minValue={today(getLocalTimeZone())}
       maxValue={today(getLocalTimeZone()).add({ days: 7 })}
       radius="full"
     />
   );
-};
-
-const generateTimeOptions = (selectedDate: DateValue | null | undefined) => {
-  const times = ['All Day'];
-  const now = dayjs();
-  let start = dayjs().startOf('day');
-
-  if (selectedDate && dayjs(selectedDate.toString()).isSame(now, 'day')) {
-    const nextHalfHour =
-      now.minute() < 30
-        ? now.minute(30).second(0)
-        : now.add(1, 'hour').minute(0).second(0);
-    start = nextHalfHour;
-  }
-
-  const end = dayjs().endOf('day');
-  let current = start;
-
-  while (current.isBefore(end)) {
-    times.push(current.format('h:mm A'));
-    current = current.add(30, 'minute');
-  }
-
-  return times;
 };
 
 const TimePicker = ({
@@ -238,9 +202,9 @@ const BookItem = ({
         <Button
           key={index}
           text={time}
-          onClick={() => {
+          onClick={async () => {
+            await setSelectedTime(time);
             onClick();
-            setSelectedTime(time);
           }}
         />
       ))}

@@ -1,6 +1,8 @@
 'use client';
 
 import { toastHelper } from '@/components';
+import { AppSocket, subscribeToCustomerUpdates } from '@/services/supa-socket';
+import { useVenueInfoStore } from '@/stores';
 import { useUserStore } from '@/stores/useUserStore';
 import { createClient } from '@/utils/supabase/client';
 import { revalidatePath } from 'next/cache';
@@ -44,10 +46,15 @@ export const useLoginSignup = () => {
     try {
       setFetchingLogin(true);
       await supabase.auth.signInWithPassword(dataInput);
-      useUserStore.getState().getAuthInfo();
+      await useUserStore.getState().getAuthInfo();
+      const userId = useUserStore.getState().authInfo?.id;
+      if (userId) {
+        AppSocket.subscribeToCustomerUpdates(userId);
+      }
+
       // revalidatePath('/', 'layout');
       // redirect('/venues');
-      router.push('/venues');
+      router.push('/');
     } catch (error: any) {
       setFetchingLogin(false);
       toastHelper.error(error.message);
@@ -76,7 +83,7 @@ export const useLoginSignup = () => {
 
     if (!error) {
       revalidatePath('/', 'layout');
-      redirect('/account');
+      redirect('/account/profile');
     } else {
       redirect('/error');
     }
@@ -93,8 +100,9 @@ export const useLoginSignup = () => {
     }
     localStorage.clear(); // Clear local storage
     sessionStorage.clear(); // Clear session storage
+    useVenueInfoStore.getState().clearFavRestaurants();
+    useUserStore.getState().logOut();
     toastHelper.success('Logout successfully');
-    window.location.reload();
     // revalidatePath('/', 'layout');
     // redirect('/venues');
   };

@@ -8,8 +8,19 @@ const nextConfig = {
         port: '',
         pathname: '/v2/photos/xlarge/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'oissfgnrpjfveyjaokgk.supabase.co',
+        port: '',
+        pathname: '/storage/v1/object/public/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
-    domains: ['images.unsplash.com'],
   },
   async redirects() {
     return [

@@ -1,33 +1,36 @@
-export interface GetRestaurantInfo {
+export interface RestaurantInfo {
   id: string;
-  heroImgUrl: any[];
-  contact: RestaurantContact[];
   name: string;
-  averageRating: number;
-  userReviewCount: number;
-  keyword: string[];
-  cuisine: string[];
-  priceTag: string;
-  hasMenu: boolean;
-  menuUrl: null | string;
-  detail: RestaurantDetails[];
-  // reviewSnippets: ReviewSnippets;
+  rating: number;
+  review_count: number;
+  short_overview: string;
+  overview: string;
+  images?: string[];
+  locations: Locations;
+  keywords?: string[];
+  price_range: number;
+  slug?: string;
+  cancellation_policy: string;
+  reservation_policy: Reservationpolicy[];
+  working_time: WorkingTime[];
 }
 
-interface RestaurantContact {
-  phone_number: string;
-  email?: string;
-  address: {
-    street: string;
-    district: string;
-    city: string;
-  };
-  long: number;
-  lat: number;
-  working_time: {
-    open_hour: string;
-    close_hour: string;
-  };
+interface Reservationpolicy {
+  body: string;
+  name: string;
+}
+
+interface Locations {
+  lat: string;
+  long: string;
+  address: string;
+  neighborhood: string;
+  city: string;
+}
+
+interface WorkingTime {
+  day: string;
+  time: string;
 }
 
 interface RestaurantDetails {
@@ -43,8 +46,8 @@ export interface CreateReservationResult {
   time: string;
   date: string;
   guest_count: number;
-  special_request: string;
-  occation: ReservationOccation;
+  special_request?: string;
+  occation?: ReservationOccation;
 }
 
 type ReservationOccation =
@@ -56,15 +59,15 @@ type ReservationOccation =
   | 'other';
 
 export interface UserInfo {
-  user_id: string;
-  username: string;
+  name?: string;
   email: string;
-  phone_number: string;
-  password: string;
-  lastname: string;
-  firstname: string;
+  auth_id: string;
+  phone?: null;
+  profile_image?: string;
+  bio?: string;
+  allergies?: string[];
+  additional_info?: string;
 }
-
 export interface GetRestaurantAvailableList {
   restaurant_id: string;
   day: string;
@@ -72,35 +75,48 @@ export interface GetRestaurantAvailableList {
   guest_count?: number;
 }
 
+export interface CreateReservation {
+  created_at: string;
+  id: string;
+  user_id: string;
+  restaurant_id: string;
+  table_id: string;
+  reservation_time: string;
+  party_size: number;
+  status: string;
+  occasion: string;
+  additional_info: string;
+}
+
 // export interface AvailableForReservation {
 //   available_time: string[];
 // }
 
-export interface GetRestaurantsList {
-  restaurantList: {
-    id: string;
-    heroImgUrl: any[];
-    contact: RestaurantContact;
-    name: string;
-    metadata: {
-      description: string;
-      keywords: string[];
-      cuisine: string[];
-      price_range: string;
-      hasMenu: boolean;
-      menuUrl: null | string;
-    };
-    averageRating: number;
-    userReviewCount: number;
-    is_open: boolean;
-  }[];
-}
-export interface ReviewSnippets {
-  reviewSnippetsList: {
-    reviewText: string;
-    reviewUrl: string;
-  }[];
-}
+// export interface GetRestaurantsList {
+//   restaurantList: {
+//     id: string;
+//     heroImgUrl: any[];
+//     contact: RestaurantContact;
+//     name: string;
+//     metadata: {
+//       description: string;
+//       keywords: string[];
+//       cuisine: string[];
+//       price_range: string;
+//       hasMenu: boolean;
+//       menuUrl: null | string;
+//     };
+//     averageRating: number;
+//     userReviewCount: number;
+//     is_open: boolean;
+//   }[];
+// }
+// export interface ReviewSnippets {
+//   reviewSnippetsList: {
+//     reviewText: string;
+//     reviewUrl: string;
+//   }[];
+// }
 
 export interface GeoLocationResponse {
   address: {

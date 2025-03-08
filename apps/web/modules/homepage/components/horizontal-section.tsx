@@ -2,14 +2,22 @@ import { BigWidget } from '@/components/big-widget';
 import { TextField } from '../../../components/text';
 import { FaRegMoon } from 'react-icons/fa';
 import { RestaurantData } from '@/interface';
+import { RestaurantInfo } from '@/services';
+import { useVenueInfoStore } from '@/stores';
 
 export const HorizontalSection = ({
   title,
   dataList,
+  // isFav,
+  // onSetFav,
 }: {
   title: string;
-  dataList: RestaurantData[];
+  dataList: RestaurantInfo[];
 }) => {
+  const favRestaurant = useVenueInfoStore((state) => state.favRestaurant);
+  const toggleFavRestaurant = useVenueInfoStore(
+    (state) => state.toggleFavRestaurant
+  );
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-1 justify-between">
@@ -19,12 +27,14 @@ export const HorizontalSection = ({
         </TextField>
       </div>
       <div className="flex gap-4 overflow-x-scroll">
-        {dataList.map((data: RestaurantData) => (
+        {dataList.map((data: RestaurantInfo) => (
           <BigWidget
+            isFav={favRestaurant}
+            onSetFav={toggleFavRestaurant}
             key={data.id}
             className="pb-5"
             data={data}
-            onClick={() => {}}
+            // onClick={() => {}}
           />
         ))}
       </div>

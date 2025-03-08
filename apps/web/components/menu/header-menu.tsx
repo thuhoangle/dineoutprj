@@ -41,17 +41,13 @@ interface MoviesProps {
 export const Navbar: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
   const pathname = usePathname();
   const router = useRouter();
-  const authInfo = useUserStore((state) => state.authInfo);
-  console.log('🚀 ~ authInfo:', authInfo);
+  const portfolioDetail = useUserStore((state) => state.portfolioDetail);
+
   const { onLogout } = useLoginSignup();
 
   const [fetching, setFetching] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [recommendations, setRecommendations] = useState<MoviesProps[]>([]);
-
-  useEffect(() => {
-    useUserStore.getState().getAuthInfo();
-  }, []);
 
   const options = getNavItems();
   const _onItemClick = (navItem: NavItemType) => {
@@ -176,19 +172,23 @@ export const Navbar: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
       </NavbarContent>
 
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
-        {/* <Link isExternal aria-label="Github" href={siteConfig.links.github}>
-          <GithubIcon className="text-default-500" />
-        </Link> */}
-        {!authInfo ? (
+        {!portfolioDetail ? (
           <MyButton
             color="tred"
             text="Login"
             onClick={() => router.push('/login')}
           />
         ) : (
-          <MyButton text={authInfo.email} onClick={onLogout} />
+          <MyButton
+            text={
+              portfolioDetail.name
+                ? portfolioDetail.name
+                : portfolioDetail.email
+            }
+            onClick={onLogout}
+          />
         )}
-        {authInfo && (
+        {portfolioDetail && (
           <MyButton
             text="Profile"
             onClick={() => router.push('/account/profile')}

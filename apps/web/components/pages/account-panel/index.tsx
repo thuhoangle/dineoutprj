@@ -2,14 +2,44 @@
 'use client';
 import { useUserStore } from '@/stores';
 import { TextField } from '../../text';
-import Image from 'next/image';
 import { TextInput } from '@/components/simple-input';
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { Button } from '@/components/button';
+import { useUpdateUser } from '@/hooks';
+import { Avatar } from '@/components';
+import clsx from 'clsx';
 
 export const ProfilePanel = () => {
-  const authInfo = useUserStore((state) => state.authInfo);
-  const [selectedOpts, setSelectedOpts] = useState<string[]>([]);
+  const {
+    updateUser,
+    fetching,
+    name,
+    setName,
+    email,
+    setEmail,
+    phone,
+    setPhone,
+    bio,
+    setBio,
+    allergies,
+    setAllergies,
+    img,
+    setImg,
+    moreInfo,
+    setMoreInfo,
+  } = useUpdateUser();
+
+  useEffect(() => {
+    useUserStore.getState().getPortfolioDetail();
+  }, []);
+
+  const toggleAllergy = (allergy: string) => {
+    setAllergies((prev) =>
+      prev.includes(allergy)
+        ? prev.filter((item) => item !== allergy)
+        : [...prev, allergy]
+    );
+  };
 
   return (
     <div className="flex flex-col gap-5">
@@ -22,39 +52,46 @@ export const ProfilePanel = () => {
         />
       </div>
       <div className="relative border-1.5 border-gray-100 flex flex-col mt-10 p-5 rounded-md shadow-lg gap-5">
-        <img
+        {/* <img
           src="https://placebear.com/100/100"
           alt="hero"
           className="object-cover object-center absolute h-20 w-20 rounded-full mx-auto left-0 -top-10 right-0 "
-        />
+        /> */}
+        <div className="absolute left-1/2 -translate-x-1/2 -top-10">
+          <Avatar
+            url={img}
+            size={80}
+            onUpload={(url) => {
+              setImg(url);
+            }}
+          />
+        </div>
         <div className="mt-20 mx-10 justify-center items-center flex flex-col gap-4">
-          <div className="w-full flex justify-between gap-12">
-            <TextInput
-              className="flex-1"
-              label="First Name"
-              placeholder="First Name"
-            />
-            <TextInput
-              className="flex-1"
-              label="Last Name"
-              placeholder="Last Name"
-            />
-          </div>
+          <TextInput
+            className="w-full"
+            label="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
           <TextInput
             label="Phone number"
             className="w-full"
-            placeholder={authInfo?.phone}
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
           />
           <TextInput
             label="Email address"
             className="w-full"
-            placeholder={authInfo?.email}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <TextInput
             label="Short Bio"
             multiline
             className="w-full"
             placeholder='Tell us about yourself. "I love to eat out and try new foods."'
+            value={bio}
+            onChange={(e) => setBio(e.target.value)}
           />
           <div className="flex w-full gap-2 flex-col">
             <TextField
@@ -66,7 +103,13 @@ export const ProfilePanel = () => {
               {ALLERGIES_AND_RESTRICTIONS.map((item) => (
                 <button
                   key={item}
-                  className="flex items-center gap-2 px-2 py-0.5 border rounded-md border-gray-200 bg-gray-50 focus:bg-gray-100 focus:border-primary-200"
+                  onClick={() => toggleAllergy(item)}
+                  className={clsx(
+                    'flex items-center gap-2 px-2 py-0.5 border rounded-md transition-colors',
+                    allergies.includes(item)
+                      ? 'border-primary-500 bg-primary-50 text-primary-700'
+                      : 'border-gray-200 bg-gray-50 hover:bg-gray-100'
+                  )}
                 >
                   {item}
                 </button>
@@ -77,10 +120,19 @@ export const ProfilePanel = () => {
               multiline
               placeholder="Add other restrictions"
               hint="We will share allergies, diet restrictions, or preferences you provide with our restaurants."
+              value={moreInfo}
+              onChange={(e) => setMoreInfo(e.target.value)}
             />
           </div>
           <div className="mt-10 w-full">
-            <Button preset="primary" size="xl" className="w-full" text="Save" />
+            <Button
+              preset="primary"
+              size="xl"
+              className="w-full"
+              text="Save"
+              fetching={fetching}
+              onClick={updateUser}
+            />
           </div>
         </div>
       </div>
