@@ -3,50 +3,29 @@
 import { MdOutlinePeopleAlt } from 'react-icons/md';
 import dayjs from 'dayjs';
 import { today, getLocalTimeZone, DateValue } from '@internationalized/date';
+import { useMemo } from 'react';
 
-import { useEffect, useState } from 'react';
-import { BookingDrawer, Button, toastHelper } from '@/components';
+import { BookingDrawer, Button, TextField } from '@/components';
 import { DatePicker } from '@nextui-org/date-picker';
 import { Select, SelectItem, useDisclosure } from '@nextui-org/react';
 import { RestaurantInfo } from '@/services';
 import { useReservation } from '@/hooks';
+import { AvailableSeats } from '@/services';
 
-export const BookingSection = ({ data }: { data: RestaurantInfo }) => {
-  // const [selectedDate, setSelectedDate] = useState<DateValue>(
-  //   today(getLocalTimeZone())
-  // );
-
-  // const [selectedGuest, setSelectedGuest] = useState('1 Guest');
-
-  // const [selectedTime, setSelectedTime] = useState('All Day');
-  // const [timeOptions, setTimeOptions] = useState<string[]>(
-  //   generateTimeOptions(selectedDate)
-  // );
-
-  // useEffect(() => {
-  //   setTimeOptions(generateTimeOptions(selectedDate));
-  // }, [selectedDate]);
-
-  // const filteredTimeOptions =
-  //   selectedTime !== 'All Day' ? [selectedTime] : timeOptions;
-
-  // const getReservationDatetime = () => {
-  //   const formattedDate = dayjs(selectedDate.toString()).format('YYYY-MM-DD');
-  //   const formattedTime = formatTime(selectedTime);
-
-  //   return dayjs(`${formattedDate} ${formattedTime}`).format(
-  //     'YYYY-MM-DD HH:mm:ss'
-  //   );
-  // };
-
+export const BookingSection = ({
+  data,
+  availableSeatsList,
+}: {
+  data: RestaurantInfo;
+  availableSeatsList: AvailableSeats[];
+}) => {
   const {
+    getReservationDatetime,
     createReservation,
     fetching,
     partySize,
     setPartySize,
-    occasion,
     setOccasion,
-    additionalInfo,
     setAdditionalInfo,
     selectedDate,
     setSelectedDate,
@@ -58,10 +37,38 @@ export const BookingSection = ({ data }: { data: RestaurantInfo }) => {
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
+  const filteredSeats = useMemo(() => {
+    return availableSeatsList.filter((seat) => {
+      const seatDate = dayjs(seat.date).format('YYYY-MM-DD');
+      const selectedDateStr = dayjs(selectedDate.toString()).format(
+        'YYYY-MM-DD'
+      );
+      const seatTime = dayjs(seat.date).format('h:mm A');
+
+      return (
+        seatDate === selectedDateStr &&
+        (selectedTime === 'All Day' || seatTime === selectedTime) &&
+        seat.tables.capacity >= partySize
+      );
+    });
+  }, [availableSeatsList, selectedDate, selectedTime, partySize]);
+
+  const getSelectedSeatInfo = useMemo(() => {
+    return availableSeatsList.find(
+      (seat) =>
+        dayjs(seat.date).format('YYYY-MM-DD') ===
+          dayjs(selectedDate.toString()).format('YYYY-MM-DD') &&
+        dayjs(seat.date).format('h:mm A') === selectedTime
+    );
+  }, [availableSeatsList, selectedDate, selectedTime]);
+
   return (
     <div className="flex flex-col gap-8 justify-start">
       <div className="flex bg-neutral-100 rounded-full w-full">
         <GuestPicker
+          maxGuest={Math.max(
+            ...availableSeatsList.map((seat) => seat.tables.capacity)
+          )}
           selectedGuest={partySize}
           setSelectedGuest={setPartySize}
         />
@@ -76,14 +83,20 @@ export const BookingSection = ({ data }: { data: RestaurantInfo }) => {
         />
       </div>
       <BookItem
-        timeOptions={filteredTimeOptions}
+        selectedDate={selectedDate}
+        selectedTime={selectedTime}
+        data={filteredSeats}
         onClick={() => onOpen()}
         setSelectedTime={setSelectedTime}
       />
       <BookingDrawer
+        onReserve={createReservation}
         fetching={fetching}
         quantity={partySize}
+        setOccasion={setOccasion}
+        setAdditionalInfo={setAdditionalInfo}
         timeSlot={getReservationDatetime()}
+        selectedOption={getSelectedSeatInfo}
         data={data}
         isOpen={!selectedDate || selectedTime === 'All Day' ? false : isOpen}
         onOpenChange={onOpenChange}
@@ -93,9 +106,11 @@ export const BookingSection = ({ data }: { data: RestaurantInfo }) => {
 };
 
 const GuestPicker = ({
+  maxGuest,
   selectedGuest,
   setSelectedGuest,
 }: {
+  maxGuest: number;
   selectedGuest: number;
   setSelectedGuest: (guest: number) => void;
 }) => {
@@ -109,26 +124,29 @@ const GuestPicker = ({
       classNames={{
         mainWrapper: 'font-semibold',
         innerWrapper: 'gap-3',
+        value: 'text-sm',
       }}
       label="Guests"
-      placeholder={formatGuestCount(1)}
+      placeholder={formatGuestCount(selectedGuest)}
       radius="full"
-      selectedKeys={[selectedGuest]}
+      selectedKeys={[selectedGuest.toString()]}
       onSelectionChange={(keys) =>
         setSelectedGuest(Number(Array.from(keys)[0]))
       }
-      startContent={<MdOutlinePeopleAlt />}
+      startContent={<MdOutlinePeopleAlt className="text-default-500" />}
     >
-      {GUEST_OPTIONS.map((num) => (
-        <SelectItem key={num} className="font-semibold">
+      {Array.from({ length: maxGuest }, (_, i) => i + 1).map((num) => (
+        <SelectItem
+          key={num}
+          value={num}
+          className="font-medium data-[selected=true]:bg-primary-100"
+        >
           {formatGuestCount(num)}
         </SelectItem>
       ))}
     </Select>
   );
 };
-
-const GUEST_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 const LocalDatePicker = ({
   selectedDate,
@@ -139,7 +157,7 @@ const LocalDatePicker = ({
 }) => {
   return (
     <DatePicker
-      className="max-w-[220px]"
+      className="max-w-[220px] font-semibold"
       classNames={{
         selectorButton: 'mr-0.5',
       }}
@@ -150,6 +168,10 @@ const LocalDatePicker = ({
       minValue={today(getLocalTimeZone())}
       maxValue={today(getLocalTimeZone()).add({ days: 7 })}
       radius="full"
+      // isDisabled={(date) => {
+      //   const dateStr = date.toString();
+      //   return !availableDates.some((d) => d.format('YYYY-MM-DD') === dateStr);
+      // }}
     />
   );
 };
@@ -177,6 +199,7 @@ const TimePicker = ({
       onSelectionChange={(keys) =>
         setSelectedTime(Array.from(keys)[0] as string)
       }
+      isDisabled={timeOptions.length === 0}
     >
       {timeOptions.map((time) => (
         <SelectItem key={time} className="font-semibold">
@@ -188,26 +211,55 @@ const TimePicker = ({
 };
 
 const BookItem = ({
-  timeOptions,
+  data,
   onClick,
   setSelectedTime,
+  selectedDate,
+  selectedTime,
 }: {
-  timeOptions: string[];
+  data: AvailableSeats[];
   onClick: () => void;
   setSelectedTime: (time: string) => void;
+  selectedDate: DateValue;
+  selectedTime: string;
 }) => {
   return (
-    <div className="grid grid-cols-5 gap-4">
-      {timeOptions.map((time, index) => (
-        <Button
-          key={index}
-          text={time}
-          onClick={async () => {
-            await setSelectedTime(time);
-            onClick();
-          }}
-        />
-      ))}
-    </div>
+    <>
+      {data.length === 0 && (
+        <div className="flex flex-col gap-2 p-5 rounded-md border border-neutral-200">
+          <TextField preset="p3" weight="m" color="g100">
+            At the moment, there's no online availability for{' '}
+            {dayjs(selectedDate.toString()).format('dddd, MMMM D')} at{' '}
+            {selectedTime}, but there are{' '}
+            <span
+              className="font-medium cursor-pointer text-red-500 hover:underline"
+              onClick={() => setSelectedTime('All Day')}
+            >
+              other times
+            </span>
+            .
+          </TextField>
+        </div>
+      )}
+      <div className="grid grid-cols-5 gap-4">
+        {data.map((seat) => (
+          <Button
+            className="flex flex-col py-2 !h-12"
+            preset="red"
+            key={seat.id}
+            onClick={async () => {
+              await setSelectedTime(dayjs(seat.date).format('h:mm A'));
+              onClick();
+            }}
+            // isDisabled={seat.tables.capacity < partySize}
+          >
+            <p className="text-base font-semibold">
+              {dayjs(seat.date).format('h:mm A')}
+            </p>
+            <p className="text-sm font-medium">{seat.tables.seat_type}</p>
+          </Button>
+        ))}
+      </div>
+    </>
   );
 };

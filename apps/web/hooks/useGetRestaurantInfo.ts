@@ -1,12 +1,11 @@
 'use client';
 
-import { RestaurantData } from '@/interface';
-import { supaApiInstance } from '@/services';
+import { RestaurantInfo, supaApiInstance } from '@/services';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
 export const useGetRestaurantInfo = () => {
-  const [dataList, setDataList] = useState<RestaurantData[]>([]);
+  const [dataList, setDataList] = useState<RestaurantInfo[]>([]);
   const [fetching, setFetching] = useState(false);
 
   const getData = async () => {

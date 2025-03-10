@@ -18,7 +18,7 @@ export const Tag: FC<TagProps> = ({
   return (
     <div
       className={clsx(
-        'flex items-center justify-center rounded-[3px] bg-gray-200 text-gray-400',
+        'flex items-center justify-center rounded-[3px] bg-gray-900 text-gray-400',
         presetSize[size],
         presetFontWeight[weight],
         className

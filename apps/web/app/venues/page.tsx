@@ -16,7 +16,8 @@ import {
 } from '@/modules/cities/components';
 import { useRouter } from 'next/navigation';
 import { RestaurantData } from '@/interface';
-import { useGetRestaurantInfo } from '@/hooks';
+import { useGetRestaurantInfo, useGetUserLocation } from '@/hooks';
+import { RestaurantInfo } from '@/services/api-types';
 
 const SECTION_LIST = [
   {
@@ -47,11 +48,8 @@ export default function VenuesPage() {
   const [selectedSection, setSelectedSection] = useState<string>(
     SECTION_LIST[0].value
   );
-  const {
-    getData,
-    dataList,
-    fetching: fetchingVenues,
-  } = useGetRestaurantInfo();
+  const { getData, dataList } = useGetRestaurantInfo();
+  const { latitude, longitude } = useGetUserLocation();
 
   useEffect(() => {
     getData();
@@ -59,11 +57,11 @@ export default function VenuesPage() {
 
   const filteredItems = dataList.filter((item) => {
     if (selectedSection === 'all') return true;
-    return item.keywords.includes(selectedSection);
+    return item.keywords?.includes(selectedSection);
   });
 
   return (
-    <div className="grid grid-cols-1 h-full ipadMini:grid-cols-2">
+    <div className="grid grid-cols-1 ipadMini:grid-cols-2">
       <div className="flex flex-col gap-4 p-4">
         <div className="flex flex-col">
           <TextField preset="h2" weight="b" text={`Restaurants nearby`} />
@@ -93,7 +91,9 @@ export default function VenuesPage() {
           ))}
         </div>
       </div>
-      <CustomMap />
+      <div className="ipadMini:sticky ipadMini:top-[77px] ipadMini:h-[calc(100vh-77px)]">
+        <CustomMap markers={filteredItems} center={{ longitude, latitude }} />
+      </div>
     </div>
   );
 }
@@ -103,7 +103,7 @@ const BentoItem = ({
   data,
 }: {
   className?: string;
-  data: RestaurantData;
+  data: RestaurantInfo;
 }) => {
   const router = useRouter();
   const [saved, setSaved] = useState(false);
@@ -119,7 +119,7 @@ const BentoItem = ({
       onClick={() => router.push(`/venues/${data.slug}`)}
     >
       <img
-        src={data?.images[0]}
+        src={data?.images?.[0]}
         alt="bento"
         className="w-48 aspect-square object-cover rounded-lg"
       />
@@ -153,7 +153,7 @@ const BentoItem = ({
           </div>
           <div className="flex items-center text-gray-500 gap-0.5">
             <GrLocation className="text-inherit w-5" />
-            {data.locations.address}
+            {data.district}
           </div>
         </div>
         {/* <SectionSelector

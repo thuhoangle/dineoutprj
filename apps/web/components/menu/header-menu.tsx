@@ -28,6 +28,12 @@ import axios from 'axios';
 import { createSerClient } from '@/utils/supabase/server';
 import { useUserStore } from '@/stores/useUserStore';
 import { useLoginSignup } from '@/hooks';
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+} from '@nextui-org/dropdown';
 
 interface HeaderMenuProps {
   onGoSamePath?: () => void;
@@ -42,6 +48,7 @@ export const Navbar: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
   const pathname = usePathname();
   const router = useRouter();
   const portfolioDetail = useUserStore((state) => state.portfolioDetail);
+  console.log('🚀 ~ portfolioDetail:', portfolioDetail);
 
   const { onLogout } = useLoginSignup();
 
@@ -172,27 +179,43 @@ export const Navbar: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
       </NavbarContent>
 
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
-        {!portfolioDetail ? (
+        {!portfolioDetail && (
           <MyButton
             color="tred"
             text="Login"
             onClick={() => router.push('/login')}
           />
-        ) : (
-          <MyButton
-            text={
-              portfolioDetail.name
-                ? portfolioDetail.name
-                : portfolioDetail.email
-            }
-            onClick={onLogout}
-          />
         )}
         {portfolioDetail && (
-          <MyButton
-            text="Profile"
-            onClick={() => router.push('/account/profile')}
-          />
+          <Dropdown>
+            <DropdownTrigger>
+              <Button variant="flat" className="bg-red-500 text-white">
+                {portfolioDetail.name
+                  ? portfolioDetail.name
+                  : portfolioDetail.email}
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu>
+              <DropdownItem
+                key={'profile'}
+                href="/account/profile"
+                startContent={
+                  <Image
+                    src={portfolioDetail.profile_image || ''}
+                    alt="Profile Image"
+                    className="w-8 h-8 rounded-full"
+                    width={40} // Specify width
+                    height={40} // Specify height
+                  />
+                }
+              >
+                Profile
+              </DropdownItem>
+              <DropdownItem key={'logout'} onPress={onLogout}>
+                Logout
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         )}
         <ThemeSwitch />
         {/* <NavbarMenuToggle /> */}

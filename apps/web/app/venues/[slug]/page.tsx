@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, usePathname } from 'next/navigation';
+import { useParams } from 'next/navigation';
 
 import { FaHeart, FaRegHeart, FaStar } from 'react-icons/fa';
 import { FaRegMessage } from 'react-icons/fa6';
@@ -15,31 +15,29 @@ import {
   MiniMap,
 } from '@/modules/venue/components';
 import { supabase } from '@/utils';
-import { RestaurantInfo } from '@/services';
+import { RestaurantInfo, supaApiInstance } from '@/services';
+import { useGetAvailableSeats } from '@/hooks';
 
 const VenueDetailPage = () => {
   const param = useParams();
-
   const slug = typeof param.slug === 'string' ? param.slug : '';
 
   const [saved, setSaved] = useState(false);
   const [restaurant, setRestaurant] = useState<RestaurantInfo | null>(null);
   const [loading, setLoading] = useState(true);
+  const { getAvailableSeats, dataList: availableSeatsList } =
+    useGetAvailableSeats();
 
   useEffect(() => {
     const fetchRestaurant = async () => {
       setLoading(true);
 
-      const { data, error } = await supabase
-        .from('restaurants')
-        .select('*')
-        .eq('slug', slug)
-        .single();
-
+      const { data, error } = await supaApiInstance.getRestaurantDetail(slug);
       if (error) {
         console.error('Error fetching restaurant:', error);
       } else {
         setRestaurant(data);
+        await getAvailableSeats(data.id);
       }
       setLoading(false);
     };
@@ -56,8 +54,8 @@ const VenueDetailPage = () => {
   }
 
   return (
-    <div className="grid grid-cols-5 gap-5 p-4">
-      <div className="col-span-3">
+    <div className="flex flex-col ipadMini:flex-row gap-5 p-4">
+      <div className="ipadMini:w-3/5 w-full">
         <div className="flex flex-col gap-3">
           <TextField preset="h1" weight="b" text={restaurant.name} />
           <div className="flex justify-between">
@@ -96,11 +94,14 @@ const VenueDetailPage = () => {
           </div>
           <hr className="h-1.5 my-2 border-t border-gray-400" />
           {restaurant && <OverviewSection description={restaurant.overview} />}
-          <BookingSection data={restaurant} />
+          <BookingSection
+            data={restaurant}
+            availableSeatsList={availableSeatsList}
+          />
         </div>
       </div>
-      <div className="col-span-2">
-        <div className="flex w-full flex-col gap-4 ">
+      <div className="w-full ipadMini:w-2/5">
+        <div className="flex h-screen sticky top-0 w-full overflow-x-auto flex-col gap-4 ">
           {restaurant!.images && restaurant!.images.length > 0 && (
             <Carousel data={restaurant!.images} />
           )}

@@ -105,10 +105,10 @@ export const ProfilePanel = () => {
                   key={item}
                   onClick={() => toggleAllergy(item)}
                   className={clsx(
-                    'flex items-center gap-2 px-2 py-0.5 border rounded-md transition-colors',
+                    'flex bg-gray-950 items-center gap-2 px-2 py-0.5 border rounded-md transition-colors',
                     allergies.includes(item)
                       ? 'border-primary-500 bg-primary-50 text-primary-700'
-                      : 'border-gray-200 bg-gray-50 hover:bg-gray-100'
+                      : 'border-gray-800 bg-gray-900 hover:bg-gray-800'
                   )}
                 >
                   {item}

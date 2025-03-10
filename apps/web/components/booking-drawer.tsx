@@ -20,7 +20,7 @@ import { useBookingStore } from '@/stores/useBookingStore';
 import toast from 'react-hot-toast';
 import { Button as MyButton } from './button';
 import { Button } from '@nextui-org/button';
-import { RestaurantInfo } from '@/services';
+import { AvailableSeats, RestaurantInfo } from '@/services';
 import { time } from 'console';
 
 export const BookingDrawer = ({
@@ -32,17 +32,19 @@ export const BookingDrawer = ({
   setOccasion,
   setAdditionalInfo,
   fetching,
-  onReserver,
+  onReserve,
+  selectedOption,
 }: {
   isOpen: boolean;
   onOpenChange: () => void;
   data: RestaurantInfo;
   timeSlot: string;
-  quantity: string;
+  quantity: number;
   setOccasion: (value: string) => void;
   setAdditionalInfo: (value: string) => void;
   fetching: boolean;
-  onReserver: (resId: string, tableId: string) => void;
+  onReserve: (resId: string, tableId: string, seat_type?: string) => void;
+  selectedOption: AvailableSeats | undefined;
 }) => {
   const authInfo = useUserStore((state) => state.authInfo);
 
@@ -51,7 +53,15 @@ export const BookingDrawer = ({
       toastHelper.error('Please login to continue');
       return;
     }
-    await onReserver(data.id, data.table_id);
+    if (!selectedOption?.table_id) {
+      toastHelper.error('Please select a table');
+      return;
+    }
+    await onReserve(
+      data.id,
+      selectedOption.table_id,
+      selectedOption.tables.seat_type
+    );
     onClose();
   };
 
@@ -141,11 +151,13 @@ export const BookingDrawer = ({
                     </div>
                     <div className="flex flex-col gap-0.5">
                       <p className="text-medium text-foreground font-medium">
-                        {quantity}
+                        {quantity} {quantity > 1 ? 'People' : 'Person'}
                       </p>
-                      {/* <p className="text-small text-default-500">
-                        {data.position}
-                      </p> */}
+                      {selectedOption?.tables.seat_type && (
+                        <p className="text-small text-default-500">
+                          {selectedOption?.tables.seat_type}
+                        </p>
+                      )}
                     </div>
                   </div>
                   <div className="flex flex-col mt-4 gap-5 items-start">
@@ -172,7 +184,7 @@ export const BookingDrawer = ({
 
                       <TextField
                         preset="p3"
-                        color="gray"
+                        color="g100"
                         className="flex flex-col gap-2"
                       >
                         {data.cancellation_policy}
@@ -209,7 +221,7 @@ export const BookingDrawer = ({
                 fetching={fetching}
                 className="w-full"
                 size="lg"
-                color="primary"
+                color="red"
                 onClick={() =>
                   _onReserve({
                     onClose,

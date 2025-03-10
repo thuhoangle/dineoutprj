@@ -1,9 +1,11 @@
 import { toastHelper } from '@/components';
 import { handleError, supaApiInstance } from '@/services';
+import { useUserStore } from '@/stores';
 import { DateValue, today, getLocalTimeZone } from '@internationalized/date';
 import { table } from 'console';
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
+import { useBookingStore } from '@/stores/useBookingStore';
 
 const generateTimeOptions = (selectedDate: DateValue) => {
   const times = ['All Day'];
@@ -63,6 +65,7 @@ export const useReservation = () => {
 
   useEffect(() => {
     setTimeOptions(generateTimeOptions(selectedDate));
+    setSelectedTime('All Day');
   }, [selectedDate]);
 
   const filteredTimeOptions =
@@ -77,15 +80,21 @@ export const useReservation = () => {
     );
   };
 
-  const createReservation = async (resId: string, tableId: string) => {
+  const createReservation = async (
+    resId: string,
+    tableId?: string,
+    seat_type?: string
+  ) => {
     const data = {
       restaurant_id: resId,
       table_id: tableId,
       status: 'pending',
-      time_slot: getReservationDatetime(),
-      guest_num: partySize,
+      reservation_time: getReservationDatetime(),
+      party_size: partySize,
       occasion,
       additional_info: additionalInfo,
+      seat_type,
+      created_at: dayjs().format('YYYY-MM-DD HH:mm:ss'),
     };
 
     try {
@@ -106,6 +115,7 @@ export const useReservation = () => {
   };
 
   return {
+    getReservationDatetime,
     createReservation,
     fetching,
     partySize,

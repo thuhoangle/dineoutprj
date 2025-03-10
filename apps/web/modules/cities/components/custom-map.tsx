@@ -3,49 +3,90 @@
 import React, { useRef, useEffect } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { useLocationStore } from '../../../stores';
-import { useGetUserLocation } from '../../../hooks';
+import { RestaurantInfo } from '../../../services/api-types';
+import clsx from 'clsx';
+import { TextField } from '@/components';
+import Image from 'next/image';
+import { FaStar } from 'react-icons/fa';
+import ReactDOM from 'react-dom/client';
 
-export const CustomMap = () => {
+/* eslint-disable @next/next/no-img-element */
+
+export const CustomMap = ({
+  markers = [],
+  center,
+  className,
+}: {
+  markers: RestaurantInfo[];
+  center?: { longitude: number | undefined; latitude: number | undefined };
+  className?: string;
+}) => {
   const mapContainer = useRef(null);
   const map = useRef<maplibregl.Map | null>(null);
-  const longitude = 139.753;
-  const latitude = 35.6844;
-  // const { latitude, longitude } = useGetUserLocation();
-  console.log('🚀 ~ CustomMap ~ latitude:', latitude, longitude);
-
   const zoom = 14;
-  const apiKey = 'DoYG2Cn5PLrGKhCO18HI';
+  const apiKey = process.env.NEXT_PUBLIC_MAPLIBRE_API_KEY;
 
   useEffect(() => {
-    getMapByLocation();
-  }, [longitude, latitude]);
-
-  const getMapByLocation = async () => {
-    if (
-      map.current ||
-      !mapContainer.current ||
-      latitude === null ||
-      longitude === null
-    )
-      return;
+    if (map.current || !mapContainer.current) return;
 
     map.current = new maplibregl.Map({
-      container: mapContainer.current as HTMLElement, // type assertion
+      container: mapContainer.current as HTMLElement,
       style: `https://api.maptiler.com/maps/basic-v2/style.json?key=${apiKey}`,
-      center: [longitude || 106.660172, latitude || 10.762622],
+      center: [center?.longitude ?? 106.660172, center?.latitude ?? 10.762622],
       zoom: zoom,
     });
 
-    new maplibregl.Marker({ color: '#FF0000' })
-      .setLngLat([longitude, latitude])
-      .addTo(map.current);
-
     map.current.addControl(new maplibregl.NavigationControl(), 'top-right');
+  }, [center?.latitude, center?.longitude]);
+
+  useEffect(() => {
+    updateMarkers();
+  }, [markers]);
+
+  const updateMarkers = () => {
+    if (!map.current) return;
+
+    const existingMarkers =
+      document.getElementsByClassName('maplibregl-marker');
+    while (existingMarkers[0]) {
+      existingMarkers[0].remove();
+    }
+
+    markers.forEach((marker) => {
+      if (marker.locations?.lng && marker.locations?.lat) {
+        const popupContent = `
+          <div class="flex flex-col">
+            <div class="flex gap-2">
+              <img
+                src="${marker.images?.[0]}"
+                alt="${marker.name}"
+                class="w-16 h-16 rounded-lg object-cover"
+              />
+              <div class="flex flex-col gap-2">
+                <div class="font-bold outline-none">
+                  <a href="/venues/${marker.slug}" class="hover:underline cursor-pointer">
+                    ${marker.name}
+                  </a>
+                </div>
+                <div class="flex items-center text-red-500 gap-1">
+                  ${marker.rating?.toString() ? `<span>⭐</span>${marker.rating}` : ''}
+                  ${marker.review_count?.toString() ? `<span class="text-gray-500">(${marker.review_count})</span>` : ''}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        new maplibregl.Marker({ color: '#FF0000' })
+          .setLngLat([marker.locations.lng, marker.locations.lat])
+          .setPopup(new maplibregl.Popup({ offset: 25 }).setHTML(popupContent))
+          .addTo(map.current!);
+      }
+    });
   };
 
   return (
-    <div className="relative w-full h-calc(100vh-77px)">
+    <div className={clsx('w-full h-full', className)}>
       <div ref={mapContainer} className="absolute w-full h-full" />
     </div>
   );

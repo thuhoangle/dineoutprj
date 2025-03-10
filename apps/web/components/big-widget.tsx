@@ -63,7 +63,7 @@ export const BigWidget = ({
         </div>
         <div className="flex items-center text-gray-500 gap-0.5">
           <GrLocation className="text-inherit w-5" />
-          <TextField preset="p3" text={data.locations.neighborhood} />
+          <TextField preset="p3" text={data.district} />
         </div>
       </div>
     </div>

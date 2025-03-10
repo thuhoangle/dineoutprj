@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { IoFlashOutline } from 'react-icons/io5';
 import { FiStar } from 'react-icons/fi';
 import { HiOutlineSparkles } from 'react-icons/hi';

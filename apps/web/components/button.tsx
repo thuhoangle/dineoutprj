@@ -66,7 +66,7 @@ export interface ButtonProps extends SimpleButtonProps {
   className?: string;
 }
 export const Button: FC<ButtonProps> = (props) => {
-  const { preset = 'sgray1', size = 'md', className, ...rest } = props;
+  const { preset = 'red', size = 'md', className, ...rest } = props;
 
   return (
     <SimpleButton
@@ -125,7 +125,7 @@ const presetTextClassName: {
   sgray1: 'text-gray-900',
   sgray2: 'text-gray-900',
   green: 'text-gray-950',
-  red: 'text-red-600',
+  red: 'text-white',
   tgray1: 'text-gray-400',
   tgray2: 'text-gray-300',
   tred: 'text-red-500',

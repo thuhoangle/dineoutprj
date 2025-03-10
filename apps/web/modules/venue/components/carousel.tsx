@@ -21,7 +21,7 @@ export const Carousel = ({ data }: { data: string[] }) => {
       }}
       navigation={true}
       modules={[Pagination, Navigation]}
-      className="justify-center items-center flex overflow-x-hidden"
+      className="justify-center w-full items-center flex overflow-x-hidden"
     >
       {data.map((item: string, index: number) => (
         <SwiperSlide key={index}>

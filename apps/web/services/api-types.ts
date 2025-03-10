@@ -3,6 +3,7 @@ export interface RestaurantInfo {
   name: string;
   rating: number;
   review_count: number;
+  district: string;
   short_overview: string;
   overview: string;
   images?: string[];
@@ -10,6 +11,9 @@ export interface RestaurantInfo {
   keywords?: string[];
   price_range: number;
   slug?: string;
+  ggUrl?: string;
+  phone?: string;
+  website?: string;
   cancellation_policy: string;
   reservation_policy: Reservationpolicy[];
   working_time: WorkingTime[];
@@ -21,10 +25,11 @@ interface Reservationpolicy {
 }
 
 interface Locations {
-  lat: string;
-  long: string;
+  lat: number;
+  lng: number;
   address: string;
   neighborhood: string;
+  countryCode: string;
   city: string;
 }
 
@@ -33,6 +38,25 @@ interface WorkingTime {
   time: string;
 }
 
+export interface GetAvailableSeats {
+  id: string;
+  restaurant_id: string;
+  table_id: string;
+  date: string;
+  time: string;
+}
+
+export interface AvailableSeats {
+  id: string;
+  restaurant_id: string;
+  table_id: string;
+  date: string;
+  time: string;
+  tables: {
+    capacity: number;
+    seat_type: string;
+  };
+}
 interface RestaurantDetails {
   overview: string;
   cancellation_policy: string;
@@ -77,15 +101,13 @@ export interface GetRestaurantAvailableList {
 
 export interface CreateReservation {
   created_at: string;
-  id: string;
-  user_id: string;
   restaurant_id: string;
   table_id: string;
-  reservation_time: string;
   party_size: number;
   status: string;
   occasion: string;
   additional_info: string;
+  reservation_time: string;
 }
 
 // export interface AvailableForReservation {
@@ -128,20 +150,20 @@ export interface GeoLocationResponse {
 
 // export interface GetRestaurantAvailableList {
 
-export interface GetVenueSearch {
-  available: boolean;
-  geo: {
-    long: number;
-    lat: number;
-  };
-  page: number;
-  last_page: number;
-  total: number;
-  slot_filter: {
-    day: string;
-    guest_number: number;
-  };
-  venue_filter: {
-    keyword: string[];
-  };
-}
+// export interface GetVenueSearch {
+//   available: boolean;
+//   geo: {
+//     long: number;
+//     lat: number;
+//   };
+//   page: number;
+//   last_page: number;
+//   total: number;
+//   slot_filter: {
+//     day: string;
+//     guest_number: number;
+//   };
+//   venue_filter: {
+//     keyword: string[];
+//   };
+// }

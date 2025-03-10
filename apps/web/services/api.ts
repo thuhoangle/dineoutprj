@@ -48,7 +48,7 @@ import apisauce from 'apisauce';
 import axios, { AxiosInstance } from 'axios';
 import { RestaurantInfo, GeoLocationResponse } from './api-types';
 
-const GEOCODE_API_KEY = '673f3ca7cf77c790832855pxbea4862';
+const GEOCODE_API_KEY = process.env.NEXT_PUBLIC_GEOCODE_API_KEY;
 
 class Api {
   axiosApi = axios.create({

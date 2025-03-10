@@ -25,7 +25,7 @@ export const ReservationInput = ({ className }: { className?: string }) => {
   return (
     <div
       className={clsx(
-        'flex items-center justify-center gap-2 divide-x-1 divide-gray-300 py-3 px-5 border border-gray-200 rounded-full',
+        'flex items-center justify-center gap-2 divide-x-1 divide-gray-800 py-3 px-5 border border-gray-600 rounded-full',
         className
       )}
     >
@@ -43,16 +43,16 @@ export const ReservationInput = ({ className }: { className?: string }) => {
         value={dayjs().format('YYYY-MM-DD').toString()}
       /> */}
       <TextInput
-        className="!min-w-32 overflow-clip justify-center h-9"
-        inputContainerClassName="!outline-none !border-none ring-offset-0 ring-0"
+        className="!min-w-32 overflow-clip justify-center"
+        inputContainerClassName="!outline-none !border border-2 h-8 !bg-transparent"
         type="time"
         value="13:30"
         step={1800}
       />
       <TextInput
-        className="!w-32"
+        className="w-40"
         inputType="number"
-        inputContainerClassName="!outline-none !border-none ring-offset-0 ring-0"
+        inputContainerClassName="!outline-none !border border-2 ring-offset-0 ring-0 !bg-transparent"
         type="number"
         unit={numberOfPeople === '1' ? 'Person' : 'People'}
         value={numberOfPeople}
