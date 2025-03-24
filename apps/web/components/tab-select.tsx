@@ -65,12 +65,12 @@ const containerPreset: {
   [key in SimpleTabSelectPreset]: (size?: SizePresets) => string;
 } = {
   gray1: () => '',
-  gray2: () => 'bg-gray-100 rounded-md',
+  gray2: () => 'bg-gray-900 rounded-md',
   underline: () => '',
   grayBg: (size) =>
-    clsx('rounded-lg bg-gray-100', size === 'md' ? 'p-1.5' : 'p-1'),
+    clsx('rounded-lg bg-gray-900', size === 'md' ? 'p-1.5' : 'p-1'),
   grayBgDarker: (size) =>
-    clsx('rounded-lg bg-gray-200', size === 'md' ? 'p-1.5' : 'p-1'),
+    clsx('rounded-lg bg-gray-800', size === 'md' ? 'p-1.5' : 'p-1'),
 };
 
 const TabItem = ({
@@ -128,16 +128,16 @@ const buttonPreset: {
 } = {
   gray1: (isSelected: boolean, size: SizePresets) =>
     clsx(
-      'rounded-md outline-none hover:bg-gray-100 hover:text-gray-100 focus:text-gray-100 focus:ring-4 focus:ring-gray-500 focus:ring-opacity-20',
-      isSelected ? 'bg-gray-100 text-gray-100' : 'text-gray-500',
+      'rounded-md outline-none hover:bg-gray-900 hover:text-gray-100 focus:text-gray-100 focus:ring-4 focus:ring-gray-500 focus:ring-opacity-20',
+      isSelected ? 'bg-gray-900 text-gray-100' : 'text-gray-500',
       size === 'md' ? 'p-3' : 'px-3 py-[7px]'
     ),
   gray2: (isSelected: boolean, size: SizePresets) =>
     clsx(
       'rounded-md px-3 py-[7px] outline-none hover:text-gray-100 focus:text-gray-100 focus:ring-4 focus:ring-gray-500',
       isSelected
-        ? 'bg-gray-300 text-gray-100 hover:bg-gray-200 focus:ring-opacity-40'
-        : 'bg-gray-100 text-gray-500 hover:bg-gray-300 focus:ring-opacity-20',
+        ? 'bg-gray-700 text-gray-100 hover:bg-gray-600 focus:ring-opacity-40'
+        : 'bg-gray-900 text-gray-500 hover:bg-gray-800 focus:ring-opacity-20',
       size === 'md' ? 'p-3' : 'px-3 py-[7px]'
     ),
   underline: (isSelected: boolean, size: SizePresets) =>
@@ -150,16 +150,16 @@ const buttonPreset: {
     clsx(
       'rounded-md px-3 py-[7px] outline-none hover:text-gray-100 focus:text-gray-100 focus:ring-4 focus:ring-gray-500',
       isSelected
-        ? 'bg-gray-300 text-gray-100 hover:bg-gray-200 focus:ring-opacity-40'
-        : 'text-gray-500 hover:bg-gray-300 focus:ring-opacity-20',
+        ? 'bg-gray-800 text-gray-100 hover:bg-gray-800 focus:ring-opacity-40'
+        : 'text-gray-500 hover:bg-gray-800 focus:ring-opacity-20',
       size === 'md' ? 'p-3' : 'px-3 py-[7px]'
     ),
   grayBgDarker: (isSelected: boolean, size: SizePresets) =>
     clsx(
       'rounded-md px-3 py-[7px] outline-none hover:text-gray-100 focus:text-gray-100 focus:ring-4 focus:ring-gray-500',
       isSelected
-        ? 'bg-gray-300 text-gray-100 hover:bg-gray-200 focus:ring-opacity-40'
-        : 'text-gray-500 hover:bg-gray-300 focus:ring-opacity-20',
+        ? 'bg-gray-700 text-gray-100 hover:bg-gray-600 focus:ring-opacity-40'
+        : 'text-gray-500 hover:bg-gray-800 focus:ring-opacity-20',
       size === 'md' ? 'p-3' : 'px-3 py-[7px]'
     ),
 };

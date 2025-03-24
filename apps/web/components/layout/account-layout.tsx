@@ -12,28 +12,28 @@ import { IconType } from 'react-icons';
 export const AccountPageLayout = ({ children }: { children: ReactNode }) => {
   const pathnameFromRouter = usePathname();
   const pathname = pathnameFromRouter?.replace('/account', '');
-  console.log(
-    '🚀 ~ AccountPageLayout ~ pathnameFromRouter:',
-    pathnameFromRouter,
-    pathname
-  );
+  // console.log(
+  //   '🚀 ~ AccountPageLayout ~ pathnameFromRouter:',
+  //   pathnameFromRouter,
+  //   pathname
+  // );
   const router = useRouter();
 
   const NAV_ITEMS = [
     {
       Icon: MdOutlineDateRange,
       label: 'Reservations & Notify',
-      value: '/reservations',
+      value: '/account/reservations',
     },
     {
       Icon: CgProfile,
       label: 'Profile',
-      value: '/profile',
+      value: '/account/profile',
     },
     {
       Icon: IoIosSettings,
       label: 'Settings',
-      value: '/settings',
+      value: '/account/settings',
     },
     // {
     //   Icon: MdOutlineLogin,
@@ -125,9 +125,9 @@ const NavItem = memo(
       <button
         disabled={disabled}
         className={clsx(
-          'relative w-full my-0.5 flex items-center gap-2 rounded-md px-4 py-2 transition duration-200 ease-in hover:bg-neutral-900 disabled:opacity-50',
+          'relative w-full my-0.5 flex items-center gap-2 rounded-md px-4 py-2 transition duration-200 ease-in hover:bg-neutral-950 disabled:opacity-50',
           isSelected
-            ? 'bg-gray-900 text-red-600 hover:text-red-600'
+            ? 'bg-gray-950 text-red-600 hover:text-red-600'
             : 'text-gray-500 hover:text-gray-500'
         )}
         onClick={_onClick}

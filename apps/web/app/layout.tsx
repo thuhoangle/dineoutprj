@@ -8,6 +8,7 @@ import { siteConfig } from '@/config/site';
 import { fontSans } from '@/config/fonts';
 import { Navbar } from '@/components/menu/header-menu';
 import ClientToaster from '@/config/client-toaster';
+import { ModalPortal } from '@/components/modal-portal';
 
 export const metadata: Metadata = {
   title: {
@@ -46,6 +47,7 @@ export default function RootLayout({
             <Navbar />
             <main className="container mx-auto pt-5 flex-grow">{children}</main>
             <ClientToaster />
+            <ModalPortal />
             {/* <footer className="w-full flex items-center justify-center py-3">
               <Link
                 isExternal

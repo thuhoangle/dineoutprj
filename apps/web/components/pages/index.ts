@@ -1,1 +1,1 @@
-export * from './account-panel';
+export * from './profile/account-panel';

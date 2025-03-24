@@ -66,9 +66,9 @@ export default function VenuesPage() {
         <div className="flex flex-col">
           <TextField preset="h2" weight="b" text={`Restaurants nearby`} />
           <TextField
+            className="text-gray-500"
             preset="h6"
             weight="m"
-            color="gray"
             text={`${filteredItems.length} ${filteredItems.length > 1 ? 'venues' : 'venue'}`}
           />
         </div>

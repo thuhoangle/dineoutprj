@@ -5,6 +5,7 @@ import { GrLocation } from 'react-icons/gr';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { RestaurantInfo } from '@/services';
+import { useRouter } from 'next/navigation';
 
 export const BigWidget = ({
   data,
@@ -21,13 +22,19 @@ export const BigWidget = ({
   };
   onSetFav: (resId: string) => void;
 }) => {
+  const router = useRouter();
+
   return (
-    <div className={clsx('flex flex-col gap-3', className)}>
+    <div
+      className={clsx('flex flex-col gap-3', className)}
+      onClick={() => router.push(`/venues/${data.slug}`)}
+    >
       <div className="relative rounded-lg aspect-square w-72">
         <Image
           //   layout="responsive"
           fill
           style={{
+            cursor: 'pointer',
             borderRadius: '8px',
             objectFit: 'cover',
             objectPosition: 'center',

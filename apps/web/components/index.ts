@@ -18,3 +18,4 @@ export * from './feature-icon';
 export * from './simple-loading';
 export * from './toast-helper';
 export * from './pages';
+export * from './modal-portal';

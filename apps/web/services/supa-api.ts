@@ -1,6 +1,6 @@
 import { useUserStore } from '@/stores';
 import { createClient } from '@/utils/supabase/client';
-import { CreateReservation } from './api-types';
+import { ReservationInfo } from './api-types';
 
 const supabase = createClient();
 
@@ -54,10 +54,17 @@ export class supaApi {
       .eq('restaurant_id', restaurantId);
 
   // RESERVATIONS
-  createReservation = (data: CreateReservation) =>
+  createReservation = (data: ReservationInfo) =>
     supabase
       .from('reservations')
       .insert([{ ...data, user_id: this.getAuthId() }]);
+
+  // Take as REFERENCE, cus i call seperately in each Now, Past, Upcoming Reservation file
+  getReservations = () =>
+    supabase
+      .from('reservations')
+      .select('*, restaurants(name)')
+      .eq('user_id', this.getAuthId());
 }
 
 export const supaApiInstance = new supaApi();

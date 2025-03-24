@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
 import { useUserStore } from '@/stores';
-import { TextField } from '../../text';
+import { TextField } from '../../../text';
 import { TextInput } from '@/components/simple-input';
 import { useEffect } from 'react';
 import { Button } from '@/components/button';

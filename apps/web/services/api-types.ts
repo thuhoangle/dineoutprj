@@ -99,7 +99,14 @@ export interface GetRestaurantAvailableList {
   guest_count?: number;
 }
 
-export interface CreateReservation {
+export interface ReservationInfo {
+  id?: string;
+  restaurants?: {
+    name: string;
+    images?: string[];
+    address: string;
+    phone: string;
+  };
   created_at: string;
   restaurant_id: string;
   table_id: string;
@@ -108,6 +115,7 @@ export interface CreateReservation {
   occasion: string;
   additional_info: string;
   reservation_time: string;
+  seat_type: string;
 }
 
 // export interface AvailableForReservation {
