@@ -1,10 +1,25 @@
 'use client';
 
-import { Button, TextField, TextInput } from '@/components';
-import { useLoginSignup } from '@/hooks';
-import { useState } from 'react';
+import { FC } from 'react';
 
-export default function LoginPage() {
+import { TextInput } from '@/components/simple-input';
+import { TextField } from '@/components/text';
+import { Button } from '@/components/button';
+import { useLoginSignup } from '@/hooks';
+import { ModalHeader, SimpleModal } from '../simple-modal';
+
+import { useState } from 'react';
+import { ModalBaseProps } from '../types';
+
+interface ModalLoginProps extends ModalBaseProps {
+  onOpenChange: () => void;
+}
+
+export const ModalLogin: FC<ModalLoginProps> = ({
+  isVisible,
+  closeFromController,
+  onOpenChange,
+}) => {
   const {
     email,
     setEmail,
@@ -16,18 +31,29 @@ export default function LoginPage() {
     onSignup,
     fetchingLogin,
     fetchingSignup,
-  } = useLoginSignup(true);
+  } = useLoginSignup();
+
+  const _handleAuth = async () => {
+    if (isSignup) {
+      await onSignup();
+    } else {
+      await onLogin();
+    }
+    onOpenChange();
+  };
 
   const [isSignup, setIsSignup] = useState(false);
 
   return (
-    <div className="w-full flex items-center flex-col gap-8 justify-center">
-      <TextField
-        preset="h1"
-        text={isSignup ? 'Welcome to Dineout!' : 'Welcome back to Dineout!'}
-        weight="s"
-      />
-      <div className="flex flex-col gap-5 w-full max-w-xl">
+    <SimpleModal
+      hideModalCB={closeFromController}
+      isVisible={isVisible}
+      showCloseIcon
+      panelClassName="gap-5"
+      panelWrapperClassName="z-[9999]"
+    >
+      <ModalHeader title={isSignup ? 'Sign up' : 'Log in'} />
+      <div className="flex flex-col gap-5 w-full">
         <TextInput
           label="Your email"
           type="email"
@@ -48,7 +74,7 @@ export default function LoginPage() {
             fetching={fetchingLogin || fetchingSignup}
             preset="red"
             text={isSignup ? 'Sign up' : 'Log in'}
-            onClick={isSignup ? onSignup : onLogin}
+            onClick={_handleAuth}
           />
           <TextField preset="p4" weight="m" color="g400">
             {isSignup ? 'Already have an account? ' : "Don't have an account? "}
@@ -61,6 +87,6 @@ export default function LoginPage() {
           </TextField>
         </div>
       </div>
-    </div>
+    </SimpleModal>
   );
-}
+};

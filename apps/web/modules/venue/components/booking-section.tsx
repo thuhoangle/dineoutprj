@@ -5,12 +5,19 @@ import dayjs from 'dayjs';
 import { today, getLocalTimeZone, DateValue } from '@internationalized/date';
 import { useMemo } from 'react';
 
-import { BookingDrawer, Button, TextField } from '@/components';
+import {
+  BookingDrawer,
+  Button,
+  ModalLogin,
+  ModalPortalController,
+  TextField,
+} from '@/components';
 import { DatePicker } from '@nextui-org/date-picker';
 import { Select, SelectItem, useDisclosure } from '@nextui-org/react';
 import { RestaurantInfo } from '@/services';
 import { useReservation } from '@/hooks';
 import { AvailableSeats } from '@/services';
+import { useUserStore } from '@/stores';
 
 export const BookingSection = ({
   data,
@@ -19,6 +26,7 @@ export const BookingSection = ({
   data: RestaurantInfo;
   availableSeatsList: AvailableSeats[];
 }) => {
+  const authInfo = useUserStore((state) => state.authInfo);
   const {
     getReservationDatetime,
     createReservation,
@@ -32,10 +40,27 @@ export const BookingSection = ({
     selectedTime,
     setSelectedTime,
     timeOptions,
-    filteredTimeOptions,
   } = useReservation();
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  const _handleOpen = () => {
+    if (!authInfo) {
+      ModalPortalController.showModal({
+        id: 'modal-login',
+        Component: ModalLogin,
+        props: {
+          isVisible: true,
+          onOpenChange: () => {
+            ModalPortalController.hideModal('modal-login');
+            onOpen();
+          },
+        },
+      });
+    } else {
+      onOpen();
+    }
+  };
 
   const filteredSeats = useMemo(() => {
     return availableSeatsList.filter((seat) => {
@@ -86,7 +111,7 @@ export const BookingSection = ({
         selectedDate={selectedDate}
         selectedTime={selectedTime}
         data={filteredSeats}
-        onClick={() => onOpen()}
+        onClick={_handleOpen}
         setSelectedTime={setSelectedTime}
       />
       <BookingDrawer

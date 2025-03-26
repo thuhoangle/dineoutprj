@@ -1,7 +1,7 @@
 'use client';
 
 import { toastHelper } from '@/components';
-import { AppSocket, subscribeToCustomerUpdates } from '@/services/supa-socket';
+import { AppSocket } from '@/services/supa-socket';
 import { useVenueInfoStore } from '@/stores';
 import { useUserStore } from '@/stores/useUserStore';
 import { createClient } from '@/utils/supabase/client';
@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 
 import { useState } from 'react';
 
-export const useLoginSignup = () => {
+export const useLoginSignup = (goToHomePage?: boolean) => {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [errorEmail, setErrorEmail] = useState('');
@@ -47,14 +47,19 @@ export const useLoginSignup = () => {
       setFetchingLogin(true);
       await supabase.auth.signInWithPassword(dataInput);
       await useUserStore.getState().getAuthInfo();
+      await useUserStore.getState().getPortfolioDetail();
+      await useVenueInfoStore.getState().getFavRestaurants();
       const userId = useUserStore.getState().authInfo?.id;
       if (userId) {
         AppSocket.subscribeToCustomerUpdates(userId);
       }
+      setFetchingLogin(false);
 
       // revalidatePath('/', 'layout');
       // redirect('/venues');
-      router.push('/');
+      if (goToHomePage) {
+        router.push('/');
+      }
     } catch (error: any) {
       setFetchingLogin(false);
       toastHelper.error(error.message);
@@ -70,6 +75,7 @@ export const useLoginSignup = () => {
   };
 
   const onSignup = async () => {
+    setFetchingSignup(true);
     const supabase = await createClient();
 
     if (!_validate()) return;
@@ -85,6 +91,7 @@ export const useLoginSignup = () => {
       revalidatePath('/', 'layout');
       redirect('/account/profile');
     } else {
+      setFetchingSignup(false);
       redirect('/error');
     }
   };

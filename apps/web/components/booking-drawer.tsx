@@ -12,16 +12,11 @@ import { BsFillPeopleFill } from 'react-icons/bs';
 import { TextField } from './text';
 import dayjs from 'dayjs';
 import { Select, SelectItem } from '@nextui-org/select';
-import { useState } from 'react';
 import { Input } from '@nextui-org/input';
 import { toastHelper } from './toast-helper';
-import { useUserStore } from '@/stores/useUserStore';
-import { useBookingStore } from '@/stores/useBookingStore';
-import toast from 'react-hot-toast';
 import { Button as MyButton } from './button';
 import { Button } from '@nextui-org/button';
 import { AvailableSeats, RestaurantInfo } from '@/services';
-import { time } from 'console';
 
 export const BookingDrawer = ({
   isOpen,
@@ -46,13 +41,7 @@ export const BookingDrawer = ({
   onReserve: (resId: string, tableId: string, seat_type?: string) => void;
   selectedOption: AvailableSeats | undefined;
 }) => {
-  const authInfo = useUserStore((state) => state.authInfo);
-
   const _onReserve = async ({ onClose }: { onClose: () => void }) => {
-    if (!authInfo) {
-      toastHelper.error('Please login to continue');
-      return;
-    }
     if (!selectedOption?.table_id) {
       toastHelper.error('Please select a table');
       return;
@@ -75,7 +64,7 @@ export const BookingDrawer = ({
       isDismissable={false}
       shouldBlockScroll={false}
       classNames={{
-        base: 'data-[placement=right]:sm:m-2 data-[placement=left]:sm:m-2  rounded-medium',
+        base: 'data-[placement=right]:sm:m-2 data-[placement=left]:sm:m-2 rounded-medium',
       }}
       isOpen={isOpen}
       onOpenChange={onOpenChange}
@@ -105,14 +94,6 @@ export const BookingDrawer = ({
                   <path d="m13 17 5-5-5-5M6 17l5-5-5-5" />
                 </svg>
               </Button>
-              {/* <Button
-                className="font-medium text-small text-default-500"
-                size="sm"
-                variant="flat"
-              >
-                Log in
-              </Button> */}
-              {/* </div> */}
             </DrawerHeader>
             <DrawerBody className="pt-12">
               <div className="flex w-full justify-start items-center pt-4">

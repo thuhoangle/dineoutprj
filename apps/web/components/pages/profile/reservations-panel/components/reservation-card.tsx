@@ -4,12 +4,10 @@ import {
   ModalReservation,
 } from '@/components/modal-portal';
 import { ReservationInfo } from '@/services';
-import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { MdRemoveRedEye } from 'react-icons/md';
 
 export const ReservationCard = ({ data }: { data: ReservationInfo }) => {
-  console.log('🚀 ~ ReservationCard ~ data:', data);
   const _onViewDetail = async () => {
     ModalPortalController.showModal({
       Component: ModalReservation,
