@@ -80,7 +80,7 @@ export const SimpleModal: FC<SimpleModalProps> = ({
       )}
       panelClassName={clsx(
         overridePanelClassName ||
-          'relative flex w-full transform flex-col overflow-hidden rounded-xl bg-gray-900 p-4 shadow-xl transition-all ipadMini:my-8 ipadMini:max-h-[90vh] ipadMini:max-w-lg ipadMini:p-6',
+          'relative flex w-full transform flex-col overflow-hidden rounded-xl bg-gray-950 p-4 shadow-xl transition-all ipadMini:my-8 ipadMini:max-h-[90vh] ipadMini:max-w-lg ipadMini:p-6',
         panelClassName
       )}
       hideModalCB={hideModalCB}

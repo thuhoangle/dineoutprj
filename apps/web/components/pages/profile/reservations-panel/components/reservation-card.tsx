@@ -3,11 +3,17 @@ import {
   ModalPortalController,
   ModalReservation,
 } from '@/components/modal-portal';
+import { toastHelper } from '@/components/toast-helper';
 import { ReservationInfo } from '@/services';
+import { useReservationStore } from '@/stores';
+import { supabase } from '@/utils';
 import dayjs from 'dayjs';
+import { useState } from 'react';
 import { MdRemoveRedEye } from 'react-icons/md';
 
 export const ReservationCard = ({ data }: { data: ReservationInfo }) => {
+  const { handleCancel, isLoading } = useCancelReservation(data);
+
   const _onViewDetail = async () => {
     ModalPortalController.showModal({
       Component: ModalReservation,
@@ -15,6 +21,13 @@ export const ReservationCard = ({ data }: { data: ReservationInfo }) => {
         data,
       },
     });
+  };
+
+  const isCancelDisabled = () => {
+    const reservationTime = dayjs(data.reservation_time);
+    const now = dayjs();
+    const hoursDiff = now.diff(reservationTime, 'hour');
+    return hoursDiff > 5;
   };
 
   return (
@@ -47,8 +60,40 @@ export const ReservationCard = ({ data }: { data: ReservationInfo }) => {
           text="View"
           onClick={_onViewDetail}
         />
-        <Button preset="secondary" text="Cancel" />
+
+        <Button
+          preset="secondary"
+          text="Cancel"
+          onClick={handleCancel}
+          fetching={isLoading}
+          disabled={isCancelDisabled()}
+        />
       </div>
     </div>
   );
+};
+
+const useCancelReservation = (data: ReservationInfo) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleCancel = async () => {
+    setIsLoading(true);
+    const { error } = await supabase
+      .from('reservations')
+      .delete()
+      .eq('id', data.id);
+
+    if (!error) {
+      await useReservationStore.getState().getTodayReservations();
+      await useReservationStore.getState().getUpcomingReservations();
+      await useReservationStore.getState().getPassReservations();
+      setIsLoading(false);
+      toastHelper.success('Reservation cancelled successfully');
+    } else {
+      setIsLoading(false);
+      toastHelper.error('Failed to cancel reservation');
+    }
+  };
+
+  return { handleCancel, isLoading };
 };

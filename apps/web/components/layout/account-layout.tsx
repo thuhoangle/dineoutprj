@@ -41,7 +41,6 @@ export const AccountPageLayout = ({ children }: { children: ReactNode }) => {
     //   value: '/logout',
     // },
   ];
-  console.log('NAV_ITEMS', NAV_ITEMS);
 
   return (
     <div className="flex w-full gap-2 px-2 ipadMini:h-0 ipadMini:flex-1">

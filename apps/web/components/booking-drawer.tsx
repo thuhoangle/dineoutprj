@@ -183,7 +183,7 @@ export const BookingDrawer = ({
                         label="Occasion"
                         onChange={(e) => setOccasion(e.target.value)}
                       >
-                        {EVENTS.map((item) => (
+                        {OCCASSION_EVENTS.map((item) => (
                           <SelectItem key={item.label}>{item.value}</SelectItem>
                         ))}
                       </Select>
@@ -218,7 +218,7 @@ export const BookingDrawer = ({
   );
 };
 
-const EVENTS = [
+export const OCCASSION_EVENTS = [
   {
     label: 'birthday',
     value: 'Birthday',

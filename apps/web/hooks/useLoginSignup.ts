@@ -52,6 +52,7 @@ export const useLoginSignup = (goToHomePage?: boolean) => {
       const userId = useUserStore.getState().authInfo?.id;
       if (userId) {
         AppSocket.subscribeToCustomerUpdates(userId);
+        AppSocket.subscribeToReservationUpdates(userId);
       }
       setFetchingLogin(false);
 

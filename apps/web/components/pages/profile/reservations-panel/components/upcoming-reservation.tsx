@@ -2,18 +2,14 @@
 
 import { SimpleLoading } from '@/components/simple-loading';
 import { TextField } from '@/components/text';
-import { toastHelper } from '@/components/toast-helper';
-import { ReservationInfo } from '@/services';
-import { useUserStore } from '@/stores';
-import { supabase } from '@/utils';
-import dayjs from 'dayjs';
+import { useReservationStore } from '@/stores';
 import { useEffect, useState } from 'react';
 import { ReservationCard } from './reservation-card';
 import clsx from 'clsx';
 
 export const UpcomingReservation = ({ className }: { className?: string }) => {
   const [fetching, setFetching] = useState(false);
-  const [dataList, setDataList] = useState<ReservationInfo[]>([]);
+  const { upcomingReservations } = useReservationStore((state) => state);
 
   useEffect(() => {
     _getData();
@@ -21,25 +17,8 @@ export const UpcomingReservation = ({ className }: { className?: string }) => {
 
   const _getData = async () => {
     setFetching(true);
-    const { data, error } = await supabase
-      .from('reservations')
-      .select('*, restaurants(name, images, locations->address, phone)')
-      .eq('user_id', useUserStore.getState().authInfo?.id)
-      // .eq('status', 'pending')
-      .gte(
-        'reservation_time',
-        dayjs().add(1, 'day').startOf('day').format('YYYY-MM-DD HH:mm:ss')
-      )
-      .lt(
-        'reservation_time',
-        dayjs().add(1, 'day').endOf('day').format('YYYY-MM-DD HH:mm:ss')
-      );
+    await useReservationStore.getState().getUpcomingReservations();
     setFetching(false);
-    if (error) {
-      toastHelper.error(error.message);
-      return;
-    }
-    setDataList(data);
   };
 
   return (
@@ -48,8 +27,10 @@ export const UpcomingReservation = ({ className }: { className?: string }) => {
       <div className="flex flex-wrap gap-4">
         {fetching ? (
           <SimpleLoading />
-        ) : dataList?.length ? (
-          dataList.map((data) => <ReservationCard data={data} key={data.id} />)
+        ) : upcomingReservations?.length ? (
+          upcomingReservations.map((data) => (
+            <ReservationCard data={data} key={data.id} />
+          ))
         ) : (
           <TextField
             preset="p4"
