@@ -25,7 +25,6 @@ import { useRouter } from 'next/navigation';
 import { FC, useState, useCallback, use, useEffect } from 'react';
 import { getNavItems, NavItemType } from './menu-data';
 import axios from 'axios';
-import { createSerClient } from '@/utils/supabase/server';
 import { useUserStore } from '@/stores/useUserStore';
 import { useLoginSignup } from '@/hooks';
 import {
@@ -48,55 +47,54 @@ export const Navbar: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
   const pathname = usePathname();
   const router = useRouter();
   const portfolioDetail = useUserStore((state) => state.portfolioDetail);
-  console.log('🚀 ~ portfolioDetail:', portfolioDetail);
 
   const { onLogout } = useLoginSignup();
 
-  const [fetching, setFetching] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [recommendations, setRecommendations] = useState<MoviesProps[]>([]);
+  // const [fetching, setFetching] = useState(false);
+  // const [searchQuery, setSearchQuery] = useState('');
+  // const [recommendations, setRecommendations] = useState<MoviesProps[]>([]);
 
-  const options = getNavItems();
-  const _onItemClick = (navItem: NavItemType) => {
-    if (navItem.route && pathname?.includes(navItem.route)) onGoSamePath?.();
-    if (navItem.route) router.push(navItem.route);
-  };
+  // const options = getNavItems();
+  // const _onItemClick = (navItem: NavItemType) => {
+  //   if (navItem.route && pathname?.includes(navItem.route)) onGoSamePath?.();
+  //   if (navItem.route) router.push(navItem.route);
+  // };
 
-  const fetchRecommendations = async (query: string) => {
-    setFetching(true);
-    try {
-      const response = await axios.post(
-        'http://127.0.0.1:5000/recommendations',
-        { query },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      setRecommendations(response.data);
-      setFetching(false);
-    } catch (err: any) {
-      setRecommendations([]);
-      setFetching(false);
-    }
-  };
-  const debouncedFetchRecommendations = useCallback(
-    debounce(async (query: string) => {
-      if (!query.trim()) {
-        setRecommendations([]);
-        return;
-      }
-      await fetchRecommendations(query);
-    }, 500),
-    []
-  );
+  // const fetchRecommendations = async (query: string) => {
+  //   setFetching(true);
+  //   try {
+  //     const response = await axios.post(
+  //       'http://127.0.0.1:5000/recommendations',
+  //       { query },
+  //       {
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //       }
+  //     );
+  //     setRecommendations(response.data);
+  //     setFetching(false);
+  //   } catch (err: any) {
+  //     setRecommendations([]);
+  //     setFetching(false);
+  //   }
+  // };
+  // const debouncedFetchRecommendations = useCallback(
+  //   debounce(async (query: string) => {
+  //     if (!query.trim()) {
+  //       setRecommendations([]);
+  //       return;
+  //     }
+  //     await fetchRecommendations(query);
+  //   }, 500),
+  //   []
+  // );
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value;
-    setSearchQuery(query);
-    debouncedFetchRecommendations(query);
-  };
+  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const query = e.target.value;
+  //   setSearchQuery(query);
+  //   debouncedFetchRecommendations(query);
+  // };
 
   const searchInput = (
     <Input

@@ -84,7 +84,7 @@ export const TextInput: FC<SimpleTextInputProps> = ({
       <div className="flex">
         <div
           className={clsx(
-            'flex flex-1 items-center gap-1 overflow-hidden rounded-lg border ipadMini:gap-2.5 bg-gray-900',
+            'flex flex-1 items-center gap-1 overflow-hidden rounded-lg border ipadMini:gap-2.5 bg-gray-950',
             rightButtonProps ? 'rounded-r-none' : ' ',
             inputSize === 'sm' ? 'px-3' : 'px-4',
             isFocused

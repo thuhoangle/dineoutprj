@@ -89,7 +89,12 @@ const ToastContent = ({
             text={title}
             weight="m"
           />
-          <TextField preset="p4" text={message as string} weight="r" />
+          <TextField
+            color="gray"
+            preset="p4"
+            text={message as string}
+            weight="m"
+          />
         </div>
       </div>
       {type !== 'loading' && <ProcessBar duration={duration} type={type} />}
