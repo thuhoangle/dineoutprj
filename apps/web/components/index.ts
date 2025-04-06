@@ -19,3 +19,4 @@ export * from './simple-loading';
 export * from './toast-helper';
 export * from './pages';
 export * from './modal-portal';
+export * from './global-loading';
