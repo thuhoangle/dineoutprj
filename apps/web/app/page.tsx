@@ -70,7 +70,7 @@ export default function Home() {
         <HorizontalSection title="Rising Venues" dataList={risingData} />
       </div>
       <div className="w-full max-w-7xl flex-1 py-28">
-        <div className="flex flex-col gap-8 ipadMini:flex-row">
+        <div className="flex justify-center items-center flex-col gap-8 ipadMini:flex-row">
           <ExploreCard
             isFav={favRestaurant}
             onSetFav={toggleFavRestaurant}

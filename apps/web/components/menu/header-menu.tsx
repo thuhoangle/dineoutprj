@@ -22,17 +22,20 @@ import { ThemeSwitch } from '@/components/theme-switch';
 import { GithubIcon, HeartFilledIcon, SearchIcon } from '@/components/icons';
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/navigation';
-import { FC, useState, useCallback, use, useEffect } from 'react';
+import { FC, useState, useCallback, useEffect, useRef } from 'react';
 import { getNavItems, NavItemType } from './menu-data';
 import axios from 'axios';
 import { useUserStore } from '@/stores/useUserStore';
-import { useLoginSignup } from '@/hooks';
+import { useGetRestaurantInfo, useLoginSignup } from '@/hooks';
 import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
 } from '@nextui-org/dropdown';
+import { useVenueInfoStore } from '@/stores';
+import { RestaurantInfo } from '@/services';
+import { useCheckPressOutSide } from '@/hooks/useCheckPressOutSide';
 
 interface HeaderMenuProps {
   onGoSamePath?: () => void;
@@ -47,74 +50,119 @@ export const Navbar: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
   const pathname = usePathname();
   const router = useRouter();
   const portfolioDetail = useUserStore((state) => state.portfolioDetail);
-
   const { onLogout } = useLoginSignup();
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
 
-  // const [fetching, setFetching] = useState(false);
-  // const [searchQuery, setSearchQuery] = useState('');
-  // const [recommendations, setRecommendations] = useState<MoviesProps[]>([]);
+  const [searchString, setSearchString] = useState('');
+  const [searchResults, setSearchResults] = useState<RestaurantInfo[]>([]);
+  const restaurantList = useVenueInfoStore((state) => state.restaurantList);
+  const [isSearchPanelVisible, setIsSearchPanelVisible] = useState(false);
 
-  // const options = getNavItems();
-  // const _onItemClick = (navItem: NavItemType) => {
-  //   if (navItem.route && pathname?.includes(navItem.route)) onGoSamePath?.();
-  //   if (navItem.route) router.push(navItem.route);
-  // };
+  useEffect(() => {
+    useVenueInfoStore.getState().getRestaurantList();
+    setSearchString('');
+    setSearchResults([]);
+  }, []);
 
-  // const fetchRecommendations = async (query: string) => {
-  //   setFetching(true);
-  //   try {
-  //     const response = await axios.post(
-  //       'http://127.0.0.1:5000/recommendations',
-  //       { query },
-  //       {
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //       }
-  //     );
-  //     setRecommendations(response.data);
-  //     setFetching(false);
-  //   } catch (err: any) {
-  //     setRecommendations([]);
-  //     setFetching(false);
-  //   }
-  // };
-  // const debouncedFetchRecommendations = useCallback(
-  //   debounce(async (query: string) => {
-  //     if (!query.trim()) {
-  //       setRecommendations([]);
-  //       return;
-  //     }
-  //     await fetchRecommendations(query);
-  //   }, 500),
-  //   []
-  // );
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key === 'k') {
+        searchInputRef.current?.focus();
+      }
+    };
+    window.addEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, []);
 
-  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const query = e.target.value;
-  //   setSearchQuery(query);
-  //   debouncedFetchRecommendations(query);
-  // };
+  useCheckPressOutSide(searchContainerRef, () => {
+    setIsSearchPanelVisible(false);
+  });
+
+  const debouncedSearch = useCallback(
+    debounce((query: string) => handleSearch(query), 300),
+    [restaurantList]
+  );
+
+  const handleSearch = (query: string) => {
+    if (!query.trim()) {
+      setSearchResults([]);
+      return;
+    }
+
+    const filtered = restaurantList.filter((restaurant) => {
+      const searchLower = query.toLowerCase();
+      return (
+        restaurant.name?.toLowerCase().includes(searchLower) ||
+        restaurant.locations?.address?.toLowerCase().includes(searchLower)
+      );
+    });
+
+    setSearchResults(filtered);
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setSearchString(query);
+    setIsSearchPanelVisible(true);
+    debouncedSearch(query);
+  };
+
+  const handleRestaurantClick = (restaurant: RestaurantInfo) => {
+    router.push(`/restaurant/${restaurant.slug}`);
+    setSearchString('');
+    setSearchResults([]);
+    setIsSearchPanelVisible(false);
+  };
 
   const searchInput = (
-    <Input
-      aria-label="Search"
-      classNames={{
-        inputWrapper: 'bg-default-100',
-        input: 'text-sm',
-      }}
-      endContent={
-        <Kbd className="hidden lg:inline-block" keys={['command']}>
-          K
-        </Kbd>
-      }
-      labelPlacement="outside"
-      placeholder="Search..."
-      startContent={
-        <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
-      }
-      type="search"
-    />
+    <div ref={searchContainerRef} className="relative w-full max-w-md">
+      <Input
+        ref={searchInputRef}
+        aria-label="Search"
+        classNames={{
+          inputWrapper: 'bg-default-100',
+          input: 'text-sm',
+        }}
+        value={searchString}
+        onChange={handleSearchChange}
+        onFocus={() => setIsSearchPanelVisible(true)}
+        endContent={<Kbd keys={['command']}>K</Kbd>}
+        labelPlacement="outside"
+        placeholder="Search restaurants..."
+        startContent={
+          <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
+        }
+        type="search"
+      />
+      {isSearchPanelVisible &&
+        (searchResults.length > 0 ? (
+          <div className="absolute z-10 max-h-80 overflow-y-auto w-full mt-1 bg-white rounded-md shadow-lg">
+            {searchResults.map((restaurant) => (
+              <div
+                key={restaurant.id}
+                className="px-4 py-2 hover:bg-gray-950 cursor-pointer scrollbar-thin"
+                onClick={() => handleRestaurantClick(restaurant)}
+              >
+                <div className="font-medium">{restaurant.name}</div>
+                <div className="text-sm text-gray-500">
+                  {restaurant.locations?.address}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          !!searchString && (
+            <div className="absolute z-10 max-h-80 overflow-y-auto w-full mt-1 bg-white rounded-md shadow-lg">
+              <div className="px-4 py-2 font-medium text-sm text-gray-500">
+                No results found
+              </div>
+            </div>
+          )
+        ))}
+    </div>
   );
 
   return (
@@ -150,30 +198,8 @@ export const Navbar: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
         </ul>
       </NavbarContent>
 
-      <NavbarContent
-        className="hidden sm:flex basis-1/5 sm:basis-full"
-        justify="end"
-      >
+      <NavbarContent className="flex w-full" justify="center">
         {searchInput}
-        <NavbarItem className="hidden sm:flex gap-2">
-          <Link isExternal aria-label="Github" href={siteConfig.links.github}>
-            <GithubIcon className="text-default-500" />
-          </Link>
-          <ThemeSwitch />
-        </NavbarItem>
-        <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
-        <NavbarItem className="hidden md:flex">
-          <Button
-            isExternal
-            as={Link}
-            className="text-sm font-normal text-default-600 bg-default-100"
-            href={siteConfig.links.sponsor}
-            startContent={<HeartFilledIcon className="text-danger" />}
-            variant="flat"
-          >
-            Sponsor
-          </Button>
-        </NavbarItem>
       </NavbarContent>
 
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
@@ -218,29 +244,6 @@ export const Navbar: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
         <ThemeSwitch />
         {/* <NavbarMenuToggle /> */}
       </NavbarContent>
-
-      {/* <NavbarMenu>
-        {searchInput}
-        <div className="mx-4 mt-2 flex flex-col gap-2">
-          {siteConfig.navMenuItems.map((item, index) => (
-            <NavbarMenuItem key={`${item}-${index}`}>
-              <Link
-                color={
-                  index === 2
-                    ? 'primary'
-                    : index === siteConfig.navMenuItems.length - 1
-                      ? 'danger'
-                      : 'foreground'
-                }
-                href="#"
-                size="lg"
-              >
-                {item.label}
-              </Link>
-            </NavbarMenuItem>
-          ))}
-        </div>
-      </NavbarMenu> */}
     </NextUINavbar>
   );
 };
