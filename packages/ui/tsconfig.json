@@ -1,8 +1,32 @@
 {
-  "extends": "@repo/typescript-config/react-library.json",
+  "name": "ui",
+  "version": "0.0.0",
+  "license": "MIT",
+  "sideEffects": ["**/*.css"],
+  "private": true,
   "compilerOptions": {
-    "outDir": "dist"
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "outDir": "dist",
+    "declaration": true
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+  "main": "dist/index.js",
+  "include": ["src/**/*", "src/types.d.ts"],
+  "exclude": ["node_modules", "dist"],
+  "peerDependencies": {
+    "@headlessui/react": "^2.2.0",
+    "@heroicons/react": "^1.0.6",
+    "react": "^18.3.1"
+  }
 }

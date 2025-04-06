@@ -1,6 +1,6 @@
 'use client';
 
-import { useWindowSize } from '@/hooks';
+import { useWindowSize } from '@monodineout/ui';
 import React, { createContext, useMemo } from 'react';
 
 interface WindowContextProps {
