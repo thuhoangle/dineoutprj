@@ -1,5 +1,3 @@
-import type { BgPatternProps } from '../bg-pattern';
-
 export type SizePreset = 'sm' | 'md' | 'lg';
 export type ColorPreset =
   | 'primary'
@@ -17,7 +15,6 @@ export interface FeatureCoreIconProps {
 export interface FeatureIconProps extends FeatureCoreIconProps {
   preset: 'round' | 'square' | 'roundStroke' | 'outline';
   sizeMode?: SizeModePreset;
-  bgPatternProps?: BgPatternProps;
   className?: string;
 }
 

@@ -1,9 +1,10 @@
-'use client';
+import '../styles/global.css';
+import { RootLayoutClient } from '@/components/root-layout-client';
 
-import { Inter } from 'next/font/google';
-import './globals.css';
-
-const inter = Inter({ subsets: ['latin'] });
+export const metadata = {
+  title: 'Admin Dashboard',
+  description: 'Admin dashboard for DineOut',
+};
 
 export default function RootLayout({
   children,
@@ -11,8 +12,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <RootLayoutClient>{children}</RootLayoutClient>
+      </body>
     </html>
   );
 }

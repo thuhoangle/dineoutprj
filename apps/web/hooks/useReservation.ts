@@ -1,11 +1,8 @@
 import { toastHelper } from '@/components';
 import { handleError, supaApiInstance } from '@/services';
-import { useUserStore } from '@/stores';
 import { DateValue, today, getLocalTimeZone } from '@internationalized/date';
-import { table } from 'console';
 import dayjs from 'dayjs';
-import { useEffect, useState, useMemo } from 'react';
-import { useBookingStore } from '@/stores/useBookingStore';
+import { useEffect, useState } from 'react';
 
 const generateTimeOptions = (selectedDate: DateValue) => {
   const times = ['All Day'];

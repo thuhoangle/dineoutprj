@@ -41,13 +41,7 @@ interface HeaderMenuProps {
   onGoSamePath?: () => void;
 }
 
-interface MoviesProps {
-  name: string;
-  poster?: string;
-}
-
 export const Navbar: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
-  const pathname = usePathname();
   const router = useRouter();
   const portfolioDetail = useUserStore((state) => state.portfolioDetail);
   const { onLogout } = useLoginSignup();
