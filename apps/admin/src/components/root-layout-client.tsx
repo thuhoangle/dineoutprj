@@ -2,9 +2,11 @@
 
 import { ibmPlexSans, roboto, robotoMono } from '@/assets/fonts';
 import { Providers } from '@/app/providers';
-import { SideMenu } from '@/components';
+import { GlobalLoading, ModalPortal, SideMenu } from '@/components';
 import { usePathname, useRouter } from 'next/navigation';
 import { IconType } from 'react-icons';
+import { WindowProvider } from '@/contexts/window-context';
+import { Toaster } from 'react-hot-toast';
 
 export interface SideMenuItemType {
   Icon?: any;
@@ -40,27 +42,24 @@ export function RootLayoutClient({ children }: RootLayoutClientProps) {
   const { push } = useRouter();
 
   return (
-    <Providers>
-      <div
-        className={`${ibmPlexSans.variable} ${roboto.variable} ${robotoMono.variable}`}
-      >
-        <div className="min-h-screen bg-gray-100">
-          <div className="flex">
-            {/* Sidebar */}
-            <aside className="w-72 min-h-screen">
-              <SideMenu
-                currentTab={pathnameFromRouter || ''}
-                navItems={NAV_ITEMS}
-                onClickItem={(value) => push(value)}
-              />
-            </aside>
-
-            {/* Main content */}
-            <main className="flex-1 p-8">{children}</main>
-          </div>
+    <WindowProvider>
+      <div className="min-h-screen bg-gray-100">
+        <div className="flex">
+          {/* Sidebar */}
+          {/* <aside className="w-72 min-h-screen"> */}
+          <SideMenu
+            currentTab={pathnameFromRouter || ''}
+            navItems={NAV_ITEMS}
+            onClickItem={(value) => push(value)}
+          />
+          {/* </aside>  */}
+          <main className="flex-1">{children}</main>
         </div>
       </div>
-    </Providers>
+      <Toaster />
+      <ModalPortal />
+      <GlobalLoading />
+    </WindowProvider>
   );
 }
 

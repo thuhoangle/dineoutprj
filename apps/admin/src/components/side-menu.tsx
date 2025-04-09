@@ -46,7 +46,8 @@ export const SideMenu: FC<SideMenuProps> = ({
   return (
     <div
       className={clsx(
-        'hidden w-72 flex-col rounded-lg bg-bg-primary px-3 py-6 ipadMini:flex',
+        // 'w-72 flex-col rounded-lg bg-white px-3 min-h-screen py-6 flex',
+        'hidden w-72 flex-col min-h-screen rounded-lg bg-white px-3 py-6 ipadMini:flex',
         className
       )}
     >

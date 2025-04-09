@@ -7,7 +7,6 @@ export * from './button';
 export * from './tag';
 export * from './badge';
 export * from './bento-item';
-export * from './bg-pattern';
 export * from './feature-icon';
 export * from './simple-loading';
 export * from './global-loading';
