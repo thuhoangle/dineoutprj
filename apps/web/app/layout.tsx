@@ -9,7 +9,6 @@ import { fontSans } from '@/config/fonts';
 import { Navbar } from '@/components/menu/header-menu';
 import ClientToaster from '@/config/client-toaster';
 import { ModalPortal } from '@/components/modal-portal';
-
 export const metadata: Metadata = {
   title: {
     default: siteConfig.name,

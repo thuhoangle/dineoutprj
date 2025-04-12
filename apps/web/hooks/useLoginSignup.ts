@@ -5,8 +5,6 @@ import { AppSocket } from '@/services/supa-socket';
 import { useVenueInfoStore } from '@/stores';
 import { useUserStore } from '@/stores/useUserStore';
 import { createClient } from '@/utils/supabase/client';
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 
 import { useState } from 'react';
@@ -84,16 +82,21 @@ export const useLoginSignup = (goToHomePage?: boolean) => {
     const dataInput = {
       email,
       password,
+      options: {
+        data: {
+          role: 'customer',
+        },
+      },
     };
 
     const { error } = await supabase.auth.signUp(dataInput);
 
     if (!error) {
-      revalidatePath('/', 'layout');
-      redirect('/account/profile');
+      router.refresh();
+      router.push('/account/profile');
     } else {
       setFetchingSignup(false);
-      redirect('/error');
+      router.push('/error');
     }
   };
 
@@ -111,8 +114,8 @@ export const useLoginSignup = (goToHomePage?: boolean) => {
     useVenueInfoStore.getState().clearFavRestaurants();
     useUserStore.getState().logOut();
     toastHelper.success('Logout successfully');
-    // revalidatePath('/', 'layout');
-    // redirect('/venues');
+    // router.refresh();
+    // router.push('/venues');
   };
 
   return {

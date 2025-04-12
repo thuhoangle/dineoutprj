@@ -17,6 +17,7 @@ export interface RestaurantInfo {
   cancellation_policy: string;
   reservation_policy: Reservationpolicy[];
   working_time: WorkingTime[];
+  manager_id?: string;
 }
 
 interface Reservationpolicy {

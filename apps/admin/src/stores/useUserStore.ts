@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { supaApiInstance, UserInfo } from '@/services';
+import { RestaurantInfo, supaApiInstance, UserInfo } from '@/services';
 // import { supabase } from '@/utils';
 // import { AppSocket } from '@/services/supa-socket';
 
@@ -13,8 +13,8 @@ interface UserStoreState {
   getAuthInfo: () => void;
   logOut: () => void;
 
-  portfolioDetail: UserInfo | undefined;
-  setPortfolioDetail: (user: Partial<UserInfo>) => void;
+  portfolioDetail: RestaurantInfo | undefined;
+  setPortfolioDetail: (user: Partial<RestaurantInfo>) => void;
   getPortfolioDetail: () => void;
 }
 
@@ -33,7 +33,7 @@ export const useUserStore = create<UserStoreState>()(
               id: user.id,
               email: user?.email,
               phone: user?.phone,
-              role: user?.role,
+              // name: user?.user_metadata?.name,
             },
           });
         }
@@ -57,7 +57,7 @@ export const useUserStore = create<UserStoreState>()(
           portfolioDetail: {
             ...(state.portfolioDetail || {}),
             ...user,
-          } as UserInfo,
+          } as RestaurantInfo,
         })),
       getPortfolioDetail: async () => {
         const { data } = await supaApiInstance.getPortfolioDetail();
@@ -74,5 +74,5 @@ export interface AuthInfo {
   id: string;
   email?: string;
   phone?: string;
-  role?: string;
+  name?: string;
 }

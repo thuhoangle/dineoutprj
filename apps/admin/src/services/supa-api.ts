@@ -13,28 +13,10 @@ export class supaApi {
   getAuthInfo = () => supabase.auth.getUser();
   getPortfolioDetail = () =>
     supabase
-      .from('customers')
+      .from('restaurants')
       .select('*')
-      .eq('auth_id', this.getAuthId())
+      .eq('manager_id', this.getAuthId())
       .single();
-
-  // FAVORITES
-  getFavRestaurants = () =>
-    supabase
-      .from('favorites')
-      .select('restaurant_id')
-      .eq('auth_id', this.getAuthId());
-
-  setFavRestaurant = (restaurantId: string) =>
-    supabase
-      .from('favorites')
-      .insert([{ auth_id: this.getAuthId(), restaurant_id: restaurantId }]);
-
-  setUnFavRestaurant = (restaurantId: string) =>
-    supabase
-      .from('favorites')
-      .delete()
-      .match({ auth_id: this.getAuthId(), restaurant_id: restaurantId });
 
   // RESTAURANTS
   getRestaurantsList = () => supabase.from('restaurants').select('*');

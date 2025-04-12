@@ -1,7 +1,7 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: 'DineOut-building',
+  name: 'DineOut',
   description:
     'Transforming Vietnam’s Dining Landscape with a Comprehensive Digital Platform for Reservations and Engagement.',
   navItems: [

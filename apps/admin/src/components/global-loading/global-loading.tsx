@@ -16,7 +16,7 @@ export const GlobalLoading = () => {
   if (!loading) return null;
   return (
     <div className="fixed inset-0 z-[999] flex h-screen w-screen flex-col items-center justify-center gap-2 bg-black/60 backdrop-blur-sm">
-      <SimpleLoading loadingColor="#eee" size={50} spinTime={1} thickness={7} />
+      <SimpleLoading loadingColor="#444" size={50} spinTime={1} thickness={7} />
       {loading}
     </div>
   );

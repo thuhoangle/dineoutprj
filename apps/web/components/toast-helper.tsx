@@ -54,7 +54,7 @@ const ToastContent = ({
   return (
     <div
       className={clsx(
-        'pointer-events-auto relative min-w-[200px] max-w-sm overflow-hidden rounded-xl bg-gray-100 shadow-md',
+        'pointer-events-auto relative min-w-[200px] max-w-sm overflow-hidden rounded-xl bg-white shadow-md',
         t.visible ? 'fade-in-right' : 'fade-out-right'
       )}
     >

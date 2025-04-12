@@ -1,12 +1,16 @@
 'use client';
 
-import { ibmPlexSans, roboto, robotoMono } from '@/assets/fonts';
-import { Providers } from '@/app/providers';
-import { GlobalLoading, ModalPortal, SideMenu } from '@/components';
+import { GlobalLoading, ModalPortal, Navbar, SideMenu } from '@/components';
 import { usePathname, useRouter } from 'next/navigation';
-import { IconType } from 'react-icons';
 import { WindowProvider } from '@/contexts/window-context';
 import { Toaster } from 'react-hot-toast';
+import {
+  MdDashboard,
+  MdPeople,
+  MdRestaurant,
+  MdEventNote,
+  MdHistory,
+} from 'react-icons/md';
 
 export interface SideMenuItemType {
   Icon?: any;
@@ -41,18 +45,23 @@ export function RootLayoutClient({ children }: RootLayoutClientProps) {
   const pathnameFromRouter = usePathname();
   const { push } = useRouter();
 
+  // const tabValue = useMemo(() => {
+  //   if (pathnameFromRouter === '/dashboard') {
+  //     return '/';
+  //   }
+  //   return pathnameFromRouter;
+  // }, [pathnameFromRouter]);
+
   return (
     <WindowProvider>
-      <div className="min-h-screen bg-gray-100">
-        <div className="flex">
-          {/* Sidebar */}
-          {/* <aside className="w-72 min-h-screen"> */}
+      <div className="min-h-screen h-auto bg-background flex flex-col">
+        <Navbar />
+        <div className="flex w-full border-t border-t-gray-200 gap-2 px-2 ipadMini:h-0 ipadMini:flex-1">
           <SideMenu
             currentTab={pathnameFromRouter || ''}
             navItems={NAV_ITEMS}
             onClickItem={(value) => push(value)}
           />
-          {/* </aside>  */}
           <main className="flex-1">{children}</main>
         </div>
       </div>
@@ -65,27 +74,32 @@ export function RootLayoutClient({ children }: RootLayoutClientProps) {
 
 export const NAV_ITEMS: SideMenuItemType[] = [
   {
-    label: 'dashboard',
-    value: '/',
+    label: 'Dashboard',
+    value: '/dashboard',
+    Icon: <MdDashboard className="w-6 h-6" />,
   },
   {
-    label: 'reservation',
+    label: 'Reservation',
     value: '/reservation',
+    Icon: <MdEventNote className="w-6 h-6" />,
   },
   {
-    label: 'table-management',
+    label: 'Table-management',
     value: '/management',
+    Icon: <MdRestaurant className="w-6 h-6" />,
   },
   {
-    label: 'open-tables',
+    label: 'Open-tables',
     value: '/open-tables',
+    Icon: <MdPeople className="w-6 h-6" />,
   },
   {
-    label: 'history',
-    value: '/portfolio/history/trades',
+    label: 'History',
+    value: '/history',
+    Icon: <MdHistory className="w-6 h-6" />,
   },
-  {
-    label: 'Human-resource',
-    value: '/human-resource',
-  },
+  // {
+  //   label: 'Human-resource',
+  //   value: '/human-resource',
+  // },
 ];

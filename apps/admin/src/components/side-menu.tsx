@@ -1,11 +1,11 @@
 'use client';
-
 import { anyToInt } from '@/utils/format-helper';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline';
 import { Badge, Tag } from 'dineout-ui';
 import clsx from 'clsx';
 import { TextField } from 'dineout-ui';
 import { type FC, memo, useState } from 'react';
+import { upperFirst } from 'lodash';
 
 export interface SideMenuItemType {
   Icon?: any;
@@ -46,30 +46,32 @@ export const SideMenu: FC<SideMenuProps> = ({
   return (
     <div
       className={clsx(
-        // 'w-72 flex-col rounded-lg bg-white px-3 min-h-screen py-6 flex',
-        'hidden w-72 flex-col min-h-screen rounded-lg bg-white px-3 py-6 ipadMini:flex',
+        'w-64 flex-col rounded-lg bg-white px-3 min-h-screen py-6 flex',
+        // 'hidden w-72 flex-col min-h-screen rounded-lg bg-white px-3 py-6 ipadMini:flex',
         className
       )}
     >
-      {navItems.map((item) =>
-        item.subItems ? (
-          <NavItemCategory
-            currentTab={currentTab}
-            data={item}
-            extraData={extraData}
-            key={item.value}
-            onClick={_onItemClick}
-          />
-        ) : item.value ? (
-          <NavItem
-            data={item}
-            extraData={extraData}
-            isSelected={currentTab === item.value}
-            key={item.value}
-            onClick={_onItemClick}
-          />
-        ) : null
-      )}
+      <div className="flex flex-col gap-2">
+        {navItems.map((item) =>
+          item.subItems ? (
+            <NavItemCategory
+              currentTab={currentTab}
+              data={item}
+              extraData={extraData}
+              key={item.value}
+              onClick={_onItemClick}
+            />
+          ) : item.value ? (
+            <NavItem
+              data={item}
+              extraData={extraData}
+              isSelected={currentTab === item.value}
+              key={item.value}
+              onClick={_onItemClick}
+            />
+          ) : null
+        )}
+      </div>
       <div className="flex-1" />
     </div>
   );
@@ -100,15 +102,15 @@ const NavItem = memo(
         disabled={disabled}
         className={clsx(
           'relative my-0.5 flex items-center gap-2 rounded-md px-4 py-2 transition duration-200 ease-in hover:bg-gray-200 hover:text-text-400 disabled:opacity-50',
-          isSelected ? 'bg-gray-200 text-gray-400' : 'text-gray-400'
+          isSelected ? 'bg-gray-200 text-gray-900' : 'text-gray-500'
         )}
         onClick={_onClick}
       >
-        <ChevronDownIcon className="w-5" />
+        {Icon || null}
         <TextField
           className="flex-1 text-left"
           preset="p3"
-          text={label}
+          text={upperFirst(label)}
           weight="s"
         />
         {getTag && anyToInt(getTag?.(extraData)) ? (
@@ -147,7 +149,7 @@ const NavItemCategory = memo(
             disabled={disabled}
             onClick={() => onClick(value!)}
           >
-            <Icon className="w-5" />
+            {Icon && <Icon className="w-5" />}
             <TextField
               className="flex-1 text-left"
               preset="p3"
