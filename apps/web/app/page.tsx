@@ -12,8 +12,11 @@ import {
 } from '@/modules/homepage/components';
 import { Button, ExploreCard, SimpleLoading, TextField } from '@/components';
 import { useUserStore, useVenueInfoStore } from '@/stores';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
+  const router = useRouter();
+  const authInfo = useUserStore((state) => state.authInfo);
   const restaurantList = useVenueInfoStore((state) => state.restaurantList);
   const favRestaurant = useVenueInfoStore((state) => state.favRestaurant);
   const toggleFavRestaurant = useVenueInfoStore(
@@ -24,10 +27,23 @@ export default function Home() {
     useGetUserLocation();
 
   useEffect(() => {
-    useVenueInfoStore.getState().getRestaurantList();
-    useVenueInfoStore.getState().getFavRestaurants();
-    useUserStore.getState().getPortfolioDetail();
+    const hash = window.location.hash;
+
+    if (hash.includes('access_token') && hash.includes('type=invite')) {
+      router.replace(`/auth/set-password${hash}`);
+    }
   }, []);
+
+  useEffect(() => {
+    useVenueInfoStore.getState().getRestaurantList();
+  }, []);
+
+  useEffect(() => {
+    if (authInfo) {
+      useVenueInfoStore.getState().getFavRestaurants();
+      useUserStore.getState().getPortfolioDetail();
+    }
+  }, [authInfo]);
 
   const risingData = restaurantList.filter((restaurant) =>
     restaurant.keywords?.includes('rising')

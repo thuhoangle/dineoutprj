@@ -1,4 +1,4 @@
-export * from './useWindowsize';
+export * from './useSetPasswordFromInvite';
 export * from './useGetUserLocation';
 export * from './useLoginSignup';
 export * from './useGetRestaurantInfo';

@@ -9,8 +9,6 @@ import {
 import { Button } from '@nextui-org/button';
 import { Button as MyButton } from '../button';
 import { Kbd } from '@nextui-org/kbd';
-import { Link } from '@nextui-org/link';
-import { Input } from '@nextui-org/input';
 import { link as linkStyles } from '@nextui-org/theme';
 import NextLink from 'next/link';
 import clsx from 'clsx';
@@ -19,14 +17,11 @@ import Image from 'next/image';
 
 import { siteConfig } from '@/config/site';
 import { ThemeSwitch } from '@/components/theme-switch';
-import { GithubIcon, HeartFilledIcon, SearchIcon } from '@/components/icons';
+import { SearchIcon } from '@/components/icons';
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/navigation';
-import { FC, useState, useCallback, useEffect, useRef } from 'react';
-import { getNavItems, NavItemType } from './menu-data';
-import axios from 'axios';
 import { useUserStore } from '@/stores/useUserStore';
-import { useGetRestaurantInfo, useLoginSignup } from '@/hooks';
+import { useLoginSignup } from '@/hooks';
 import {
   Dropdown,
   DropdownItem,
@@ -36,6 +31,9 @@ import {
 import { useVenueInfoStore } from '@/stores';
 import { RestaurantInfo } from '@/services';
 import { useCheckPressOutSide } from '@/hooks/useCheckPressOutSide';
+import { TextField } from '../text';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { Input } from '@nextui-org/input';
 
 interface HeaderMenuProps {
   onGoSamePath?: () => void;
@@ -43,6 +41,7 @@ interface HeaderMenuProps {
 
 export const Navbar: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
   const router = useRouter();
+  const pathname = usePathname();
   const portfolioDetail = useUserStore((state) => state.portfolioDetail);
   const { onLogout } = useLoginSignup();
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -159,6 +158,10 @@ export const Navbar: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
     </div>
   );
 
+  if (pathname?.includes('/auth/set-password')) {
+    return <PwHeader />;
+  }
+
   return (
     <NextUINavbar isBordered maxWidth="full" position="sticky">
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
@@ -237,6 +240,34 @@ export const Navbar: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
         )}
         <ThemeSwitch />
         {/* <NavbarMenuToggle /> */}
+      </NavbarContent>
+    </NextUINavbar>
+  );
+};
+
+const PwHeader = () => {
+  return (
+    <NextUINavbar isBordered maxWidth="full" position="sticky">
+      <NavbarContent
+        className="flex items-center gap-1 w-full"
+        justify="center"
+      >
+        <Image
+          height={32}
+          width={40}
+          src="/logo.png"
+          priority
+          style={{ width: 'auto', height: 'auto' }}
+          alt="logo"
+        />
+        <NextLink className="flex justify-start items-center gap-1" href="/">
+          <TextField
+            preset="h5"
+            weight="s"
+            className="text-black"
+            text="Dineout"
+          />
+        </NextLink>
       </NavbarContent>
     </NextUINavbar>
   );
