@@ -2,7 +2,7 @@
 
 import { MdOutlinePeopleAlt } from 'react-icons/md';
 import dayjs from 'dayjs';
-import { today, getLocalTimeZone, DateValue } from '@internationalized/date';
+import { getLocalTimeZone, today } from '@internationalized/date';
 import { useMemo } from 'react';
 
 import {
@@ -12,8 +12,13 @@ import {
   ModalPortalController,
   TextField,
 } from '@/components';
-import { DatePicker } from '@nextui-org/date-picker';
-import { Select, SelectItem, useDisclosure } from '@nextui-org/react';
+import {
+  Select,
+  SelectItem,
+  useDisclosure,
+  DatePicker,
+  type DateValue,
+} from '@heroui/react';
 import { RestaurantInfo } from '@/services';
 import { useReservation } from '@/hooks';
 import { AvailableSeats } from '@/services';
@@ -108,7 +113,7 @@ export const BookingSection = ({
         />
       </div>
       <BookItem
-        selectedDate={selectedDate}
+        selectedDate={selectedDate as unknown as DateValue}
         selectedTime={selectedTime}
         data={filteredSeats}
         onClick={_handleOpen}
@@ -163,7 +168,6 @@ const GuestPicker = ({
       {Array.from({ length: maxGuest }, (_, i) => i + 1).map((num) => (
         <SelectItem
           key={num}
-          value={num}
           className="font-medium data-[selected=true]:bg-primary-100"
         >
           {formatGuestCount(num)}
@@ -177,8 +181,8 @@ const LocalDatePicker = ({
   selectedDate,
   setSelectedDate,
 }: {
-  selectedDate: DateValue;
-  setSelectedDate: (date: DateValue) => void;
+  selectedDate: any;
+  setSelectedDate: (value: any) => void;
 }) => {
   return (
     <DatePicker
@@ -189,14 +193,12 @@ const LocalDatePicker = ({
       selectorButtonPlacement="start"
       label="Date"
       value={selectedDate}
-      onChange={(value) => value && setSelectedDate(value)}
-      minValue={today(getLocalTimeZone())}
-      maxValue={today(getLocalTimeZone()).add({ days: 7 })}
+      onChange={setSelectedDate}
+      minValue={today(getLocalTimeZone()) as unknown as DateValue}
+      maxValue={
+        today(getLocalTimeZone()).add({ days: 7 }) as unknown as DateValue
+      }
       radius="full"
-      // isDisabled={(date) => {
-      //   const dateStr = date.toString();
-      //   return !availableDates.some((d) => d.format('YYYY-MM-DD') === dateStr);
-      // }}
     />
   );
 };

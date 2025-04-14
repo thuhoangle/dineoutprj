@@ -1,15 +1,16 @@
 'use client';
 
-import { revalidatePath } from 'next/cache';
+import { toastHelper } from '@/components';
+// import { AppSocket } from '@/services/supa-socket';
+import { useVenueInfoStore } from '@/stores';
+import { useUserStore } from '@/stores/useUserStore';
+import { createClient } from '@/utils/supabase/client';
 import { redirect } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 
 import { useState } from 'react';
-import { useUserStore } from '../stores';
-import { toastHelper } from '../components';
-import { createClient } from '../utils/supabase/client';
 
-export const useLoginSignup = (goToHomePage?: boolean) => {
+export const useLogin = (goToHomePage?: boolean) => {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [errorEmail, setErrorEmail] = useState('');
@@ -41,6 +42,7 @@ export const useLoginSignup = (goToHomePage?: boolean) => {
       email,
       password,
     };
+    console.log('🚀 ~ onLogin ~ dataInput:', dataInput);
     try {
       setFetchingLogin(true);
       await supabase.auth.signInWithPassword(dataInput);
@@ -72,28 +74,6 @@ export const useLoginSignup = (goToHomePage?: boolean) => {
     // }
   };
 
-  const onSignup = async () => {
-    setFetchingSignup(true);
-    const supabase = await createClient();
-
-    if (!_validate()) return;
-
-    const dataInput = {
-      email,
-      password,
-    };
-
-    const { error } = await supabase.auth.signUp(dataInput);
-
-    if (!error) {
-      revalidatePath('/', 'layout');
-      redirect('/account/profile');
-    } else {
-      setFetchingSignup(false);
-      redirect('/error');
-    }
-  };
-
   const onLogout = async () => {
     const supabase = await createClient();
 
@@ -105,6 +85,7 @@ export const useLoginSignup = (goToHomePage?: boolean) => {
     }
     localStorage.clear(); // Clear local storage
     sessionStorage.clear(); // Clear session storage
+    useVenueInfoStore.getState().clearFavRestaurants();
     useUserStore.getState().logOut();
     toastHelper.success('Logout successfully');
     // revalidatePath('/', 'layout');
@@ -121,7 +102,6 @@ export const useLoginSignup = (goToHomePage?: boolean) => {
     fetchingLogin,
     fetchingSignup,
     onLogin,
-    onSignup,
     onLogout,
   };
 };

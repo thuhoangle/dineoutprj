@@ -1,6 +1,6 @@
 'use client';
 
-import { GlobalLoading, ModalPortal, Navbar, SideMenu } from '@/components';
+import { ModalPortal, HeaderMenu, SideMenu } from '@/components';
 import { usePathname, useRouter } from 'next/navigation';
 import { WindowProvider } from '@/contexts/window-context';
 import { Toaster } from 'react-hot-toast';
@@ -11,31 +11,26 @@ import {
   MdEventNote,
   MdHistory,
 } from 'react-icons/md';
+import ClientToaster from '@/config/client-toaster';
+import { GlobalLoading } from './global-loading';
 
-export interface SideMenuItemType {
+export interface MenuItemType {
   Icon?: any;
   label: string;
   value?: string;
-  subItems?: SideMenuSubItemType[];
+  subItems?: MenuSubItemType[];
   disabled?: boolean;
   getTag?: (data: any) => string;
   getConfig?: (data: any) => any;
   isHidden?: boolean;
 }
-interface SideMenuSubItemType {
+interface MenuSubItemType {
   value: string;
   label: string;
   disabled?: boolean;
   getTag?: (data: any) => string;
   getConfig?: (data: any) => any;
   isHidden?: boolean;
-}
-interface SideMenuProps {
-  className?: string;
-  currentTab: string;
-  onClickItem: (value: string) => void;
-  navItems: SideMenuItemType[];
-  extraData?: any;
 }
 interface RootLayoutClientProps {
   children: React.ReactNode;
@@ -55,24 +50,25 @@ export function RootLayoutClient({ children }: RootLayoutClientProps) {
   return (
     <WindowProvider>
       <div className="min-h-screen h-auto bg-background flex flex-col">
-        <Navbar />
+        <HeaderMenu />
         <div className="flex w-full border-t border-t-gray-200 gap-2 px-2 ipadMini:h-0 ipadMini:flex-1">
-          <SideMenu
-            currentTab={pathnameFromRouter || ''}
-            navItems={NAV_ITEMS}
-            onClickItem={(value) => push(value)}
-          />
+          {pathnameFromRouter.includes('/auth') ? null : (
+            <SideMenu
+              currentTab={pathnameFromRouter || ''}
+              navItems={NAV_ITEMS}
+              onClickItem={(value) => push(value)}
+            />
+          )}
           <main className="flex-1">{children}</main>
         </div>
       </div>
-      <Toaster />
+      <ClientToaster />
       <ModalPortal />
-      <GlobalLoading />
     </WindowProvider>
   );
 }
 
-export const NAV_ITEMS: SideMenuItemType[] = [
+export const NAV_ITEMS: MenuItemType[] = [
   {
     label: 'Dashboard',
     value: '/dashboard',

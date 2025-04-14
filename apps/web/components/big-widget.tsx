@@ -39,7 +39,7 @@ export const BigWidget = ({
             objectFit: 'cover',
             objectPosition: 'center',
           }}
-          src={data.images[0]}
+          src={data.images?.[0] || ''}
           alt="food"
         />
         <div className="absolute right-0 top-0">

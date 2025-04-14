@@ -2,12 +2,12 @@
 
 import { IoSearch } from 'react-icons/io5';
 import clsx from 'clsx';
-import { TextInput } from '../../../components/simple-input';
-import { getLocalTimeZone, Time, today } from '@internationalized/date';
 import { FaRegUser } from 'react-icons/fa';
 import { useState } from 'react';
 import { Button } from '../../../components/button';
-import { DatePicker } from '@nextui-org/date-picker';
+import { DatePicker, Input, type DateValue } from '@heroui/react';
+import { today, getLocalTimeZone } from '@internationalized/date';
+import { TextField } from '@/components';
 
 export interface DatePickerProps {
   startDate: string;
@@ -15,11 +15,6 @@ export interface DatePickerProps {
   onDateChange: (startDate: string, endDate: string) => void;
 }
 export const ReservationInput = ({ className }: { className?: string }) => {
-  // const [date, setDate] = useState<DatePickerProps>({
-  //   startDate: dayjs().format('YYYY-MM-DD'),
-  //   endDate: dayjs().format('YYYY-MM-DD'),
-  //   onDateChange: () => {},
-  // });
   const [numberOfPeople, setNumberOfPeople] = useState('2');
 
   return (
@@ -31,33 +26,40 @@ export const ReservationInput = ({ className }: { className?: string }) => {
     >
       <DatePicker
         aria-label="date-picker"
-        // className="border-2 border-gray-200 rounded-sm"
+        selectorButtonPlacement="start"
         size="sm"
         variant="bordered"
-        defaultValue={today(getLocalTimeZone())}
+        defaultValue={today(getLocalTimeZone()) as unknown as DateValue}
       />
-
-      {/* <TextInput
-        placeholder="Add a note"
-        type="date"
-        value={dayjs().format('YYYY-MM-DD').toString()}
-      /> */}
-      <TextInput
-        className="!min-w-32 overflow-clip justify-center"
-        inputContainerClassName="!outline-none !border border-2 h-8 !bg-transparent"
+      <Input
+        size="sm"
+        variant="bordered"
         type="time"
         value="13:30"
         step={1800}
+        className="!min-w-32 overflow-clip justify-center"
       />
-      <TextInput
-        className="w-40"
-        inputType="number"
-        inputContainerClassName="!outline-none !border border-2 ring-offset-0 ring-0 !bg-transparent"
+      <Input
+        size="sm"
+        variant="bordered"
         type="number"
-        unit={numberOfPeople === '1' ? 'Person' : 'People'}
         value={numberOfPeople}
-        onChangeValue={setNumberOfPeople}
-        LeftIcon={FaRegUser}
+        onValueChange={setNumberOfPeople}
+        className="!w-40"
+        startContent={
+          <div className="flex items-center w-8 h-8 justify-center">
+            <FaRegUser className="w-[18px] h-[18px]" />
+          </div>
+        }
+        endContent={
+          <div className="flex items-center gap-2">
+            <TextField
+              preset="p4"
+              weight="m"
+              text={numberOfPeople === '1' ? 'Person' : 'People'}
+            />
+          </div>
+        }
       />
       <div className="px-2">
         <Button preset="link" RightHeroIcon={IoSearch} />

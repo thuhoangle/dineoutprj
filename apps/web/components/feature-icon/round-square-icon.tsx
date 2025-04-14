@@ -24,13 +24,13 @@ export const RoundIcon: FC<FeatureCoreIconProps> = ({ Icon, size, color }) => {
     <div
       className={clsx(
         'z-10 flex flex-col items-center justify-center rounded-full',
-        getBgColorClassName(color),
+        getBgColorClassName(color as ColorPreset),
         getFullSizeClassName(size)
       )}
     >
       <Icon
         className={clsx(
-          getIconColorClassName(color),
+          getIconColorClassName(color as ColorPreset),
           getIconSizeClassName(size)
         )}
       />
@@ -43,13 +43,13 @@ export const SquareIcon: FC<FeatureCoreIconProps> = ({ Icon, size, color }) => {
     <div
       className={clsx(
         'z-10 flex flex-col items-center justify-center rounded-lg',
-        getBgColorClassName(color),
+        getBgColorClassName(color as ColorPreset),
         getFullSizeClassName(size)
       )}
     >
       <Icon
         className={clsx(
-          getIconColorClassName(color),
+          getIconColorClassName(color as ColorPreset),
           getIconSizeClassName(size)
         )}
       />

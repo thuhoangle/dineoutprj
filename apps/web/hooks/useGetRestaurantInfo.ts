@@ -1,5 +1,6 @@
 'use client';
 
+import { globalLoading } from '@/components';
 import { RestaurantInfo, supaApiInstance } from '@/services';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
@@ -10,6 +11,7 @@ export const useGetRestaurantInfo = () => {
 
   const getData = async () => {
     setFetching(true);
+    globalLoading.show();
     try {
       const { data, error } = await supaApiInstance.getRestaurantsList();
       if (error) {
@@ -21,6 +23,7 @@ export const useGetRestaurantInfo = () => {
       toast.error(error.message);
     } finally {
       setFetching(false);
+      globalLoading.hide();
     }
   };
 

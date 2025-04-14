@@ -5,9 +5,6 @@ import type { ThemeProviderProps } from 'next-themes';
 import * as React from 'react';
 import { HeroUIProvider } from '@heroui/react';
 import { useRouter } from 'next/navigation';
-import { ThemeProvider as NextThemesProvider } from 'next-themes';
-import { GlobalLoading } from '@/components';
-import { WindowProvider } from '@/contexts';
 
 export interface ProvidersProps {
   children: React.ReactNode;
@@ -22,17 +19,8 @@ declare module '@react-types/shared' {
   }
 }
 
-export function Providers({ children, themeProps }: ProvidersProps) {
+export function Providers({ children }: ProvidersProps) {
   const router = useRouter();
 
-  return (
-    <HeroUIProvider navigate={router.push}>
-      <NextThemesProvider {...themeProps}>
-        <WindowProvider>
-          {children}
-          <GlobalLoading />
-        </WindowProvider>
-      </NextThemesProvider>
-    </HeroUIProvider>
-  );
+  return <HeroUIProvider navigate={router.push}>{children}</HeroUIProvider>;
 }

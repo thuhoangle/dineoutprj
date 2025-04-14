@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { FC, ReactElement, SVGProps } from 'react';
 import { TextField } from '../../../components';
 import { GoStar } from 'react-icons/go';
-import { Tooltip } from '@nextui-org/tooltip';
+import { Tooltip } from '@heroui/tooltip';
 
 interface SimpleSectionSelectorProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -13,7 +13,6 @@ interface SimpleSectionSelectorProps
   containerClassName?: string;
   textPreset?: string;
   onClick?: () => void;
-  active?: boolean;
   preset?: SectionSelectorPreset;
 }
 
@@ -43,7 +42,7 @@ export const SimpleSectionSelector: FC<SimpleSectionSelectorProps> = (
           <button
             aria-label="btn"
             className={clsx(
-              'flex items-center p-2 justify-center aspect-square rounded-full disabled:cursor-not-allowed ',
+              'flex items-center p-2 justify-center aspect-square rounded-full outline-none disabled:cursor-not-allowed',
               className
             )}
             onClick={onClick}
@@ -72,8 +71,8 @@ export const SimpleSectionSelector: FC<SimpleSectionSelectorProps> = (
 };
 
 interface SectionSelectorProps extends SimpleSectionSelectorProps {
-  // active?: boolean;
   className?: string;
+  isSelected?: boolean;
 }
 export const SectionSelector: FC<SectionSelectorProps> = (props) => {
   const {
@@ -82,6 +81,8 @@ export const SectionSelector: FC<SectionSelectorProps> = (props) => {
     className,
     containerClassName,
     textPreset,
+    isSelected,
+
     ...rest
   } = props;
 
@@ -91,6 +92,7 @@ export const SectionSelector: FC<SectionSelectorProps> = (props) => {
       className={clsx(
         presetClassName[preset],
         presetTextClassName[preset],
+        isSelected && selectedPresetClassName[preset],
         className,
         containerClassName
       )}
@@ -102,18 +104,15 @@ export const SectionSelector: FC<SectionSelectorProps> = (props) => {
 
 export type SectionSelectorPreset = keyof typeof presetClassName;
 const presetClassName = {
-  base: '',
-  text: '',
-
   primary:
-    'hover:shadow-[0px_0px_30px_-5px_#396BF8] bg-gray-50 focus:ring-2 outline-none hover:ring-2 hover:ring-primary-600 focus:ring-primary-600',
+    'hover:shadow-[0px_0px_30px_-5px_#396BF8] bg-gray-50 border hover:border-primary-600 active:border-primary-600',
   sgray1:
-    'hover:bg-gray-250 focus:ring-2 outline-none focus:ring-gray-500 hover:ring-2 hover:ring-gray-500',
+    'hover:bg-gray-250 border hover:border-gray-500 active:border-gray-500',
   sgray2:
-    'hover:bg-gray-200 focus:ring-2 outline-none focus:ring-gray-500 hover:ring-2 hover:ring-gray-500',
+    'hover:bg-gray-200 border hover:border-gray-500 active:border-gray-500',
   green:
-    'bg-gray-50 focus:ring-2 outline-none focus:ring-green-500 hover:ring-2 hover:ring-green-500',
-  red: 'hover:ring-2 hover:ring-red-500 bg-gray-50 focus:ring-2 outline-none focus:ring-red-500',
+    'bg-neutral-1000 border hover:border-green-500 active:border-green-500',
+  red: 'bg-neutral-1000 border hover:border-red-500 active:border-red-500',
 
   // legacy
   secondary:
@@ -122,16 +121,25 @@ const presetClassName = {
     'bg-neutral-800 enabled:hover:bg-neutral-700 disabled:bg-neutral-700',
 };
 
+const selectedPresetClassName: {
+  [key in SectionSelectorPreset]: string;
+} = {
+  primary: 'border-primary-600',
+  sgray1: 'border-gray-500',
+  sgray2: 'border-gray-500',
+  green: 'border-green-500',
+  red: 'border-red-500',
+  secondary: 'border-neutral-900',
+  modalSecondary: 'border-neutral-800',
+};
+
 const presetTextClassName: {
   [key in SectionSelectorPreset]: string;
 } = {
-  base: '',
-  text: '',
-
   primary: 'text-primary-600',
   sgray1: 'text-gray-300',
   sgray2: 'text-gray-500',
-  green: 'text-green-700',
+  green: 'text-green-500',
   red: 'text-red-600',
 
   // legacy

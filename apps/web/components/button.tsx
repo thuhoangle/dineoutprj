@@ -9,6 +9,7 @@ interface SimpleButtonProps
   text?: string;
   className?: string;
   LeftHeroIcon?: (props: SVGProps<SVGSVGElement>) => ReactElement;
+  iconClassName?: string;
   RightHeroIcon?: (props: SVGProps<SVGSVGElement>) => ReactElement;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   fetching?: boolean;
@@ -27,6 +28,7 @@ export const SimpleButton: FC<SimpleButtonProps> = (props) => {
     LeftHeroIcon,
     RightHeroIcon,
     preset,
+    iconClassName,
     ...rest
   } = props;
 
@@ -48,14 +50,16 @@ export const SimpleButton: FC<SimpleButtonProps> = (props) => {
       {fetching ? (
         <SimpleLoading size={15} />
       ) : LeftHeroIcon ? (
-        <LeftHeroIcon className="h-5 w-5 text-inherit" />
+        <LeftHeroIcon className={clsx('h-5 w-5 text-inherit', iconClassName)} />
       ) : null}
       {text && preset !== 'square' ? (
         <div className="text-center">{text}</div>
       ) : null}
       {children}
       {RightHeroIcon ? (
-        <RightHeroIcon className="h-5 w-5 text-inherit" />
+        <RightHeroIcon
+          className={clsx('h-5 w-5 text-inherit', iconClassName)}
+        />
       ) : null}
     </button>
   );
@@ -101,7 +105,7 @@ const presetBtClassName = {
   tred: 'hover:bg-gray-850 hover:text-red-400',
   link: 'hover:text-primary-700',
   linkGray:
-    'border-2 py-1.5 px-2.5 border-gray-300 hover:border-gray-500 hover:text-gray-600',
+    'border-1.5 py-1.5 px-2.5 border-gray-400 hover:border-gray-500 hover:text-gray-600',
   linkRed: 'py-1.5 px-2.5 hover:text-red-600',
 
   // legacy

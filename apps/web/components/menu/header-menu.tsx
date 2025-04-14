@@ -1,15 +1,7 @@
 'use client';
 
-import {
-  Navbar as NextUINavbar,
-  NavbarContent,
-  NavbarBrand,
-  NavbarItem,
-} from '@nextui-org/navbar';
-import { Button } from '@nextui-org/button';
 import { Button as MyButton } from '../button';
-import { Kbd } from '@nextui-org/kbd';
-import { link as linkStyles } from '@nextui-org/theme';
+import { link as linkStyles } from '@heroui/theme';
 import NextLink from 'next/link';
 import clsx from 'clsx';
 import { debounce } from 'lodash';
@@ -22,24 +14,34 @@ import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/stores/useUserStore';
 import { useLoginSignup } from '@/hooks';
-import {
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-} from '@nextui-org/dropdown';
 import { useVenueInfoStore } from '@/stores';
 import { RestaurantInfo } from '@/services';
 import { useCheckPressOutSide } from '@/hooks/useCheckPressOutSide';
 import { TextField } from '../text';
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
-import { Input } from '@nextui-org/input';
+import {
+  FC,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import { Input } from '@heroui/input';
+import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from '@heroui/navbar';
+import { Button, Kbd } from '@heroui/react';
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+} from '@heroui/react';
+import { useWindowContext } from '@/contexts';
 
 interface HeaderMenuProps {
   onGoSamePath?: () => void;
 }
 
-export const Navbar: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
+export const HeaderMenu: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
   const router = useRouter();
   const pathname = usePathname();
   const portfolioDetail = useUserStore((state) => state.portfolioDetail);
@@ -51,6 +53,7 @@ export const Navbar: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
   const [searchResults, setSearchResults] = useState<RestaurantInfo[]>([]);
   const restaurantList = useVenueInfoStore((state) => state.restaurantList);
   const [isSearchPanelVisible, setIsSearchPanelVisible] = useState(false);
+  const { isMobileMode } = useWindowContext();
 
   useEffect(() => {
     useVenueInfoStore.getState().getRestaurantList();
@@ -62,6 +65,9 @@ export const Navbar: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
     const handleKeyPress = (event: KeyboardEvent) => {
       if ((event.metaKey || event.ctrlKey) && event.key === 'k') {
         searchInputRef.current?.focus();
+      }
+      if (event.key === 'Escape') {
+        setIsSearchPanelVisible(false);
       }
     };
     window.addEventListener('keydown', handleKeyPress);
@@ -104,7 +110,7 @@ export const Navbar: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
   };
 
   const handleRestaurantClick = (restaurant: RestaurantInfo) => {
-    router.push(`/restaurant/${restaurant.slug}`);
+    router.push(`/venues/${restaurant.slug}`);
     setSearchString('');
     setSearchResults([]);
     setIsSearchPanelVisible(false);
@@ -163,7 +169,7 @@ export const Navbar: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
   }
 
   return (
-    <NextUINavbar isBordered maxWidth="full" position="sticky">
+    <Navbar isBordered maxWidth="full" position="sticky">
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
@@ -177,27 +183,31 @@ export const Navbar: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
             />
           </NextLink>
         </NavbarBrand>
-        <ul className="hidden ipadMini:flex gap-4  justify-start ml-2">
-          {siteConfig.navItems.map((item) => (
-            <NavbarItem key={item.href}>
-              <NextLink
-                className={clsx(
-                  linkStyles({ color: 'foreground' }),
-                  'data-[active=true]:text-primary min-w-max text-sm data-[active=true]:font-medium'
-                )}
-                color="foreground"
-                href={item.href}
-              >
-                {item.label}
-              </NextLink>
-            </NavbarItem>
-          ))}
-        </ul>
+        {!isMobileMode && (
+          <ul className="hidden ipadMini:flex gap-4  justify-start ml-2">
+            {siteConfig.navItems.map((item) => (
+              <NavbarItem key={item.href}>
+                <NextLink
+                  className={clsx(
+                    linkStyles({ color: 'foreground' }),
+                    'data-[active=true]:text-primary min-w-max text-sm data-[active=true]:font-medium'
+                  )}
+                  color="foreground"
+                  href={item.href}
+                >
+                  {item.label}
+                </NextLink>
+              </NavbarItem>
+            ))}
+          </ul>
+        )}
       </NavbarContent>
 
-      <NavbarContent className="flex w-full" justify="center">
-        {searchInput}
-      </NavbarContent>
+      {!isMobileMode && (
+        <NavbarContent className="flex w-full" justify="center">
+          {searchInput}
+        </NavbarContent>
+      )}
 
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
         {!portfolioDetail && (
@@ -210,7 +220,11 @@ export const Navbar: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
         {portfolioDetail && (
           <Dropdown>
             <DropdownTrigger>
-              <Button variant="flat" className="bg-red-500 text-white">
+              <Button
+                variant="bordered"
+                color="danger"
+                className="border-red-600 text-red-500"
+              >
                 {portfolioDetail.name
                   ? portfolioDetail.name
                   : portfolioDetail.email}
@@ -218,8 +232,8 @@ export const Navbar: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
             </DropdownTrigger>
             <DropdownMenu>
               <DropdownItem
-                key={'profile'}
-                href="/account/profile"
+                key="profile"
+                onPress={() => router.push('/account/profile')}
                 startContent={
                   <Image
                     src={portfolioDetail.profile_image || ''}
@@ -241,13 +255,13 @@ export const Navbar: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
         <ThemeSwitch />
         {/* <NavbarMenuToggle /> */}
       </NavbarContent>
-    </NextUINavbar>
+    </Navbar>
   );
 };
 
 const PwHeader = () => {
   return (
-    <NextUINavbar isBordered maxWidth="full" position="sticky">
+    <Navbar isBordered maxWidth="full" position="sticky">
       <NavbarContent
         className="flex items-center gap-1 w-full"
         justify="center"
@@ -269,6 +283,6 @@ const PwHeader = () => {
           />
         </NextLink>
       </NavbarContent>
-    </NextUINavbar>
+    </Navbar>
   );
 };

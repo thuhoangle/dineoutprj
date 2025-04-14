@@ -67,20 +67,20 @@ export const OutlineIcon: FC<FeatureCoreIconProps> = ({
       <div
         className={clsx(
           'flex flex-col items-center justify-center rounded-full border-2',
-          getColorRing1ClassName(color),
+          getColorRing1ClassName(color as ColorPreset),
           getSizeRing1ClassName(size)
         )}
       >
         <div
           className={clsx(
             'flex flex-col items-center justify-center rounded-full border-2',
-            getColorRing2ClassName(color),
+            getColorRing2ClassName(color as ColorPreset),
             getSizeRing2ClassName(size)
           )}
         >
           <Icon
             className={clsx(
-              getIconColorClassName(color),
+              getIconColorClassName(color as ColorPreset),
               getIconSizeClassName(size)
             )}
           />

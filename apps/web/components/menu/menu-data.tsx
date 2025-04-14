@@ -5,6 +5,7 @@ export interface NavItemType {
   disabled?: boolean;
   checkFunction?: (params: any) => boolean;
   iconUrl?: string;
+  actionCode?: string;
 }
 const checkPath = ({ pathname, route }: { pathname: string; route: string }) =>
   pathname.includes(route);

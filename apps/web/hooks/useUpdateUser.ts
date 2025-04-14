@@ -1,25 +1,47 @@
-import { useState } from 'react';
+'use client';
+import { useEffect, useState } from 'react';
 import { useUserStore } from '@/stores';
 import { toastHelper } from '@/components';
 import { supabase } from '@/utils';
 import { handleError } from '@/services';
+import { UserInfo } from '@/services';
 
 export const useUpdateUser = () => {
   const portfolioDetail = useUserStore((state) => state.portfolioDetail);
-
-  const [name, setName] = useState(portfolioDetail?.name || '');
-  const [email, setEmail] = useState(portfolioDetail?.email || '');
-  const [phone, setPhone] = useState(portfolioDetail?.phone || '');
-  const [img, setImg] = useState(portfolioDetail?.profile_image || '');
-  const [bio, setBio] = useState(portfolioDetail?.bio || '');
-  const [moreInfo, setMoreInfo] = useState(
-    portfolioDetail?.additional_info || ''
-  );
-  const [allergies, setAllergies] = useState<string[]>(
-    portfolioDetail?.allergies || []
-  );
+  const [userProfile, setUserProfile] = useState<UserInfo>({
+    name: '',
+    email: '',
+    phone: '',
+    profile_image: '',
+    bio: '',
+    additional_info: '',
+    allergies: [],
+    auth_id: '',
+  });
 
   const [fetching, setFetching] = useState(false);
+
+  useEffect(() => {
+    const initializeProfile = async () => {
+      await useUserStore.getState().getPortfolioDetail();
+    };
+    initializeProfile();
+  }, []);
+
+  useEffect(() => {
+    if (portfolioDetail) {
+      setUserProfile({
+        name: portfolioDetail.name || '',
+        email: portfolioDetail.email || '',
+        phone: portfolioDetail.phone,
+        profile_image: portfolioDetail.profile_image || '',
+        bio: portfolioDetail.bio || '',
+        additional_info: portfolioDetail.additional_info || '',
+        allergies: portfolioDetail.allergies || [],
+        auth_id: portfolioDetail.auth_id || '',
+      });
+    }
+  }, [portfolioDetail]);
 
   const updateUser = async () => {
     if (!portfolioDetail?.auth_id) {
@@ -28,14 +50,15 @@ export const useUpdateUser = () => {
     }
 
     const updateData = {
-      profile_image: img,
-      name,
-      email,
-      phone,
-      bio,
-      allergies,
-      additional_info: moreInfo,
+      profile_image: userProfile.profile_image || '',
+      name: userProfile.name,
+      email: userProfile.email,
+      phone: userProfile.phone,
+      bio: userProfile.bio,
+      allergies: userProfile.allergies,
+      additional_info: userProfile.additional_info,
     };
+
     try {
       setFetching(true);
       const { error } = await supabase
@@ -56,22 +79,17 @@ export const useUpdateUser = () => {
     }
   };
 
+  const updateField = (field: keyof UserInfo, value: any) => {
+    setUserProfile((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
   return {
     updateUser,
     fetching,
-    name,
-    setName,
-    email,
-    setEmail,
-    phone,
-    setPhone,
-    bio,
-    setBio,
-    allergies,
-    setAllergies,
-    img,
-    setImg,
-    moreInfo,
-    setMoreInfo,
+    userProfile,
+    updateField,
   };
 };

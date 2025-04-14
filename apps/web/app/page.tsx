@@ -19,6 +19,7 @@ export default function Home() {
   const authInfo = useUserStore((state) => state.authInfo);
   const restaurantList = useVenueInfoStore((state) => state.restaurantList);
   const favRestaurant = useVenueInfoStore((state) => state.favRestaurant);
+
   const toggleFavRestaurant = useVenueInfoStore(
     (state) => state.toggleFavRestaurant
   );
@@ -56,7 +57,7 @@ export default function Home() {
   );
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex flex-col items-center gap-4 px-8">
       <div className="flex flex-col gap-3 items-center justify-center">
         <ReservationInput />
         <div className="flex items-center gap-2">
@@ -85,14 +86,15 @@ export default function Home() {
         </div> */}
         <HorizontalSection title="Rising Venues" dataList={risingData} />
       </div>
-      <div className="w-full max-w-7xl flex-1 py-28">
-        <div className="flex justify-center items-center flex-col gap-8 ipadMini:flex-row">
+      <div className="w-full ipadPro:max-w-8xl flex-1 py-28">
+        <div className="flex justify-center flex-1 h-max items-center flex-col gap-x-8 gap-y-12 ipadPro:flex-row">
           <ExploreCard
             isFav={favRestaurant}
             onSetFav={toggleFavRestaurant}
             Icon={IoFlashOutline}
             title="Rising"
             dataList={risingData}
+            onClick={() => router.push('/rising')}
           />
           <ExploreCard
             isFav={favRestaurant}
@@ -100,6 +102,7 @@ export default function Home() {
             Icon={FiStar}
             title="Popular"
             dataList={popularData}
+            onClick={() => router.push('/popular')}
           />
           <ExploreCard
             isFav={favRestaurant}
@@ -107,6 +110,7 @@ export default function Home() {
             Icon={HiOutlineSparkles}
             title="New"
             dataList={newData}
+            onClick={() => router.push('/new')}
           />
         </div>
       </div>

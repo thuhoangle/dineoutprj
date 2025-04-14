@@ -8,15 +8,14 @@ import { IoIosSettings } from 'react-icons/io';
 import { MdOutlineDateRange, MdOutlineLogin } from 'react-icons/md';
 import { TextField } from '../text';
 import { IconType } from 'react-icons';
+import { useWindowContext } from '@/contexts';
 
 export const AccountPageLayout = ({ children }: { children: ReactNode }) => {
   const pathnameFromRouter = usePathname();
-  const pathname = pathnameFromRouter?.replace('/account', '');
-  // console.log(
-  //   '🚀 ~ AccountPageLayout ~ pathnameFromRouter:',
-  //   pathnameFromRouter,
-  //   pathname
-  // );
+  const { isMobileMode } = useWindowContext();
+  console.log('🚀 ~ AccountPageLayout ~ isMobileMode:', isMobileMode);
+  // const pathname = pathnameFromRouter?.replace('/account', '');
+
   const router = useRouter();
 
   const NAV_ITEMS = [
@@ -30,11 +29,12 @@ export const AccountPageLayout = ({ children }: { children: ReactNode }) => {
       label: 'Profile',
       value: '/account/profile',
     },
-    {
-      Icon: IoIosSettings,
-      label: 'Settings',
-      value: '/account/settings',
-    },
+    // {
+    //   Icon: IoIosSettings,
+    //   label: 'Settings',
+    //   value: '/account/settings',
+    // },
+
     // {
     //   Icon: MdOutlineLogin,
     //   label: 'Logout',
@@ -44,11 +44,13 @@ export const AccountPageLayout = ({ children }: { children: ReactNode }) => {
 
   return (
     <div className="flex w-full gap-2 px-2 ipadMini:h-0 ipadMini:flex-1">
-      <SideMenu
-        currentTab={pathname}
-        navItems={NAV_ITEMS}
-        onClickItem={(value) => router.push(value)}
-      />
+      {!isMobileMode && (
+        <SideMenu
+          currentTab={pathnameFromRouter}
+          navItems={NAV_ITEMS}
+          onClickItem={(value) => router.push(value)}
+        />
+      )}
       {children}
     </div>
   );

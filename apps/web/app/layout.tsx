@@ -6,9 +6,11 @@ import { Providers } from './providers';
 
 import { siteConfig } from '@/config/site';
 import { fontSans } from '@/config/fonts';
-import { Navbar } from '@/components/menu/header-menu';
+import { HeaderMenu } from '@/components/menu/header-menu';
 import ClientToaster from '@/config/client-toaster';
 import { ModalPortal } from '@/components/modal-portal';
+import { StickyBottomMenu } from '@/components';
+
 export const metadata: Metadata = {
   title: {
     default: siteConfig.name,
@@ -43,8 +45,11 @@ export default function RootLayout({
       >
         <Providers themeProps={{ attribute: 'class', defaultTheme: 'light' }}>
           <div className="relative flex flex-col h-screen">
-            <Navbar />
-            <main className="container mx-auto pt-5 flex-grow">{children}</main>
+            <HeaderMenu />
+            <main className="container mx-auto pt-5 flex-grow">
+              {children}
+              <StickyBottomMenu />
+            </main>
             <ClientToaster />
             <ModalPortal />
             {/* <footer className="w-full flex items-center justify-center py-3">

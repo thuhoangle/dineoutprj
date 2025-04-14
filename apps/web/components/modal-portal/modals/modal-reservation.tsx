@@ -13,7 +13,7 @@ import NextImage from 'next/image';
 import { MdOutlineEdit } from 'react-icons/md';
 import { supabase } from '@/utils';
 import { OCCASSION_EVENTS, TextInput, toastHelper } from '@/components';
-import { Select, SelectItem } from '@nextui-org/select';
+import { Select, SelectItem } from "@heroui/select";
 
 interface ModalReservationProps extends ModalBaseProps {
   data: ReservationInfo;

@@ -11,7 +11,7 @@ export * from './change-theme';
 export * from './badge';
 export * from './widget';
 export * from './booking-drawer';
-export * from './bento-item';
+export * from './bento-item/bento-item';
 export * from './explore-card';
 export * from './bg-pattern';
 export * from './feature-icon';

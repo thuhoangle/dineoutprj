@@ -1,5 +1,7 @@
+'use client';
+
 import { toastHelper } from '@/components';
-import { handleError, supaApiInstance } from '@/services';
+import { handleError, ReservationInfo, supaApiInstance } from '@/services';
 import { DateValue, today, getLocalTimeZone } from '@internationalized/date';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
@@ -79,10 +81,10 @@ export const useReservation = () => {
 
   const createReservation = async (
     resId: string,
-    tableId?: string,
+    tableId: string,
     seat_type?: string
   ) => {
-    const data = {
+    const data: ReservationInfo = {
       restaurant_id: resId,
       table_id: tableId,
       status: 'pending',

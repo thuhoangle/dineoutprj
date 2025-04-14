@@ -95,7 +95,9 @@ export const Avatar = ({
         />
       )}
       <div className="self-center">
-        <label htmlFor="single">{uploading ? 'Uploading ...' : 'Upload'}</label>
+        <label style={{ fontSize: '14px' }} htmlFor="single">
+          {uploading ? 'Uploading ...' : 'Upload'}
+        </label>
         <input
           style={{
             visibility: 'hidden',

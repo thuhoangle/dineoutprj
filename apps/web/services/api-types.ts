@@ -86,7 +86,7 @@ export interface UserInfo {
   name?: string;
   email: string;
   auth_id: string;
-  phone?: null;
+  phone?: string;
   profile_image?: string;
   bio?: string;
   allergies?: string[];
@@ -115,7 +115,7 @@ export interface ReservationInfo {
   occasion: string;
   additional_info: string;
   reservation_time: string;
-  seat_type: string;
+  seat_type?: string;
 }
 
 // export interface AvailableForReservation {

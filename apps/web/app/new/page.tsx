@@ -11,8 +11,8 @@ import { SlArrowLeft } from 'react-icons/sl';
 import NextLink from 'next/link';
 import { useWindowContext } from '@/contexts';
 
-export default function RisingPage() {
-  const { dataList, getData, fetching } = useGetRisingList();
+export default function NewPage() {
+  const { dataList, getData, fetching } = useGetNewList();
   const { latitude, longitude } = useGetUserLocation();
   const { isMobileMode } = useWindowContext();
 
@@ -31,11 +31,11 @@ export default function RisingPage() {
             <SlArrowLeft className="w-3 h-3" />
             All Results
           </NextLink>
-          <TextField preset="h2" weight="b" text="Rising Restaurants" />
+          <TextField preset="h2" weight="b" text="New Restaurants" />
           <TextField
             preset="p3"
             className="text-gray-500"
-            text="Discover rising restaurants gaining popularity among diners and secure your table before they're fully booked."
+            text="Craving something different? Discover the newest culinary destinations in town and book your table."
           />
         </div>
         <div className="flex flex-col gap-4">
@@ -57,7 +57,7 @@ export default function RisingPage() {
   );
 }
 
-const useGetRisingList = () => {
+const useGetNewList = () => {
   const [dataList, setDataList] = useState<RestaurantInfo[]>([]);
   const [fetching, setFetching] = useState(false);
 
@@ -68,7 +68,7 @@ const useGetRisingList = () => {
     const { data, error } = await supabase
       .from('restaurants')
       .select('*')
-      .contains('keywords', ['rising']);
+      .contains('keywords', ['New']);
     if (error) {
       toastHelper.error('Error fetching restaurants:');
       console.error(error.message);

@@ -79,20 +79,20 @@ export const RoundStrokeIcon: FC<FeatureCoreIconProps> = ({
       <div
         className={clsx(
           'z-10 flex flex-col items-center justify-center rounded-full',
-          getColorRing1ClassName(color),
+          getColorRing1ClassName(color as ColorPreset),
           getSizeRing1ClassName(size)
         )}
       >
         <div
           className={clsx(
             'z-10 flex flex-col items-center justify-center rounded-full',
-            getColorRing2ClassName(color),
+            getColorRing2ClassName(color as ColorPreset),
             getSizeRing2ClassName(size)
           )}
         >
           <Icon
             className={clsx(
-              getIconColorClassName(color),
+              getIconColorClassName(color as ColorPreset),
               getIconSizeClassName(size)
             )}
           />
@@ -132,7 +132,7 @@ export const RoundStrokeGrayIcon: FC<FeatureCoreIconProps> = ({
       >
         <Icon
           className={clsx(
-            getIconColorClassName(color),
+            getIconColorClassName(color as ColorPreset),
             getIconSizeClassName(size)
           )}
         />

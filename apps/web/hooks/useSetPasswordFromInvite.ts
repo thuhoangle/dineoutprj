@@ -1,4 +1,5 @@
-// useSetPasswordFromInvite.ts
+'use client';
+
 import { useEffect, useMemo, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import toast from 'react-hot-toast';

@@ -6,7 +6,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { RestaurantInfo } from '@/services/api-types';
 import clsx from 'clsx';
 import { TextField } from '@/components';
-import { Link } from '@nextui-org/link';
+import { Link } from "@heroui/link";
 
 export const MiniMap = ({
   data,

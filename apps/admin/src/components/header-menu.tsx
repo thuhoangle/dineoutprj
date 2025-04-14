@@ -1,32 +1,29 @@
 'use client';
 
-import {
-  Navbar as NextUINavbar,
-  NavbarContent,
-  NavbarBrand,
-} from '@nextui-org/navbar';
-import { Button } from '@nextui-org/button';
+import { Navbar, NavbarContent, NavbarBrand } from '@heroui/navbar';
+import { Button } from '@heroui/button';
 import NextLink from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { FC } from 'react';
 import { useUserStore } from '@/stores/useUserStore';
-import { useLoginSignup } from '@/hooks';
+import { useLogin } from '@/hooks';
 import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from '@nextui-org/dropdown';
+} from '@heroui/dropdown';
+import { SimpleLoading } from './simple-loading';
 
 interface HeaderMenuProps {
   onGoSamePath?: () => void;
 }
 
-export const Navbar: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
+export const HeaderMenu: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
   const router = useRouter();
   const portfolioDetail = useUserStore((state) => state.portfolioDetail);
-  const { onLogout } = useLoginSignup();
+  const { onLogout } = useLogin();
 
   // const restaurantList = useVenueInfoStore((state) => state.restaurantList);
 
@@ -35,7 +32,7 @@ export const Navbar: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
   // }, []);
 
   return (
-    <NextUINavbar isBordered maxWidth="full" position="sticky">
+    <Navbar isBordered maxWidth="full" position="sticky">
       <NavbarContent
         className="flex items-cente justify-betweenr"
         justify="start"
@@ -85,6 +82,6 @@ export const Navbar: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
           </Dropdown>
         )}
       </NavbarContent>
-    </NextUINavbar>
+    </Navbar>
   );
 };

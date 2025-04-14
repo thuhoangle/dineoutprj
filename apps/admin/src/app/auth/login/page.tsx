@@ -1,9 +1,11 @@
 'use client';
 
-import { Button, TextField, TextInput } from '@/components';
-import { useLoginSignup } from '@/hooks';
+import { useLogin } from '@/hooks';
+import { Button, TextField } from 'dineout-ui';
 import { Input } from '@heroui/react';
 import { useState } from 'react';
+import { GlobalLoading } from '@/components/global-loading';
+import { toastHelper } from '@/components/toast-helper';
 
 export default function LoginPage() {
   const {
@@ -13,32 +15,28 @@ export default function LoginPage() {
     password,
     setPassword,
     errorPassword,
-    onLogin,
-    onSignup,
     fetchingLogin,
-    fetchingSignup,
-  } = useLoginSignup(true);
+    onLogin,
+  } = useLogin();
+  console.log('🚀 ~ LoginPage ~ email:', email, password);
 
-  const [isSignup, setIsSignup] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
   return (
     <div className="w-full flex items-center flex-col gap-8 justify-center">
-      <TextField
-        preset="h1"
-        text={isSignup ? 'Welcome to Dineout!' : 'Welcome back to Dineout!'}
-        weight="s"
-      />
+      <TextField preset="h1" text="Welcome back to Dineout!" weight="s" />
       <div className="flex flex-col gap-5 w-full max-w-xl">
         <Input
           isClearable
-          label="Your email"
-          type="email"
+          variant="bordered"
+          label="Email"
           onValueChange={setEmail}
           errorMessage={errorEmail}
         />
+
         <Input
-          label="Your password"
+          variant="bordered"
+          label="Password"
           type={isVisible ? 'text' : 'password'}
           value={password}
           onValueChange={setPassword}
@@ -50,23 +48,15 @@ export default function LoginPage() {
             />
           }
         />
-        <div className="flex flex-col items-end gap-2 ">
+        <div className="flex-1 ">
           <Button
+            disabled={!email && !password}
             className="w-full"
-            fetching={fetchingLogin || fetchingSignup}
+            fetching={fetchingLogin}
             preset="red"
-            text={isSignup ? 'Sign up' : 'Log in'}
-            onClick={isSignup ? onSignup : onLogin}
+            text="Log in"
+            onClick={onLogin}
           />
-          <TextField preset="p4" weight="m" color="g400">
-            {isSignup ? 'Already have an account? ' : "Don't have an account? "}
-            <span
-              className="text-red-500 cursor-pointer"
-              onClick={() => setIsSignup(!isSignup)}
-            >
-              {isSignup ? 'Log in' : 'Sign up'}
-            </span>
-          </TextField>
         </div>
       </div>
     </div>

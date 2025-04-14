@@ -1,7 +1,13 @@
+'use client';
+
 import { FC } from 'react';
-import { AdminLayout } from '@/layouts/AdminLayout';
+import { useUserStore } from '@/stores';
 
 const DashboardPage: FC = () => {
+  const authInfo = useUserStore((state) => state.authInfo);
+  const portfolioDetail = useUserStore((state) => state.portfolioDetail);
+  console.log('🚀 ~ portfolioDetail:', portfolioDetail);
+  console.log('🚀 ~ authInfo:', authInfo);
   return (
     // <AdminLayout>
     <div className="p-6">

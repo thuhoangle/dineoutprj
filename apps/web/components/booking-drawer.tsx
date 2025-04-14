@@ -6,16 +6,16 @@ import {
   DrawerHeader,
   DrawerBody,
   DrawerFooter,
-} from '@nextui-org/drawer';
+} from "@heroui/drawer";
 import { BsFillPeopleFill } from 'react-icons/bs';
 
 import { TextField } from './text';
 import dayjs from 'dayjs';
-import { Select, SelectItem } from '@nextui-org/select';
-import { Input } from '@nextui-org/input';
+import { Select, SelectItem } from "@heroui/select";
+import { Input } from "@heroui/input";
 import { toastHelper } from './toast-helper';
 import { Button as MyButton } from './button';
-import { Button } from '@nextui-org/button';
+import { Button } from "@heroui/button";
 import { AvailableSeats, RestaurantInfo } from '@/services';
 
 export const BookingDrawer = ({

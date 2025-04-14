@@ -9,10 +9,10 @@ export const siteConfig = {
       label: 'Home',
       href: '/',
     },
-    {
-      label: 'Today',
-      href: '/today',
-    },
+    // {
+    //   label: 'Today',
+    //   href: '/today',
+    // },
     {
       label: 'All Days',
       href: '/venues',

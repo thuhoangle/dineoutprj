@@ -2,7 +2,7 @@
 
 import clsx from 'clsx';
 import Image from 'next/image';
-import { Button, TextField } from '.';
+import { Button, TextField } from '..';
 import { FaHeart, FaRegHeart, FaStar } from 'react-icons/fa';
 import { useState } from 'react';
 import { GrLocation } from 'react-icons/gr';
