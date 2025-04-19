@@ -14,9 +14,13 @@ import { useVenueInfoStore } from '@/stores';
 export const BentoItem = ({
   className,
   data,
+  onHover,
+  onUnhover,
 }: {
   className?: string;
   data: RestaurantInfo;
+  onHover?: () => void;
+  onUnhover?: () => void;
 }) => {
   const router = useRouter();
   const favRestaurant = useVenueInfoStore((state) => state.favRestaurant);
@@ -30,6 +34,8 @@ export const BentoItem = ({
         'rounded-xl group hover:cursor-pointer hover:border-gray-700 border transition duration-200 shadow-input p-4 justify-start gap-4 flex flex-row',
         className
       )}
+      onMouseEnter={onHover}
+      onMouseLeave={onUnhover}
       onClick={() => router.push(`/venues/${data.slug}`)}
     >
       <Image

@@ -15,6 +15,7 @@ export default function RisingPage() {
   const { dataList, getData, fetching } = useGetRisingList();
   const { latitude, longitude } = useGetUserLocation();
   const { isMobileMode } = useWindowContext();
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   useEffect(() => {
     getData();
@@ -44,13 +45,24 @@ export default function RisingPage() {
               <TextField preset="h6" text="No results found :(" />
             </div>
           ) : (
-            dataList.map((item, index) => <BentoItem key={index} data={item} />)
+            dataList.map((item, index) => (
+              <BentoItem
+                onHover={() => setHoveredId(item.id)}
+                onUnhover={() => setHoveredId(null)}
+                key={index}
+                data={item}
+              />
+            ))
           )}
         </div>
       </div>
       {!isMobileMode && (
         <div className="ipadMini:sticky ipadMini:top-[77px] ipadMini:h-[calc(100vh-77px)]">
-          <CustomMap markers={dataList} center={{ longitude, latitude }} />
+          <CustomMap
+            hoveredId={hoveredId}
+            markers={dataList}
+            center={{ longitude, latitude }}
+          />
         </div>
       )}
     </div>

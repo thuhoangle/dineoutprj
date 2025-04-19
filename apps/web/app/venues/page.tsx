@@ -1,11 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
-import Image from 'next/image';
-import { Button, TextField } from '../../components';
-import clsx from 'clsx';
-import { FaHeart, FaRegHeart, FaStar } from 'react-icons/fa';
+import { TextField } from '../../components';
 import { useEffect, useState } from 'react';
-import { GrLocation } from 'react-icons/gr';
 import { IoFlashOutline } from 'react-icons/io5';
 import { HiOutlineSparkles } from 'react-icons/hi2';
 import { FiStar } from 'react-icons/fi';
@@ -14,13 +10,9 @@ import {
   SectionSelector,
   SectionSelectorPreset,
 } from '@/modules/cities/components';
-import { useRouter } from 'next/navigation';
-import { RestaurantData } from '@/interface';
-import { useGetRestaurantInfo, useGetUserLocation } from '@/hooks';
-import { RestaurantInfo } from '@/services/api-types';
+import { useGetUserLocation } from '@/hooks';
 import { BentoItem } from '@/components/bento-item';
 import { useVenueNearMeStore } from '@/stores';
-import { supabase } from '@/utils';
 
 const SECTION_LIST = [
   {
@@ -54,6 +46,7 @@ export default function VenuesPage() {
   const [selectedSection, setSelectedSection] = useState<string>(
     SECTION_LIST[0].value
   );
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   useEffect(() => {
     if (latitude && longitude) {
@@ -95,12 +88,22 @@ export default function VenuesPage() {
         </div>
         <div className="flex flex-col gap-4">
           {filteredItems.map((item, index) => (
-            <BentoItem className="min-w-96" key={index} data={item} />
+            <BentoItem
+              onHover={() => setHoveredId(item.id)}
+              onUnhover={() => setHoveredId(null)}
+              className="min-w-96"
+              key={index}
+              data={item}
+            />
           ))}
         </div>
       </div>
       <div className="ipadMini:sticky ipadMini:top-[77px] ipadMini:h-[calc(100vh-77px)]">
-        <CustomMap markers={filteredItems} center={{ longitude, latitude }} />
+        <CustomMap
+          hoveredId={hoveredId}
+          markers={filteredItems}
+          center={{ longitude, latitude }}
+        />
       </div>
     </div>
   );

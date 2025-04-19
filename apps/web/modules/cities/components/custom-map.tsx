@@ -5,10 +5,6 @@ import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { RestaurantInfo } from '../../../services/api-types';
 import clsx from 'clsx';
-import { TextField } from '@/components';
-import Image from 'next/image';
-import { FaStar } from 'react-icons/fa';
-import ReactDOM from 'react-dom/client';
 
 /* eslint-disable @next/next/no-img-element */
 
@@ -16,10 +12,12 @@ export const CustomMap = ({
   markers = [],
   center,
   className,
+  hoveredId,
 }: {
   markers: RestaurantInfo[];
   center?: { longitude: number | undefined; latitude: number | undefined };
   className?: string;
+  hoveredId?: string | null;
 }) => {
   const mapContainer = useRef(null);
   const map = useRef<maplibregl.Map | null>(null);
@@ -41,7 +39,7 @@ export const CustomMap = ({
 
   useEffect(() => {
     updateMarkers();
-  }, [markers]);
+  }, [markers, hoveredId]);
 
   const updateMarkers = () => {
     if (!map.current) return;
@@ -54,6 +52,17 @@ export const CustomMap = ({
 
     markers.forEach((marker) => {
       if (marker.locations?.lng && marker.locations?.lat) {
+        const isHovered = hoveredId === marker.id;
+
+        const markerElement = document.createElement('div');
+        markerElement.style.width = isHovered ? '35px' : '20px';
+        markerElement.style.height = isHovered ? '35px' : '20px';
+        markerElement.style.borderRadius = '50%';
+        markerElement.style.backgroundColor = isHovered ? '#b91c1c' : '#FF0000';
+        markerElement.style.border = '2px solid white';
+        markerElement.style.boxShadow = '0 0 5px rgba(0,0,0,0.3)';
+        markerElement.style.transition = 'all 0.2s ease';
+
         const popupContent = `
           <div class="flex flex-col">
             <div class="flex gap-2">
@@ -77,12 +86,27 @@ export const CustomMap = ({
           </div>
         `;
 
-        new maplibregl.Marker({ color: '#FF0000' })
+        new maplibregl.Marker({ element: markerElement })
           .setLngLat([marker.locations.lng, marker.locations.lat])
           .setPopup(new maplibregl.Popup({ offset: 25 }).setHTML(popupContent))
           .addTo(map.current!);
       }
     });
+
+    if (center?.longitude && center?.latitude) {
+      const userMarker = document.createElement('div');
+      userMarker.style.width = '18px';
+      userMarker.style.height = '18px';
+      userMarker.style.borderRadius = '50%';
+      userMarker.style.backgroundColor = '#007AFF';
+      userMarker.style.border = '2px solid white';
+      userMarker.style.boxShadow = '0 0 5px rgba(0,0,0,0.3)';
+
+      new maplibregl.Marker({ element: userMarker })
+        .setLngLat([center.longitude, center.latitude])
+        .setPopup(new maplibregl.Popup({ offset: 25 }).setText('You are here'))
+        .addTo(map.current!);
+    }
   };
 
   return (
