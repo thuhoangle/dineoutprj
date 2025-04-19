@@ -19,6 +19,8 @@ import { RestaurantData } from '@/interface';
 import { useGetRestaurantInfo, useGetUserLocation } from '@/hooks';
 import { RestaurantInfo } from '@/services/api-types';
 import { BentoItem } from '@/components/bento-item';
+import { useVenueNearMeStore } from '@/stores';
+import { supabase } from '@/utils';
 
 const SECTION_LIST = [
   {
@@ -45,24 +47,30 @@ const SECTION_LIST = [
 ];
 
 export default function VenuesPage() {
+  const { latitude, longitude } = useGetUserLocation();
+  const restaurantNearMeList = useVenueNearMeStore(
+    (state) => state.restaurantNearMeList
+  );
   const [selectedSection, setSelectedSection] = useState<string>(
     SECTION_LIST[0].value
   );
-  const { getData, dataList } = useGetRestaurantInfo();
-  const { latitude, longitude } = useGetUserLocation();
 
   useEffect(() => {
-    getData();
-  }, []);
+    if (latitude && longitude) {
+      useVenueNearMeStore
+        .getState()
+        .getRestaurantNearMeList(latitude, longitude);
+    }
+  }, [latitude, longitude]);
 
-  const filteredItems = dataList.filter((item) => {
+  const filteredItems = restaurantNearMeList.filter((item) => {
     if (selectedSection === 'all') return true;
     return item.keywords?.includes(selectedSection);
   });
 
   return (
     <div className="grid grid-cols-1 ipadMini:grid-cols-2">
-      <div className="flex flex-col gap-4 p-4">
+      <div className="flex flex-col gap-4 p-4 !pt-0">
         <div className="flex flex-col">
           <TextField preset="h2" weight="b" text={`Restaurants nearby`} />
           <TextField
@@ -87,7 +95,7 @@ export default function VenuesPage() {
         </div>
         <div className="flex flex-col gap-4">
           {filteredItems.map((item, index) => (
-            <BentoItem key={index} data={item} />
+            <BentoItem className="min-w-96" key={index} data={item} />
           ))}
         </div>
       </div>

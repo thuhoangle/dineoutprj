@@ -39,12 +39,14 @@ export const BentoItem = ({
         }
         alt="bento"
         width={192}
-        height={192}
+        height={156}
         style={{
           cursor: 'pointer',
           borderRadius: '8px',
           objectFit: 'cover',
           objectPosition: 'center',
+          maxHeight: '156px',
+          overflow: 'hidden',
         }}
       />
       <div className="transition flex flex-col justify-start flex-1 mt-2 duration-200">

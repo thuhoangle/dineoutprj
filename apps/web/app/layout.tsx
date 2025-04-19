@@ -46,7 +46,7 @@ export default function RootLayout({
         <Providers themeProps={{ attribute: 'class', defaultTheme: 'light' }}>
           <div className="relative flex flex-col h-screen">
             <HeaderMenu />
-            <main className="container mx-auto pt-5 flex-grow">
+            <main className="pt-5 min-h-screen w-full">
               {children}
               <StickyBottomMenu />
             </main>
