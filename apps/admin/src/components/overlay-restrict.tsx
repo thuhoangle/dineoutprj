@@ -36,11 +36,11 @@ export const OverlayRestrict = ({
   return (
     <div
       className={clsx(
-        'fixed inset-0 z-50 flex h-full w-full flex-col items-center justify-center bg-bg-overlay/60 backdrop-blur',
+        'fixed inset-0 z-50 flex h-full w-full flex-col items-center justify-center bg-black/60 backdrop-blur',
         className
       )}
     >
-      <div className="flex w-full max-w-md flex-col rounded-xl border border-border-primary bg-bg-primary px-6 pb-6">
+      <div className="flex w-full max-w-md flex-col rounded-xl border border-gray-300 bg-gray-100 px-6 pb-6">
         <div className="flex flex-col items-center justify-center gap-1 pb-8 pt-6 text-center">
           <TextField
             preset="h6"
@@ -52,8 +52,7 @@ export const OverlayRestrict = ({
           )}
         </div>
         <Button
-          className="w-full self-end"
-          preset="primary"
+          className="w-full self-end !bg-transparent border-2 border-red-500 font-semibold text-red-500"
           text={buttonText || 'Log in'}
           onClick={onButtonClick || (() => router.push('/auth/login'))}
         />
