@@ -5,6 +5,8 @@ import { RestaurantInfo, supaApiInstance, UserInfo } from '@/services';
 // import { AppSocket } from '@/services/supa-socket';
 
 interface UserStoreState {
+  rehydrated: boolean;
+  setRehydrated: () => void;
   // userInfo: UserInfo | null;
   //   setUserInfo: (userInfo: UserInfo) => void;
   //   getUserInfo: () => UserInfo | null;
@@ -21,6 +23,9 @@ interface UserStoreState {
 export const useUserStore = create<UserStoreState>()(
   persist(
     (set, get) => ({
+      rehydrated: false,
+      setRehydrated: () => set({ rehydrated: true }),
+
       authInfo: null,
       getAuthInfo: async () => {
         const {
@@ -66,6 +71,13 @@ export const useUserStore = create<UserStoreState>()(
     }),
     {
       name: 'user-storage',
+      onRehydrateStorage: () => (state, error) => {
+        if (error) {
+          // console.log('an error happened during hydration', error);
+        } else {
+          state?.setRehydrated();
+        }
+      },
     }
   )
 );

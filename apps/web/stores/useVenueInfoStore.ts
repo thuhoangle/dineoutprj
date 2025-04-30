@@ -5,8 +5,8 @@ import { toastHelper } from '@/components';
 import { useUserStore } from '.';
 
 interface VenueInfoState {
-  // rehydrated: boolean;
-  // setRehydrated: () => void;
+  rehydrated: boolean;
+  setRehydrated: () => void;
 
   restaurantList: RestaurantInfo[];
   restaurantDetail: { [key: string]: RestaurantInfo };
@@ -24,8 +24,8 @@ interface VenueInfoState {
 export const useVenueInfoStore = create<VenueInfoState>()(
   persist(
     (set, get) => ({
-      // rehydrated: false,
-      // setRehydrated: () => set({ rehydrated: true }),
+      rehydrated: false,
+      setRehydrated: () => set({ rehydrated: true }),
 
       restaurantList: [],
       restaurantDetail: {},
@@ -136,6 +136,13 @@ export const useVenueInfoStore = create<VenueInfoState>()(
 
     {
       name: 'venue-info-store',
+      onRehydrateStorage: () => (state, error) => {
+        if (error) {
+          // console.log('an error happened during hydration', error);
+        } else {
+          state?.setRehydrated();
+        }
+      },
     }
   )
 );

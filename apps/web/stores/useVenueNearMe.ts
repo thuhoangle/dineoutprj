@@ -7,8 +7,8 @@ import { supabase } from '@/utils';
 import { useGetUserLocation } from '@/hooks';
 
 interface VenueNearMeState {
-  // rehydrated: boolean;
-  // setRehydrated: () => void;
+  rehydrated: boolean;
+  setRehydrated: () => void;
 
   restaurantNearMeList: RestaurantInfo[];
   restaurantNearMeDetail: { [key: string]: RestaurantInfo };
@@ -26,8 +26,8 @@ interface VenueNearMeState {
 export const useVenueNearMeStore = create<VenueNearMeState>()(
   persist(
     (set, get) => ({
-      // rehydrated: false,
-      // setRehydrated: () => set({ rehydrated: true }),
+      rehydrated: false,
+      setRehydrated: () => set({ rehydrated: true }),
 
       restaurantNearMeList: [],
       restaurantNearMeDetail: {},
@@ -129,6 +129,13 @@ export const useVenueNearMeStore = create<VenueNearMeState>()(
 
     {
       name: 'venue-near-me-store',
+      onRehydrateStorage: () => (state, error) => {
+        if (error) {
+          // console.log('an error happened during hydration', error);
+        } else {
+          state?.setRehydrated();
+        }
+      },
     }
   )
 );
