@@ -58,7 +58,7 @@ export const useLogin = (goToHomePage?: boolean) => {
       // revalidatePath('/', 'layout');
       // redirect('/venues');
       if (goToHomePage) {
-        router.push('/');
+        router.push('/dashboard');
       }
     } catch (error: any) {
       setFetchingLogin(false);

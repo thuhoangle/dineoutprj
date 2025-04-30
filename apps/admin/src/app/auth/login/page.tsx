@@ -17,8 +17,7 @@ export default function LoginPage() {
     errorPassword,
     fetchingLogin,
     onLogin,
-  } = useLogin();
-  console.log('🚀 ~ LoginPage ~ email:', email, password);
+  } = useLogin(true);
 
   const [isVisible, setIsVisible] = useState(false);
 

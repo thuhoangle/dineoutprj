@@ -54,7 +54,7 @@ export const HeaderMenu: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
       <NavbarContent className="pl-4" justify="end">
         {!portfolioDetail && (
           <Button
-            onPress={() => router.push('/login')}
+            onPress={() => router.push('/auth/login')}
             variant="flat"
             radius="md"
             className="bg-red-500 text-white text-medium"
@@ -72,8 +72,8 @@ export const HeaderMenu: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
               </Button>
             </DropdownTrigger>
             <DropdownMenu>
-              <DropdownItem key={'profile'} href="/account/profile">
-                Restaurant Management
+              <DropdownItem key={'profile'} href="/user">
+                Restaurant Managing
               </DropdownItem>
               <DropdownItem key={'logout'} onPress={onLogout}>
                 Logout
