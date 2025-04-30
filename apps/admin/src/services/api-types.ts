@@ -10,6 +10,7 @@ export interface RestaurantInfo {
   locations?: Locations;
   keywords?: string[];
   price_range?: number;
+  price?: string;
   slug?: string;
   ggUrl?: string;
   phone?: string;

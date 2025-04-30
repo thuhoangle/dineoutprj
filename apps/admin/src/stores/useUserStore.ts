@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { RestaurantInfo, supaApiInstance, UserInfo } from '@/services';
-// import { supabase } from '@/utils';
-// import { AppSocket } from '@/services/supa-socket';
+import { RestaurantInfo, supaApiInstance } from '@/services';
+import { AppSocket } from '@/services/supa-socket';
+import { supabase } from '@/utils';
 
 interface UserStoreState {
   rehydrated: boolean;
@@ -45,14 +45,14 @@ export const useUserStore = create<UserStoreState>()(
       },
       logOut: async () => {
         const state = get();
-        // if (state.authInfo?.id) {
-        //   const channel = AppSocket.subscribeToCustomerUpdates(
-        //     state.authInfo.id
-        //   );
-        //   if (channel) {
-        //     supabase.removeChannel(channel);
-        //   }
-        // }
+        if (state.authInfo?.id) {
+          const channel = AppSocket.subscribeToRestaurantUpdates(
+            state.authInfo.id
+          );
+          if (channel) {
+            supabase.removeChannel(channel);
+          }
+        }
         set({ authInfo: null, portfolioDetail: undefined });
       },
 

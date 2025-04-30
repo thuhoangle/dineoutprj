@@ -12,6 +12,7 @@ export interface EditRestaurantProps {
   images?: string[];
   locations?: Locations;
   price_range?: number;
+  price?: string;
   slug?: string;
   ggUrl?: string;
   phone?: string;
@@ -34,6 +35,7 @@ export const useUpdateRestaurantInfo = () => {
     images: portfolioDetail?.images,
     locations: portfolioDetail?.locations,
     price_range: portfolioDetail?.price_range,
+    price: portfolioDetail?.price,
     slug: portfolioDetail?.slug,
     ggUrl: portfolioDetail?.ggUrl,
     phone: portfolioDetail?.phone,
@@ -59,60 +61,99 @@ export const useUpdateRestaurantInfo = () => {
     fetchDetail();
   }, [portfolioDetail]);
 
-  const uploadImage = async (
-    files: FileList | null
-  ): Promise<string[] | null> => {
-    if (!files) return null;
+  const getCoordinatesFromAddress = async (
+    address: string,
+    neighborhood: string,
+    district: string
+  ) => {
+    const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_API_KEY;
+    const geocodeUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
+      `${address}, ${neighborhood}, ${district}, Ho Chi Minh City, Vietnam`
+    )}.json?access_token=${mapboxToken}`;
 
-    const bucket = 'restaurants-images';
-    const imageUrls: string[] = [];
+    try {
+      const response = await fetch(geocodeUrl);
+      const data = await response.json();
 
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const fileName = `${portfolioDetail?.manager_id}-${Date.now()}-${file.name}`;
-
-      const { data, error: uploadError } = await supabase.storage
-        .from(bucket)
-        .upload(fileName, file);
-
-      if (uploadError) {
-        console.error('Error uploading file:', uploadError);
-        return null;
+      if (data.features && data.features.length > 0) {
+        const [longitude, latitude] = data.features[0].center;
+        return { latitude, longitude };
+      } else {
+        throw new Error('No geocoding results found.');
       }
-
-      const {
-        data: { publicUrl },
-      } = supabase.storage.from(bucket).getPublicUrl(fileName);
-
-      imageUrls.push(publicUrl);
+    } catch (error) {
+      console.error('Geocoding Error:', error);
+      return null;
     }
-
-    return imageUrls;
   };
 
-  const updateUser = async (files?: FileList | null) => {
+  const updateUser = async () => {
     if (!portfolioDetail?.manager_id || !authInfo?.id) {
       toastHelper.error('User not found');
       return;
     }
 
-    const updateData = {
-      name: query.name,
-      district: query.district,
-      overview: query.overview,
-      images: query.images,
-      locations: query.locations,
-      price_range: query.price_range,
-      slug: query.slug,
-      ggUrl: query.ggUrl,
-      phone: query.phone,
-      website: query.website,
-      cancellation_policy: query.cancellation_policy,
-      reservation_policy: query.reservation_policy,
-      opening_hours: query.opening_hours,
+    const processCoordinates = async () => {
+      const { address, neighborhood, lat, lng } = query.locations || {};
+      const district = query.district || '';
+
+      if (lat && lng) {
+        return query.locations; // Return existing locations if coordinates already exist
+      } else if (address && neighborhood && district) {
+        const coords = await getCoordinatesFromAddress(
+          address,
+          neighborhood,
+          district
+        );
+        if (coords) {
+          const { latitude, longitude } = coords;
+
+          const updatedLocations = {
+            ...(query.locations || {}),
+            lat: latitude,
+            lng: longitude,
+            address: address || '',
+            neighborhood: neighborhood || '',
+            countryCode: query.locations?.countryCode || 'VN',
+            city: query.locations?.city || 'Ho Chi Minh City',
+          };
+
+          return updatedLocations;
+        } else {
+          toastHelper.error('Failed to fetch coordinates.');
+          return null;
+        }
+      } else {
+        return query.locations;
+      }
     };
+
     try {
       setFetching(true);
+      const updatedLocations = await processCoordinates();
+
+      if (updatedLocations === null) {
+        setFetching(false);
+        return;
+      }
+
+      const updateData = {
+        name: query.name,
+        district: query.district,
+        overview: query.overview,
+        images: query.images,
+        locations: updatedLocations,
+        price_range: query.price_range,
+        price: query.price,
+        slug: query.slug,
+        ggUrl: query.ggUrl,
+        phone: query.phone,
+        website: query.website,
+        cancellation_policy: query.cancellation_policy,
+        reservation_policy: query.reservation_policy,
+        opening_hours: query.opening_hours,
+      };
+
       const { error } = await supabase
         .from('restaurants')
         .update(updateData)
@@ -122,6 +163,14 @@ export const useUpdateRestaurantInfo = () => {
         toastHelper.error(error.message);
         return;
       }
+
+      if (updatedLocations !== query.locations) {
+        setQuery((prev) => ({
+          ...prev,
+          locations: updatedLocations,
+        }));
+      }
+
       toastHelper.success('Profile updated successfully');
       useUserStore.getState().getPortfolioDetail();
       setFetching(false);
@@ -133,7 +182,6 @@ export const useUpdateRestaurantInfo = () => {
   };
 
   return {
-    uploadImage,
     updateUser,
     fetching,
     query,

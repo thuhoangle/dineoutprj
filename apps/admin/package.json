@@ -19,6 +19,7 @@
     "clsx": "^2.1.1",
     "dineout-ui": "*",
     "framer-motion": "^12.6.5",
+    "mapbox-gl": "^3.11.1",
     "next": "^15.2.4",
     "postcss": "8.4.35",
     "react": "^19.1.0",
