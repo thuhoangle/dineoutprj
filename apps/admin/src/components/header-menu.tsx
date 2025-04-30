@@ -57,7 +57,7 @@ export const HeaderMenu: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
             onPress={() => router.push('/auth/login')}
             variant="flat"
             radius="md"
-            className="bg-red-500 text-white text-medium"
+            className="!bg-transparent font-semibold !border-2 !border-red-500 !text-red-500 text-medium"
           >
             Login
           </Button>
@@ -65,7 +65,10 @@ export const HeaderMenu: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
         {portfolioDetail && (
           <Dropdown>
             <DropdownTrigger>
-              <Button variant="flat" className="bg-red-500 text-white">
+              <Button
+                variant="flat"
+                className="!bg-transparent font-semibold !border-2 !border-red-500 !text-red-500"
+              >
                 {portfolioDetail.name
                   ? portfolioDetail.name
                   : useUserStore.getState().authInfo?.email}

@@ -1,42 +1,39 @@
 export interface RestaurantInfo {
   id: string;
-  name: string;
-  rating: number;
-  review_count: number;
-  district: string;
-  short_overview: string;
-  overview: string;
+  name?: string;
+  rating?: number;
+  review_count?: number;
+  district?: string;
+  short_overview?: string;
+  overview?: string;
   images?: string[];
-  locations: Locations;
+  locations?: Locations;
   keywords?: string[];
-  price_range: number;
+  price_range?: number;
   slug?: string;
   ggUrl?: string;
   phone?: string;
   website?: string;
-  cancellation_policy: string;
-  reservation_policy: Reservationpolicy[];
-  working_time: WorkingTime[];
+  cancellation_policy?: string;
+  reservation_policy?: string;
+  opening_hours?: {
+    [day: string]: string;
+  };
   manager_id?: string;
 }
 
-interface Reservationpolicy {
+export interface Reservationpolicy {
   body: string;
   name: string;
 }
 
-interface Locations {
+export interface Locations {
   lat: number;
   lng: number;
   address: string;
   neighborhood: string;
   countryCode: string;
   city: string;
-}
-
-interface WorkingTime {
-  day: string;
-  time: string;
 }
 
 export interface GetAvailableSeats {

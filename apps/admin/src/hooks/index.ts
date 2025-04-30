@@ -1,5 +1,6 @@
 export * from './useGetRestaurantInfo';
-export * from './useUpdateUser';
+export * from './useUpdateRestaurantInfo';
 // export * from './useReservation';
 export * from './useGetAvailableSeats';
 export * from './useLogin';
+export * from './useWindowSize';

@@ -26,7 +26,7 @@ export const useUpdateUser = () => {
       await useUserStore.getState().getPortfolioDetail();
     };
     initializeProfile();
-  }, []);
+  }, [portfolioDetail]);
 
   useEffect(() => {
     if (portfolioDetail) {
