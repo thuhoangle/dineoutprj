@@ -17,7 +17,6 @@ import {
   RadioGroup,
   Accordion,
   AccordionItem,
-  NumberInput,
 } from '@heroui/react';
 import { useWindowContext } from '@/contexts';
 import { Button, SimpleLoading } from 'dineout-ui';
@@ -210,7 +209,6 @@ export const ProfilePanel = () => {
           <Accordion
             defaultExpandedKeys={['website']}
             isCompact
-            // variant="bordered"
             itemClasses={{
               trigger: '!py-2',
               heading: 'px-3',

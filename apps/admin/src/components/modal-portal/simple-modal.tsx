@@ -80,7 +80,7 @@ export const SimpleModal: FC<SimpleModalProps> = ({
       )}
       panelClassName={clsx(
         overridePanelClassName ||
-          'relative flex w-full transform flex-col overflow-hidden rounded-xl bg-gray-950 p-4 shadow-xl transition-all ipadMini:my-8 ipadMini:max-h-[90vh] ipadMini:max-w-lg ipadMini:p-6',
+          'relative flex w-full transform flex-col overflow-hidden rounded-xl bg-gray-100 border-2 border-gray-300 p-4 shadow-xl transition-all ipadMini:my-8 ipadMini:max-h-[90vh] ipadMini:max-w-lg ipadMini:p-6',
         panelClassName
       )}
       hideModalCB={hideModalCB}
@@ -119,9 +119,9 @@ export const ModalHeader = ({
     >
       {children || (
         <div className="flex flex-col gap-1">
-          <TextField preset="h6" weight="m" text={title} />
+          <TextField preset="p1" weight="m" text={title} />
           {subtitle ? (
-            <TextField preset="p3" className="text-gray-400" text={subtitle} />
+            <TextField preset="p3" className="text-gray-700" text={subtitle} />
           ) : null}
         </div>
       )}

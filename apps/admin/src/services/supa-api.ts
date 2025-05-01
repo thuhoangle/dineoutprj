@@ -41,12 +41,17 @@ export class supaApi {
       .from('reservations')
       .insert([{ ...data, user_id: this.getAuthId() }]);
 
-  // Take as REFERENCE, cus i call seperately in each Now, Past, Upcoming Reservation file
+  // GET UPCOMING TABLES
   getReservations = () =>
     supabase
       .from('reservations')
       .select('*, restaurants(name)')
-      .eq('user_id', this.getAuthId());
+      .eq('user_id', this.getAuthId())
+      .order('created_at', { ascending: false });
+
+  // GET TABLES
+  getRestaurantTables = (restaurantId: string) =>
+    supabase.from('tables').select('*').eq('restaurant_id', restaurantId);
 }
 
 export const supaApiInstance = new supaApi();

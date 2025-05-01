@@ -37,6 +37,15 @@ export interface Locations {
   city: string;
 }
 
+export interface RestaurantTableProps {
+  id?: number;
+  table_number: number;
+  capacity: number;
+  is_available: boolean;
+  seat_type: string;
+  restaurant_id?: string;
+}
+
 export interface GetAvailableSeats {
   id: string;
   restaurant_id: string;

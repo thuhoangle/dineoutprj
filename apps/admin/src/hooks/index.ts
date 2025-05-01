@@ -5,3 +5,4 @@ export * from './useGetAvailableSeats';
 export * from './useLogin';
 export * from './useWindowSize';
 export * from './useUpdateRestaurantImage';
+export * from './useGetTables';
