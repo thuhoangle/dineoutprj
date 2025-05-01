@@ -1,6 +1,11 @@
 'use client';
 
-import { ModalPortal, HeaderMenu, SideMenu } from '@/components';
+import {
+  ModalPortal,
+  HeaderMenu,
+  SideMenu,
+  OverlayRestrict,
+} from '@/components';
 import { usePathname, useRouter } from 'next/navigation';
 import { WindowProvider } from '@/contexts/window-context';
 import { Toaster } from 'react-hot-toast';
@@ -38,14 +43,6 @@ interface RootLayoutClientProps {
 
 export function RootLayoutClient({ children }: RootLayoutClientProps) {
   const pathnameFromRouter = usePathname();
-  const { push } = useRouter();
-
-  // const tabValue = useMemo(() => {
-  //   if (pathnameFromRouter === '/dashboard') {
-  //     return '/';
-  //   }
-  //   return pathnameFromRouter;
-  // }, [pathnameFromRouter]);
 
   return (
     <WindowProvider>
@@ -56,7 +53,6 @@ export function RootLayoutClient({ children }: RootLayoutClientProps) {
             <SideMenu
               currentTab={pathnameFromRouter || ''}
               navItems={NAV_ITEMS}
-              onClickItem={(value) => push(value)}
             />
           )}
           <main className="flex-1">{children}</main>
@@ -64,6 +60,7 @@ export function RootLayoutClient({ children }: RootLayoutClientProps) {
       </div>
       <ClientToaster />
       <ModalPortal />
+      {!pathnameFromRouter.includes('/auth/login') ? <OverlayRestrict /> : null}
     </WindowProvider>
   );
 }

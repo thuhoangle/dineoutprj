@@ -16,6 +16,7 @@ export const ReservationCard = ({ data }: { data: ReservationInfo }) => {
 
   const _onViewDetail = async () => {
     ModalPortalController.showModal({
+      id: 'modal-reservation',
       Component: ModalReservation,
       props: {
         data,

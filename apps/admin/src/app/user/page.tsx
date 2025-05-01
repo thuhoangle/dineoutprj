@@ -4,7 +4,7 @@ import { OverlayRestrict } from '@/components';
 const Profile = () => (
   <>
     <ProfilePanel />
-    <OverlayRestrict />
+    {/* <OverlayRestrict /> */}
   </>
 );
 

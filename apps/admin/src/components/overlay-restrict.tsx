@@ -52,7 +52,7 @@ export const OverlayRestrict = ({
           )}
         </div>
         <Button
-          className="w-full self-end !bg-transparent border-2 border-red-500 font-semibold text-red-500"
+          className="w-full self-end !bg-transparent border-2 border-red-500 font-semibold !text-red-500"
           text={buttonText || 'Log in'}
           onClick={onButtonClick || (() => router.push('/auth/login'))}
         />
