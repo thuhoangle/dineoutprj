@@ -8,7 +8,7 @@ import { createClient } from '@/utils/supabase/client';
 import { redirect } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export const useLogin = (goToHomePage?: boolean) => {
   const router = useRouter();
@@ -19,6 +19,10 @@ export const useLogin = (goToHomePage?: boolean) => {
 
   const [password, setPassword] = useState('');
   const [errorPassword, setErrorPassword] = useState('');
+
+  useEffect(() => {
+    router.prefetch('/dashboard');
+  }, []);
 
   const _validate = () => {
     let isError = false;
@@ -42,7 +46,6 @@ export const useLogin = (goToHomePage?: boolean) => {
       email,
       password,
     };
-    console.log('🚀 ~ onLogin ~ dataInput:', dataInput);
     try {
       setFetchingLogin(true);
       await supabase.auth.signInWithPassword(dataInput);

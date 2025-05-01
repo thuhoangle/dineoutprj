@@ -6,6 +6,7 @@ import clsx from 'clsx';
 import { TextField } from 'dineout-ui';
 import { type FC, memo, useState } from 'react';
 import { upperFirst } from 'lodash';
+import Link from 'next/link';
 
 export interface SideMenuItemType {
   Icon?: any;
@@ -28,7 +29,6 @@ interface SideMenuSubItemType {
 interface SideMenuProps {
   className?: string;
   currentTab: string;
-  onClickItem: (value: string) => void;
   navItems: SideMenuItemType[];
   extraData?: any;
 }
@@ -36,13 +36,8 @@ export const SideMenu: FC<SideMenuProps> = ({
   className,
   currentTab,
   navItems,
-  onClickItem,
   extraData,
 }) => {
-  const _onItemClick = (value: string) => {
-    onClickItem(value);
-  };
-
   return (
     <div
       className={clsx(
@@ -59,7 +54,6 @@ export const SideMenu: FC<SideMenuProps> = ({
               data={item}
               extraData={extraData}
               key={item.value}
-              onClick={_onItemClick}
             />
           ) : item.value ? (
             <NavItem
@@ -67,7 +61,6 @@ export const SideMenu: FC<SideMenuProps> = ({
               extraData={extraData}
               isSelected={currentTab === item.value}
               key={item.value}
-              onClick={_onItemClick}
             />
           ) : null
         )}
@@ -80,31 +73,25 @@ export const SideMenu: FC<SideMenuProps> = ({
 const NavItem = memo(
   ({
     data,
-    onClick,
     isSelected,
     extraData,
   }: {
     data: SideMenuItemType;
-    onClick: (value: string) => void;
     isSelected?: boolean;
     extraData?: any;
   }) => {
-    const { Icon, label, value, disabled, getTag, getConfig } = data || {};
+    const { Icon, label, value, getTag, getConfig } = data || {};
     const config = getConfig ? getConfig(extraData) : {};
-
-    const _onClick = () => {
-      onClick(value!);
-    };
 
     if (config?.hidden) return null;
     return (
-      <button
-        disabled={disabled}
+      <Link
+        href={`${value || '/'}`}
+        prefetch={true}
         className={clsx(
           'relative my-0.5 flex items-center gap-2 rounded-md px-4 py-2 transition duration-200 ease-in hover:bg-gray-200 hover:text-text-400 disabled:opacity-50',
           isSelected ? 'bg-gray-200 text-gray-900' : 'text-gray-500'
         )}
-        onClick={_onClick}
       >
         {Icon || null}
         <TextField
@@ -116,7 +103,7 @@ const NavItem = memo(
         {getTag && anyToInt(getTag?.(extraData)) ? (
           <Badge color="gray" size="xs" text={getTag(extraData)} />
         ) : null}
-      </button>
+      </Link>
     );
   }
 );
@@ -125,17 +112,14 @@ NavItem.displayName = 'NavItem';
 const NavItemCategory = memo(
   ({
     data,
-    onClick,
     currentTab,
     extraData,
   }: {
     data: SideMenuItemType;
-    onClick: (value: string) => void;
     currentTab?: string;
     extraData?: any;
   }) => {
-    const { Icon, label, disabled, subItems, value, getTag, getConfig } =
-      data || {};
+    const { Icon, label, subItems, value, getTag, getConfig } = data || {};
     const config = getConfig ? getConfig(extraData) : {};
 
     const [showSubItems, setShowSubItems] = useState(true);
@@ -144,12 +128,12 @@ const NavItemCategory = memo(
     return (
       <div className="flex flex-col pb-1">
         <div className="relative flex items-center gap-3 rounded-md px-4 py-2.5 text-gray-400 transition duration-200 ease-in hover:bg-gray-200 hover:text-gray-400 disabled:opacity-50">
-          <button
+          <Link
+            href={`${value || '/'}`}
+            prefetch={true}
             className="flex flex-1 items-center gap-2"
-            disabled={disabled}
-            onClick={() => onClick(value!)}
           >
-            {Icon && <Icon className="w-5" />}
+            {Icon || null}
             <TextField
               className="flex-1 text-left"
               preset="p3"
@@ -159,7 +143,7 @@ const NavItemCategory = memo(
             {getTag && anyToInt(getTag?.(extraData)) ? (
               <Tag size="lg" text={getTag(extraData)} />
             ) : null}
-          </button>
+          </Link>
           <button onClick={() => setShowSubItems((prev) => !prev)}>
             {showSubItems ? (
               <ChevronUpIcon className="w-5" />
@@ -178,7 +162,6 @@ const NavItemCategory = memo(
                   extraData={extraData}
                   isSelected={currentTab === item.value}
                   key={item.value}
-                  onClick={() => onClick(item.value)}
                 />
               ))
           : null}
@@ -191,28 +174,26 @@ NavItemCategory.displayName = 'NavItemCategory';
 const NavSubItem = memo(
   ({
     data,
-    onClick,
     isSelected,
     extraData,
   }: {
     data: SideMenuSubItemType;
-    onClick: () => void;
     isSelected: boolean;
     extraData?: any;
   }) => {
-    const { label, value, disabled, getTag, getConfig } = data || {};
+    const { label, value, getTag, getConfig } = data || {};
     const config = getConfig ? getConfig(extraData) : {};
 
     if (config?.hidden) return null;
     return (
-      <button
-        disabled={disabled}
+      <Link
+        href={`${value || '/'}`}
+        prefetch={true}
         key={value}
         className={clsx(
           'relative ml-9 flex items-center gap-2 rounded-md px-4 py-2.5 transition duration-200 ease-in hover:bg-gray-200 hover:text-gray-400 disabled:opacity-50',
           isSelected ? 'bg-gray-200 text-gray-400' : 'text-gray-400'
         )}
-        onClick={onClick}
       >
         <TextField
           className="flex-1 text-left"
@@ -223,7 +204,7 @@ const NavSubItem = memo(
         {getTag && anyToInt(getTag(extraData)) ? (
           <Tag size="lg" text={getTag(extraData)} />
         ) : null}
-      </button>
+      </Link>
     );
   }
 );
