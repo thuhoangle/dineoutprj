@@ -7,8 +7,7 @@ import { Button } from '@heroui/react';
 import { upperFirst } from 'lodash';
 import { TableDetails } from './table-details';
 import { RestaurantTableProps } from '@/services/api-types';
-import { useUserStore } from '@/stores';
-import { useGetTables } from '@/hooks';
+import { useTablesStore, useUserStore } from '@/stores';
 import { supabase } from '@/utils';
 import { toastHelper } from '@/components';
 import { handleError } from '@/services';
@@ -17,9 +16,12 @@ import { TABLE_CONFIG } from './config';
 export default function TableAvailability() {
   const authInfo = useUserStore((state) => state.authInfo);
   const portfolioDetail = useUserStore((state) => state.portfolioDetail);
-  const { dataList, fetching, getRestaurantTables } = useGetTables();
+  const tables: RestaurantTableProps[] = useTablesStore(
+    (state) => state.tables
+  );
 
-  const [tables, setTables] = useState<RestaurantTableProps[]>(dataList);
+  const [availTables, setAvailTables] =
+    useState<RestaurantTableProps[]>(tables);
   const [selectedTable, setSelectedTable] =
     useState<RestaurantTableProps | null>(null);
 
@@ -31,22 +33,22 @@ export default function TableAvailability() {
   }, [portfolioDetail, authInfo]);
 
   useEffect(() => {
-    if (!!tables) {
-      setTables(dataList);
+    if (!!availTables) {
+      setAvailTables(tables);
     }
-  }, [dataList]);
+  }, [tables]);
 
   const _handleExistingTables = async () => {
     if (!portfolioDetail?.id) {
       useUserStore.getState().getPortfolioDetail();
     } else {
-      await getRestaurantTables(portfolioDetail?.id);
-      setTables(dataList);
+      await useTablesStore.getState().getTables();
+      setAvailTables(tables);
     }
   };
 
   const initalTable: RestaurantTableProps = {
-    table_number: tables.length + 1,
+    table_number: availTables.length + 1,
     capacity: 4,
     is_available: true,
     seat_type: 'indoor',
@@ -58,7 +60,7 @@ export default function TableAvailability() {
     const updatedTable = { ...selectedTable, [field]: value };
     setSelectedTable(updatedTable);
 
-    setTables((prev) =>
+    setAvailTables((prev) =>
       prev.map((t) =>
         t.table_number === updatedTable.table_number ? updatedTable : t
       )
@@ -66,13 +68,13 @@ export default function TableAvailability() {
   };
 
   const _handleCreateTable = () => {
-    setTables([...tables, initalTable]);
+    setAvailTables([...availTables, initalTable]);
     setSelectedTable(initalTable);
   };
 
   const _handleDeleteTable = () => {
-    setTables(
-      tables.filter((t) => t.table_number !== selectedTable?.table_number)
+    setAvailTables(
+      availTables.filter((t) => t.table_number !== selectedTable?.table_number)
     );
     setSelectedTable(null);
   };
@@ -101,7 +103,7 @@ export default function TableAvailability() {
       }
 
       await getRestaurantTables(portfolioDetail?.id);
-      setTables(dataList);
+      setAvailTables(tables);
       toastHelper.success('Table updated successfully');
       setFetchingUpdate(false);
       setSelectedTable(null);
@@ -113,7 +115,7 @@ export default function TableAvailability() {
   };
 
   return (
-    <div className="flex desktop:flex-row mt-5 flex-col-reverse desktop:flex-wrap border-1.5 py-5 px-10 rounded-md shadow-lg border-gray-100 gap-4 justify-between w-full h-screen">
+    <div className="flex desktop:flex-row flex-col-reverse desktop:flex-wrap border-1.5 py-5 px-10 rounded-md shadow-lg border-gray-100 gap-4 justify-between w-full h-screen">
       {/* Table Plan */}
       <div className="flex-1 w-full flex flex-col gap-10">
         <div className="flex flex-col gap-1">
@@ -142,13 +144,13 @@ export default function TableAvailability() {
             </div>
           </div>
         </div>
-        {!tables.length ? (
+        {!availTables.length ? (
           <div className="italic flex justify-center w-full p-5 font-medium text-base">
             Empty Table
           </div>
         ) : (
           <div className="grid grid-cols-4 gap-x-8 gap-y-16">
-            {tables.map((table, index) => (
+            {availTables.map((table, index) => (
               <TableCard
                 isSelected={selectedTable?.table_number === table.table_number}
                 key={index}
@@ -165,7 +167,7 @@ export default function TableAvailability() {
         disableSave={
           JSON.stringify(selectedTable) ===
           JSON.stringify(
-            dataList.find((t) => t.table_number === selectedTable?.table_number)
+            tables.find((t) => t.table_number === selectedTable?.table_number)
           )
         }
         fetchingSave={fetchingUpdate}

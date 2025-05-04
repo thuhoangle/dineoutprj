@@ -13,8 +13,6 @@ import { useWindowContext } from '@/contexts';
 export const AccountPageLayout = ({ children }: { children: ReactNode }) => {
   const pathnameFromRouter = usePathname();
   const { isMobileMode } = useWindowContext();
-  console.log('🚀 ~ AccountPageLayout ~ isMobileMode:', isMobileMode);
-  // const pathname = pathnameFromRouter?.replace('/account', '');
 
   const router = useRouter();
 
