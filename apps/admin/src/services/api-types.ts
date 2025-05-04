@@ -56,14 +56,17 @@ export interface GetAvailableSeats {
 
 export interface AvailableSeats {
   id: string;
-  restaurant_id: string;
-  table_id: string;
-  date: string;
-  time: string;
+  restaurant_id?: string;
+  table_id?: string;
+  date?: string;
+  time?: string;
   tables: {
-    capacity: number;
-    seat_type: string;
+    capacity?: number;
+    seat_type?: string;
+    is_available?: boolean;
+    table_number?: number;
   };
+  more_info?: string;
 }
 interface RestaurantDetails {
   overview: string;

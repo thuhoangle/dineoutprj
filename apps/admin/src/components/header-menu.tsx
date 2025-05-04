@@ -14,7 +14,6 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from '@heroui/dropdown';
-import { SimpleLoading } from './simple-loading';
 
 interface HeaderMenuProps {
   onGoSamePath?: () => void;
@@ -25,16 +24,10 @@ export const HeaderMenu: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
   const portfolioDetail = useUserStore((state) => state.portfolioDetail);
   const { onLogout } = useLogin();
 
-  // const restaurantList = useVenueInfoStore((state) => state.restaurantList);
-
-  // useEffect(() => {
-  //   useVenueInfoStore.getState().getRestaurantList();
-  // }, []);
-
   return (
     <Navbar isBordered maxWidth="full" position="sticky">
       <NavbarContent
-        className="flex items-cente justify-betweenr"
+        className="flex items-center justify-betweenr"
         justify="start"
       >
         <NavbarBrand as="li" className="gap-3 max-w-fit">

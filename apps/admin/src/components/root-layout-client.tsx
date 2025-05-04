@@ -47,16 +47,18 @@ export function RootLayoutClient({ children }: RootLayoutClientProps) {
 
   return (
     <WindowProvider>
-      <div className="min-h-screen h-auto bg-background flex flex-col">
+      <div className="w-full bg-background flex flex-col h-screen">
         <HeaderMenu />
-        <div className="flex w-full border-t border-t-gray-200 gap-2 px-2 ipadMini:h-0 ipadMini:flex-1">
+        <div className="flex flex-1 w-full border-t border-t-gray-200 gap-2 px-2 ipadMini:flex-1 overflow-hidden">
           {pathnameFromRouter.includes('/auth') ? null : (
             <SideMenu
               currentTab={pathnameFromRouter || ''}
               navItems={NAV_ITEMS}
             />
           )}
-          <main className="flex-1">{children}</main>
+          <main className="flex-1 pt-5 pb-2 h-full overflow-auto scrollbar-main">
+            {children}
+          </main>
         </div>
       </div>
       <ClientToaster />

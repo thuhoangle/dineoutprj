@@ -42,3 +42,16 @@ export function objectToGetParams(object: {
 
   return params.length > 0 ? `?${params.join('&')}` : '';
 }
+
+export const getWeekdayName = (day: number): string => {
+  const days = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ];
+  return days[day];
+};

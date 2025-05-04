@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 const { heroui } = require('@heroui/theme');
+const scrollbar = require('tailwind-scrollbar');
 
 module.exports = {
   content: [
@@ -44,5 +45,5 @@ module.exports = {
       },
     },
   },
-  plugins: [heroui()],
+  plugins: [heroui(), scrollbar({ nocompatible: true })],
 };
