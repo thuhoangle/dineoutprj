@@ -7,7 +7,7 @@ import {
   OverlayRestrict,
 } from '@/components';
 import { usePathname, useRouter } from 'next/navigation';
-import { WindowProvider } from '@/contexts/window-context';
+import { useWindowContext, WindowProvider } from '@/contexts/window-context';
 import { Toaster } from 'react-hot-toast';
 import {
   MdDashboard,
@@ -18,6 +18,7 @@ import {
 } from 'react-icons/md';
 import ClientToaster from '@/config/client-toaster';
 import { GlobalLoading } from './global-loading';
+import { OverlayBlockMobileMode } from './overlay-block-mobile-mode';
 
 export interface MenuItemType {
   Icon?: any;
@@ -60,6 +61,7 @@ export function RootLayoutClient({ children }: RootLayoutClientProps) {
       </div>
       <ClientToaster />
       <ModalPortal />
+      <OverlayBlockMobileMode />
       {!pathnameFromRouter.includes('/auth/login') ? <OverlayRestrict /> : null}
     </WindowProvider>
   );
