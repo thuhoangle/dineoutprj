@@ -1,7 +1,6 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import { GrLocation } from 'react-icons/gr';
 import { IoShareOutline } from 'react-icons/io5';
 import { useEffect, useMemo, useState } from 'react';
 import { Button, globalLoading, TextField, toastHelper } from '@/components';
@@ -15,6 +14,8 @@ import { RestaurantInfo, supaApiInstance } from '@/services';
 import { useGetAvailableSeats } from '@/hooks';
 import { useVenueInfoStore } from '@/stores';
 import { FaHeart, FaRegHeart, FaStar } from 'react-icons/fa';
+import { FaLocationDot } from "react-icons/fa6";
+import { getPriceRange } from '@/utils';
 
 const VenueDetailPage = () => {
   const param = useParams();
@@ -67,31 +68,45 @@ const VenueDetailPage = () => {
           <TextField preset="h1" weight="b" text={restaurant.name} />
           <div className="flex justify-between">
             <div className="flex flex-col gap-1">
-              <div className="flex items-center text-center text-red-500 gap-1">
-                <FaStar className="text-inherit w-5" />
-                {restaurant?.rating}
-                {!!restaurant?.review_count && (
-                  <span className="text-gray-500 text-[12px]">{`(${restaurant?.review_count})`}</span>
+              <div className="flex items-center">
+                <div className="flex items-center text-center text-red-500 gap-1">
+                  <FaStar className="text-inherit w-5" />
+                  {restaurant?.rating ? (
+                    <>
+                  {restaurant?.rating}
+                  {!!restaurant?.review_count && (
+                    <span className="text-gray-500 text-[12px]">{`(${restaurant?.review_count})`}</span>
+                  )}
+                  </>
+                ) : (
+                  <div>N/A</div>
                 )}
+                </div>
+                <div className="">
+                  {'\u00A0•\u00A0'}
+                  {getPriceRange(restaurant.price_range)}
+                </div>
               </div>
               {/* <div className="flex items-center text-center gap-1">
                    <FaRegMessage className="text-inherit w-5" />
                    {reviews.length} {reviews.length > 1 ? 'Reviews' : 'Review'}
                  </div> */}
               <div className="flex items-center text-gray-300 gap-0.5">
-                <GrLocation className="text-inherit w-5" />
+                <FaLocationDot className="text-inherit w-5" />
                 {restaurant?.locations.address}
               </div>
             </div>
             <div className="flex justify-between">
               <div className="flex gap-2">
                 <Button
+                  className="text-sm"
                   preset="linkGray"
                   LeftHeroIcon={IoShareOutline}
                   text="Share"
                   onClick={_onCopyLink}
                 />
                 <Button
+                  className="text-sm"
                   preset="linkGray"
                   LeftHeroIcon={
                     favRestaurant[restaurant.id] ? FaHeart : FaRegHeart
@@ -129,11 +144,3 @@ const VenueDetailPage = () => {
 };
 
 export default VenueDetailPage;
-
-// export default function RestaurantPage({
-//   params,
-// }: {
-//   params: { slug: string };
-// }) {
-//   return <div>Restaurant Page: {params.slug}</div>;
-// }

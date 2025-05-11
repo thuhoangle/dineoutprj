@@ -42,3 +42,7 @@ export function objectToGetParams(object: {
 
   return params.length > 0 ? `?${params.join('&')}` : '';
 }
+
+export const getPriceRange = (price: number) => {
+  return '$'.repeat(price)
+}

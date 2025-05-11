@@ -6,6 +6,7 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import { RestaurantInfo } from '@/services';
 import { useRouter } from 'next/navigation';
+import { getPriceRange } from '@/utils';
 
 export const BigWidget = ({
   data,
@@ -65,7 +66,7 @@ export const BigWidget = ({
           </TextField>
           <TextField preset="p3" className="text-gray-500">
             {'\u00A0•\u00A0'}
-            {'$'.repeat(data.price_range)}
+            {getPriceRange(data.price_range)}
           </TextField>
         </div>
         <div className="flex items-center text-gray-500 gap-0.5">
