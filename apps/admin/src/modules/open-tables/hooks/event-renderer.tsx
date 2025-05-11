@@ -11,18 +11,12 @@ type EventRendererProps = {
   className?: string;
 };
 
-export function EventRenderer({
-  date,
-  view,
-  events,
-  className,
-}: EventRendererProps) {
+export function EventRenderer({ date, view, events, className }: EventRendererProps) {
   const { openEventSummary, setSelectedTableEvents } = useEventStore();
 
   const filteredEvents = events.filter((event: AvailableSeats) => {
     // Create a complete datetime by combining date and time fields
-    const eventDateTime =
-      event?.date && event?.time ? dayjs(`${event.date} ${event.time}`) : null;
+    const eventDateTime = event?.date && event?.time ? dayjs(`${event.date} ${event.time}`) : null;
 
     if (!eventDateTime) return false;
 
@@ -34,18 +28,15 @@ export function EventRenderer({
   });
 
   // Group events by table number to highlight visually that they're connected
-  const groupedEvents = filteredEvents.reduce<Record<string, AvailableSeats[]>>(
-    (acc, event) => {
-      // Make sure tableNumber exists and convert to string to use as object key
-      const tableNumber = event.tables.table_number?.toString() || 'unknown';
-      if (!acc[tableNumber]) {
-        acc[tableNumber] = [];
-      }
-      acc[tableNumber].push(event);
-      return acc;
-    },
-    {}
-  );
+  const groupedEvents = filteredEvents.reduce<Record<string, AvailableSeats[]>>((acc, event) => {
+    // Make sure tableNumber exists and convert to string to use as object key
+    const tableNumber = event.tables.table_number?.toString() || 'unknown';
+    if (!acc[tableNumber]) {
+      acc[tableNumber] = [];
+    }
+    acc[tableNumber].push(event);
+    return acc;
+  }, {});
 
   // Different rendering based on view
   if (view === 'month') {
@@ -71,9 +62,7 @@ export function EventRenderer({
               )}
               title={`${tableEvents.length} available ${tableEvents.length === 1 ? 'slot' : 'slots'} for Table ${tableNumber}`}
             >
-              <span className="font-semibold whitespace-nowrap">
-                T{tableNumber}
-              </span>
+              <span className="font-semibold whitespace-nowrap">T{tableNumber}</span>
               {!!tableEvents.length && (
                 <span className="ml-1 bg-white text-green-800 px-1 rounded-full text-[8px] font-bold">
                   {tableEvents.length}
@@ -108,9 +97,7 @@ export function EventRenderer({
             )}
             title={`${tableEvents.length} available ${tableEvents.length === 1 ? 'slot' : 'slots'} for Table ${tableNumber}`}
           >
-            <span className="font-medium whitespace-nowrap">
-              T{tableNumber}
-            </span>
+            <span className="font-medium whitespace-nowrap">T{tableNumber}</span>
           </div>
         );
       })}

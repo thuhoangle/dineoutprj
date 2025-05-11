@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 dayjs.extend(weekOfYear);
+import { DateValue} from '@internationalized/date';
 
 export const isCurrentDay = (day: dayjs.Dayjs) => {
   return day.isSame(dayjs(), 'day');
@@ -105,4 +106,9 @@ export const getDisabledTimes = (
   });
 
   return disabledTimes;
+};
+
+
+export const formatDateForAPI = (date: DateValue): string => {
+  return date.toString().split('T')[0]; //  YYYY-MM-DD format
 };

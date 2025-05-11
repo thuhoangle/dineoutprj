@@ -16,18 +16,10 @@ import { useTablesStore, useAvailableSeatsStore } from '@/stores';
 
 export const OpenTablesPanel = () => {
   const { selectedView } = useViewStore();
-  const availableSlots = useAvailableSeatsStore(
-    (state) => state.availableSlots
-  );
+  const availableSlots = useAvailableSeatsStore((state) => state.availableSlots);
 
-  const {
-    isPopoverOpen,
-    closePopover,
-    isEventSummaryOpen,
-    closeEventSummary,
-    selectedEvent,
-    setEvents,
-  } = useEventStore();
+  const { isPopoverOpen, closePopover, isEventSummaryOpen, closeEventSummary, selectedEvent, setEvents } =
+    useEventStore();
 
   const { userSelectedDate } = useDateStore();
 
@@ -45,7 +37,7 @@ export const OpenTablesPanel = () => {
         table_number: event.tables.table_number || 0,
         seat_type: event.tables.seat_type || '',
         capacity: event.tables.capacity || 0,
-        more_info: event.more_info || '',
+        more_info: event.tables.more_info || '',
       },
     }));
 
@@ -74,11 +66,7 @@ export const OpenTablesPanel = () => {
         />
       )}
       {isEventSummaryOpen && selectedEvent && (
-        <CheckTableSlotDrawer
-          isOpen={isEventSummaryOpen}
-          onClose={closeEventSummary}
-          data={selectedEvent}
-        />
+        <CheckTableSlotDrawer isOpen={isEventSummaryOpen} onClose={closeEventSummary} data={selectedEvent} />
       )}
     </div>
   );

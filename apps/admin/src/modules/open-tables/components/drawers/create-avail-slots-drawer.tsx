@@ -8,24 +8,19 @@ import {
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  ScrollShadow,
-  Select,
-  SelectItem,
   Textarea,
-  Radio,
-  RadioGroup,
 } from '@heroui/react';
 import {
   DateValue,
-  today,
   isSameDay,
   parseDate,
 } from '@internationalized/date';
 import { useAvailableSeatsStore, useTablesStore, useUserStore } from '@/stores';
-import { ChevronDownIcon, PlusIcon, XIcon } from '@heroicons/react/outline';
 import { toastHelper } from '@/components';
-import { getDisabledTimes, getWeekdayName, supabase } from '@/utils';
-import { useCheckPressOutSide } from '@/hooks/useCheckPressOutSide';
+import { formatDateForAPI, supabase, TimeRange } from '@/utils';
+import { TablePicker } from '../time-picker';
+import { TimeRangePicker } from '../time-range-picker';
+import { RepeatOption, RepeatTimeSlotOptions } from '../repeat-time-slot-options';
 
 export const CreateAvailSlotsDrawer: FC<CreateAvailSlotsDrawerProps> = ({
   isOpen,
@@ -35,8 +30,8 @@ export const CreateAvailSlotsDrawer: FC<CreateAvailSlotsDrawerProps> = ({
   const portfolioDetail = useUserStore((state) => state.portfolioDetail);
   const tables = useTablesStore((state) => state.tables);
   const popoverRef = useRef<HTMLDivElement>(null);
-  const [selectedTable, setSelectedTable] = useState<number>(
-    tables[0]?.table_number
+  const [selectedTable, setSelectedTable] = useState<string>(
+    tables[1]?.table_number.toString()
   );
   const [selectedDate, setSelectedDate] = useState<DateValue | null>(
     parseDate(date) as unknown as DateValue
@@ -50,8 +45,6 @@ export const CreateAvailSlotsDrawer: FC<CreateAvailSlotsDrawerProps> = ({
   ]);
   const [repeatOption, setRepeatOption] = useState<RepeatOption>('none');
   const [repeatUntil, setRepeatUntil] = useState<DateValue | null>(null);
-
-  const availTable = tables.filter((slot) => slot.is_available === true);
 
   const addTimeRange = () => {
     setTimeRanges([...timeRanges, { startTime: '09:00', endTime: '10:00' }]);
@@ -86,7 +79,6 @@ export const CreateAvailSlotsDrawer: FC<CreateAvailSlotsDrawerProps> = ({
       dates.push(currentDate);
 
       if (repeatOption === 'daily') {
-        // Add 1 day
         currentDate = currentDate.add({ days: 1 });
       } else if (repeatOption === 'weekly') {
         // Add 7 days for weekly repeat
@@ -141,7 +133,7 @@ export const CreateAvailSlotsDrawer: FC<CreateAvailSlotsDrawerProps> = ({
 
             batchRequests.push({
               table_id: tables.find(
-                (table) => table.table_number === selectedTable
+                (table) => table.table_number.toString() === selectedTable
               )?.id,
               date: formatDateForAPI(date),
               time: timeSlot,
@@ -159,7 +151,7 @@ export const CreateAvailSlotsDrawer: FC<CreateAvailSlotsDrawerProps> = ({
           .match({
             restaurant_id: portfolioDetail?.id,
             table_id: tables.find(
-              (table) => table.table_number === selectedTable
+              (table) => table.table_number.toString() === selectedTable
             )?.id,
             date: data.date,
             time: data.time,
@@ -182,9 +174,6 @@ export const CreateAvailSlotsDrawer: FC<CreateAvailSlotsDrawerProps> = ({
     }
   };
 
-  const formatDateForAPI = (date: DateValue): string => {
-    return date.toString().split('T')[0]; //  YYYY-MM-DD format
-  };
 
   if (!tables || tables.length === 0) {
     return <div>No available tables :(</div>;
@@ -196,21 +185,11 @@ export const CreateAvailSlotsDrawer: FC<CreateAvailSlotsDrawerProps> = ({
         <DrawerHeader>Create Available Slots</DrawerHeader>
 
         <DrawerBody className="flex flex-col gap-4">
-          <Select
-            isRequired
-            label="Table #"
-            selectedKeys={selectedTable ? [`${selectedTable}`] : []}
-            onSelectionChange={(value: any) => setSelectedTable(value)}
-          >
-            {availTable.map((table) => (
-              <SelectItem
-                key={table.table_number}
-                textValue={table.table_number.toString()}
-              >
-                {table.table_number}
-              </SelectItem>
-            ))}
-          </Select>
+          <TablePicker
+            tables={tables}
+            selectedTable={selectedTable}
+            setSelectedTable={setSelectedTable}
+          />
 
           <DatePicker
             description="mm/dd/yyyy"
@@ -223,78 +202,21 @@ export const CreateAvailSlotsDrawer: FC<CreateAvailSlotsDrawerProps> = ({
             onChange={(value: any) => setSelectedDate(value)}
           />
 
-          <div className="border p-3 rounded-md">
-            <div className="font-medium mb-2 text-[14px]">Time Ranges</div>
-            {timeRanges.map((range, index) => (
-              <div key={index} className="flex items-center gap-2 mb-2">
-                <div className="flex-1 flex items-center gap-2">
-                  <AddTime
-                    initialTime={range.startTime}
-                    onTimeSelect={(time) =>
-                      updateTimeRange(index, 'startTime', time)
-                    }
-                    disabledTimes={getDisabledTimes(timeRanges, index)}
-                  />
-                  <span>to</span>
-                  <AddTime
-                    initialTime={range.endTime}
-                    onTimeSelect={(time) =>
-                      updateTimeRange(index, 'endTime', time)
-                    }
-                    isEndTime={true}
-                    startTime={range.startTime}
-                    disabledTimes={getDisabledTimes(timeRanges, index)}
-                  />
-                </div>
-                {timeRanges.length > 1 && (
-                  <XIcon
-                    className="h-4 cursor-pointer w-4"
-                    onClick={() => removeTimeRange(index)}
-                  />
-                )}
-              </div>
-            ))}
-            <Button
-              variant="light"
-              size="sm"
-              startContent={<PlusIcon className="h-4 w-4" />}
-              onPress={addTimeRange}
-            >
-              Add Time Range
-            </Button>
-          </div>
+         <TimeRangePicker
+            timeRanges={timeRanges}
+            updateTimeRange={updateTimeRange}
+            removeTimeRange={removeTimeRange}
+            addTimeRange={addTimeRange}
+          />
 
-          <div className="border p-3 rounded-md">
-            <div className="font-medium mb-2 text-[14px]">Repeat</div>
-            <RadioGroup
-              size="sm"
-              value={repeatOption}
-              onValueChange={(value) => setRepeatOption(value as RepeatOption)}
-            >
-              <Radio value="none">Don't repeat</Radio>
-              <Radio value="daily">Every day</Radio>
-              <Radio value="weekly">
-                Weekly on{' '}
-                {selectedDate
-                  ? getWeekdayName(new Date(selectedDate.toString()).getDay())
-                  : 'selected day'}
-              </Radio>
-            </RadioGroup>
-
-            {repeatOption !== 'none' && (
-              <div className="mt-3">
-                <DatePicker
-                  className="max-w-[284px]"
-                  label="Repeat Until"
-                  labelPlacement="outside"
-                  selectorButtonPlacement="start"
-                  value={repeatUntil as any}
-                  onChange={(value: any) => setRepeatUntil(value)}
-                />
-              </div>
-            )}
-          </div>
-
+          <RepeatTimeSlotOptions
+            selectedDate={selectedDate}
+            repeatOption={repeatOption}
+            setRepeatOption={setRepeatOption}
+            repeatUntil={repeatUntil}
+            setRepeatUntil={setRepeatUntil}
+          />
+         
           <Textarea
             label="More Info"
             value={moreInfo}
@@ -316,97 +238,8 @@ export const CreateAvailSlotsDrawer: FC<CreateAvailSlotsDrawerProps> = ({
   );
 };
 
-const AddTime = ({
-  initialTime = '00:00',
-  onTimeSelect,
-  isEndTime = false,
-  startTime = '00:00',
-  disabledTimes = [],
-}: {
-  initialTime?: string;
-  onTimeSelect: (time: string) => void;
-  isEndTime?: boolean;
-  startTime?: string;
-  disabledTimes?: string[];
-}) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedTime, setSelectedTime] = useState(initialTime);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  useCheckPressOutSide(dropdownRef, () => {
-    setIsOpen(false);
-  });
-
-  const generateTimeIntervals = () => {
-    const intervals = [];
-    for (let hour = 0; hour < 24; hour++) {
-      for (let minute = 0; minute < 60; minute += 30) {
-        intervals.push(
-          `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`
-        );
-      }
-    }
-    return intervals;
-  };
-
-  const handleTimeSelect = (time: string) => {
-    setSelectedTime(time);
-    onTimeSelect(time);
-    setIsOpen(false);
-  };
-
-  const isTimeBeforeStart = (time: string) => {
-    if (!isEndTime) return false;
-
-    const [startHour, startMinute] = startTime.split(':').map(Number);
-    const [timeHour, timeMinute] = time.split(':').map(Number);
-
-    const startTotalMinutes = startHour * 60 + startMinute;
-    const timeTotalMinutes = timeHour * 60 + timeMinute;
-
-    return timeTotalMinutes < startTotalMinutes;
-  };
-
-  const isTimeDisabled = (time: string) => {
-    return disabledTimes.includes(time) || isTimeBeforeStart(time);
-  };
-
-  return (
-    <div className="relative" ref={dropdownRef}>
-      <Button
-        className="w-24 justify-between !bg-default-100 !hover:bg-default-200"
-        onPress={() => setIsOpen(!isOpen)}
-      >
-        {selectedTime}
-        <ChevronDownIcon className="h-4 w-4 opacity-50" />
-      </Button>
-      {isOpen && (
-        <div className="absolute z-50 mt-2 w-24 rounded-md border bg-foreground-100 shadow-md">
-          <ScrollShadow className="h-60">
-            <div className="p-1">
-              {generateTimeIntervals().map((time) => (
-                <Button
-                  key={time}
-                  variant="light"
-                  className="w-full justify-start"
-                  onPress={() => handleTimeSelect(time)}
-                  isDisabled={isTimeDisabled(time)}
-                >
-                  {time}
-                </Button>
-              ))}
-            </div>
-          </ScrollShadow>
-        </div>
-      )}
-    </div>
-  );
-};
-
 interface CreateAvailSlotsDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   date: string;
 }
-
-type RepeatOption = 'none' | 'daily' | 'weekly';

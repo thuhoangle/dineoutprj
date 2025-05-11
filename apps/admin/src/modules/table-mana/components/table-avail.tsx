@@ -102,8 +102,10 @@ export default function TableAvailability() {
         return;
       }
 
-      await getRestaurantTables(portfolioDetail?.id);
-      setAvailTables(tables);
+      useTablesStore.getState().getTables();
+      setTimeout(() => {
+        setAvailTables(tables);
+      }, 500);
       toastHelper.success('Table updated successfully');
       setFetchingUpdate(false);
       setSelectedTable(null);
