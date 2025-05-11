@@ -68,9 +68,10 @@ export const SimpleButton: FC<SimpleButtonProps> = (props) => {
 export interface ButtonProps extends SimpleButtonProps {
   size?: ButtonSizePreset;
   className?: string;
+  iconClassName?: string;
 }
 export const Button: FC<ButtonProps> = (props) => {
-  const { preset = 'red', size = 'md', className, ...rest } = props;
+  const { preset = 'red', size = 'md', className, iconClassName, ...rest } = props;
 
   return (
     <SimpleButton
@@ -81,6 +82,7 @@ export const Button: FC<ButtonProps> = (props) => {
         presetSizeClassname[size]?.(preset),
         className
       )}
+      iconClassName={iconClassName}
       {...rest}
     />
   );
@@ -105,7 +107,7 @@ const presetBtClassName = {
   tred: 'hover:bg-gray-850 hover:text-red-400',
   link: 'hover:text-primary-700',
   linkGray:
-    'border-1.5 py-1.5 px-2.5 border-gray-400 hover:border-gray-500 hover:text-gray-600',
+    'border-1.5 py-1.5 px-2.5 border-foreground-400 hover:border-foreground-700',
   linkRed: 'py-1.5 px-2.5 hover:text-red-600',
 
   // legacy
@@ -134,7 +136,7 @@ const presetTextClassName: {
   tgray2: 'text-gray-300',
   tred: 'text-red-500',
   link: 'text-primary-600',
-  linkGray: 'text-gray-500',
+  linkGray: 'text-black dark:text-white',
   linkRed: 'text-red-500',
 
   // legacy
