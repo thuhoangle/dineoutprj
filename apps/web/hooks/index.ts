@@ -7,3 +7,6 @@ export * from './useReservation';
 export * from './useGetAvailableSeats';
 export * from './useWindowSize';
 export * from './useGetSearchResults';
+export * from './useCheckPressOutSide';
+export * from './useEditReservation';
+export * from './useCancelReservation';

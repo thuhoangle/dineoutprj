@@ -19,15 +19,16 @@ export const AccountPageLayout = ({ children }: { children: ReactNode }) => {
 
   const NAV_ITEMS = [
     {
-      Icon: MdOutlineDateRange,
-      label: 'Reservations & Notify',
-      value: '/account/reservations',
-    },
-    {
       Icon: CgProfile,
       label: 'Profile',
       value: '/account/profile',
     },
+    {
+      Icon: MdOutlineDateRange,
+      label: 'Reservations & Notify',
+      value: '/account/reservations',
+    },
+
     // {
     //   Icon: IoIosSettings,
     //   label: 'Settings',
@@ -43,12 +44,7 @@ export const AccountPageLayout = ({ children }: { children: ReactNode }) => {
 
   return (
     <div className="flex w-full gap-2 px-2 ipadMini:h-0 ipadMini:flex-1">
-      {!isMobileMode && (
-        <SideMenu
-          currentTab={pathnameFromRouter}
-          navItems={NAV_ITEMS}
-        />
-      )}
+      {!isMobileMode && <SideMenu currentTab={pathnameFromRouter} navItems={NAV_ITEMS} />}
       {children}
     </div>
   );
@@ -69,51 +65,30 @@ interface SideMenuProps {
 
 const SideMenu: FC<SideMenuProps> = ({ className, currentTab, navItems }) => {
   return (
-    <div
-      className={clsx(
-        'w-96 flex-col rounded-lg bg-bg-primary px-3 py-6',
-        className
-      )}
-    >
+    <div className={clsx('w-96 flex-col rounded-lg bg-bg-primary px-3 py-6', className)}>
       {navItems.map(
-        (item) =>
-          item.value && (
-            <NavItem
-              data={item}
-              isSelected={currentTab === item.value}
-              key={item.value}
-            />
-          )
+        (item) => item.value && <NavItem data={item} isSelected={currentTab === item.value} key={item.value} />
       )}
       <div className="flex-1" />
     </div>
   );
 };
 
-const NavItem = memo(
-  ({ data, isSelected }: { data: SideMenuItemType; isSelected?: boolean }) => {
-    const { Icon, label, value } = data || {};
+const NavItem = memo(({ data, isSelected }: { data: SideMenuItemType; isSelected?: boolean }) => {
+  const { Icon, label, value } = data || {};
 
-    return (
-      <Link
-        href={`${value || '/'}`}
-        prefetch={true}
-        className={clsx(
-          'relative w-full my-0.5 flex items-center gap-2 rounded-md px-4 py-2 transition duration-200 ease-in hover:bg-neutral-950 disabled:opacity-50',
-          isSelected
-            ? 'bg-gray-950 text-red-600 hover:text-red-600'
-            : 'text-gray-500 hover:text-gray-500'
-        )}
-      >
-        {Icon && <Icon className="w-6 h-6 text-inherit" />}
-        <TextField
-          className="flex-1 text-left"
-          preset="p2"
-          text={label}
-          weight="s"
-        />
-      </Link>
-    );
-  }
-);
+  return (
+    <Link
+      href={`${value || '/'}`}
+      prefetch={true}
+      className={clsx(
+        'relative w-full my-0.5 flex items-center gap-2 rounded-md px-4 py-2 transition duration-200 ease-in hover:bg-neutral-950 disabled:opacity-50',
+        isSelected ? 'bg-gray-950 text-red-600 hover:text-red-600' : 'text-gray-500 hover:text-gray-500'
+      )}
+    >
+      {Icon && <Icon className="w-6 h-6 text-inherit" />}
+      <TextField className="flex-1 text-left" preset="p2" text={label} weight="s" />
+    </Link>
+  );
+});
 NavItem.displayName = 'NavItem';

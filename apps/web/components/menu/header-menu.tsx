@@ -1,6 +1,5 @@
 'use client';
 
-import { Button as MyButton } from '../button';
 import { link as linkStyles } from '@heroui/theme';
 import NextLink from 'next/link';
 import clsx from 'clsx';
@@ -8,24 +7,30 @@ import { debounce } from 'lodash';
 import Image from 'next/image';
 
 import { siteConfig } from '@/config/site';
-import { ThemeSwitch } from '@/components/theme-switch';
-import { SearchIcon } from '@/components/icons';
-import { usePathname } from 'next/navigation';
-import { useRouter } from 'next/navigation';
-import { useUserStore } from '@/stores/useUserStore';
-import { useLoginSignup } from '@/hooks';
-import { useVenueInfoStore } from '@/stores';
+import { useCheckPressOutSide, useLoginSignup } from '@/hooks';
+import { useUserStore, useVenueInfoStore } from '@/stores';
 import { RestaurantInfo } from '@/services';
-import { useCheckPressOutSide } from '@/hooks/useCheckPressOutSide';
 import { TextField } from '../text';
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { Input } from '@heroui/input';
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from '@heroui/navbar';
-import { Button, Kbd } from '@heroui/react';
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@heroui/react';
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Button,
+  Kbd,
+  Navbar,
+  NavbarContent,
+  NavbarBrand,
+  NavbarItem,
+} from '@heroui/react';
 import { useWindowContext } from '@/contexts';
 import { MdEventNote } from 'react-icons/md';
 import { IoLogOutOutline } from 'react-icons/io5';
+import { usePathname, useRouter } from 'next/navigation';
+import { SearchIcon } from '../icons';
+import { ThemeSwitch } from '../theme-switch';
 interface HeaderMenuProps {
   onGoSamePath?: () => void;
 }

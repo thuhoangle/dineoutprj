@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, type FC } from 'react';
+import { type FC } from 'react';
 
 import type { ModalBaseProps } from '../types';
 import { ModalBtRow, ModalHeader, SimpleModal } from '../simple-modal';
@@ -10,20 +10,18 @@ import { ReservationInfo } from '@/services';
 import dayjs from 'dayjs';
 import { upperFirst } from 'lodash';
 import NextImage from 'next/image';
-import { MdOutlineEdit } from 'react-icons/md';
-import { supabase } from '@/utils';
+import { MdLocationOn, MdOutlineEdit } from 'react-icons/md';
 import { OCCASSION_EVENTS, TextInput, toastHelper } from '@/components';
-import { Select, SelectItem } from "@heroui/select";
+import { Select, SelectItem } from '@heroui/select';
+import { FaPhoneAlt } from 'react-icons/fa';
+import { Input } from '@heroui/input';
+import { useEditReservation } from '@/hooks';
 
 interface ModalReservationProps extends ModalBaseProps {
   data: ReservationInfo;
 }
 
-export const ModalReservation: FC<ModalReservationProps> = ({
-  isVisible,
-  closeFromController,
-  data,
-}) => {
+export const ModalReservation: FC<ModalReservationProps> = ({ isVisible, closeFromController, data }) => {
   const {
     setIsEditing,
     setTableCapacity,
@@ -39,18 +37,11 @@ export const ModalReservation: FC<ModalReservationProps> = ({
   } = useEditReservation(data);
 
   return (
-    <SimpleModal
-      hideModalCB={closeFromController}
-      isVisible={isVisible}
-      showCloseIcon
-    >
+    <SimpleModal hideModalCB={closeFromController} isVisible={isVisible} showCloseIcon>
       <ModalHeader>
         <div className="flex items-center gap-2">
           <TextField preset="h6" weight="m" text="Reservation Infomation" />
-          <MdOutlineEdit
-            className="text-gray-500 w-5 h-5 cursor-pointer"
-            onClick={() => setIsEditing(true)}
-          />
+          <MdOutlineEdit className="text-gray-500 w-5 h-5 cursor-pointer" onClick={() => setIsEditing(true)} />
         </div>
       </ModalHeader>
       <div className="flex flex-col gap-3 py-4">
@@ -64,77 +55,55 @@ export const ModalReservation: FC<ModalReservationProps> = ({
               src={data.restaurants?.images?.[0] || ''}
               alt="venue img"
             />
-            {/* <Image
-              src={data.restaurants?.images?.[0]}
-              alt="restaurant"
-              className="w-full h-full object-cover"
-            /> */}
           </div>
           <div className="flex flex-col gap-2">
-            <TextField
-              weight="b"
-              className="text-neutral-400"
-              preset="p1"
-              text={data.restaurants?.name}
-            />
-            <TextField
-              className="text-neutral-400"
-              preset="p4"
-              text={data.restaurants?.address}
-            />
+            <TextField weight="b" className="text-neutral-400" preset="p1" text={data.restaurants?.name} />
+            {data.restaurants?.address && (
+              <div className="flex items-center gap-1">
+                <MdLocationOn className="text-neutral-400" />
+                <TextField className="text-neutral-400" preset="p4" text={data.restaurants?.address} />
+              </div>
+            )}
             {data.restaurants?.phone && (
-              <TextField
-                className="text-neutral-400"
-                preset="p4"
-                text={data.restaurants?.phone}
-              />
+              <div className="flex items-center gap-1">
+                <FaPhoneAlt className="text-neutral-400 h-3.5 w-3.5" />
+                <TextField className="text-neutral-400" preset="p4" text={data.restaurants?.phone} />
+              </div>
             )}
           </div>
         </div>
       </div>
-      <div className="flex flex-col gap-2 mb-5">
-        <InfoRow
-          label="Date"
-          value={dayjs(data.reservation_time).format('DD/MM/YYYY')}
-        />
-        <InfoRow
-          label="Time"
-          value={dayjs(data.reservation_time).format('HH:mm')}
-        />
-        {data.seat_type && (
-          <InfoRow label="Seating Type" value={data.seat_type} />
-        )}
-        <InfoRow
+      <div className="flex flex-col gap-2">
+        <InfoRow label="Date" value={dayjs(data.reservation_time).format('DD/MM/YYYY')} />
+        <InfoRow label="Time" value={dayjs(data.reservation_time).format('HH:mm')} />
+        {data.seat_type && <InfoRow label="Seating Type" value={upperFirst(data.seat_type)} />}
+        <Input
+          variant="bordered"
+          labelPlacement="outside-left"
+          classNames={{
+            base: 'justify-between items-end',
+            label: '!p-0 text-[15px] leading-5 font-medium',
+          }}
           label="Number of Guests"
           value={`${tableCapacity || data.party_size}`}
-          toEdit={isEditing}
-          setValue={(value) => {
-            const numValue = Number(value);
+          onChange={(e) => {
+            const numValue = Number(e.target.value);
             if (maxTableCapacity && numValue > maxTableCapacity) {
-              toastHelper.error(
-                `Maximum capacity for this table is ${maxTableCapacity}`
-              );
+              toastHelper.error(`Maximum capacity for this table is ${maxTableCapacity}`);
               return;
             }
             setTableCapacity(numValue);
           }}
-          inputType="number"
+          type="number"
           min={1}
           max={maxTableCapacity}
-          description={
-            maxTableCapacity ? `Max capacity: ${maxTableCapacity}` : ''
-          }
+          description={maxTableCapacity ? `Max capacity: ${maxTableCapacity}` : ''}
         />
 
         {isEditing ? (
-          <div className="flex justify-between items-center gap-16">
+          <div className="flex justify-between items-start gap-16">
             <TextField preset="p3" weight="m" text="Occasion" />
-            <Select
-              className="max-w-[200px]"
-              size="sm"
-              value={occasion}
-              onChange={(e) => setOccasion(e.target.value)}
-            >
+            <Select className="max-w-[200px]" size="sm" value={occasion} onChange={(e) => setOccasion(e.target.value)}>
               {OCCASSION_EVENTS.map((item) => (
                 <SelectItem key={item.label}>{item.value}</SelectItem>
               ))}
@@ -154,6 +123,7 @@ export const ModalReservation: FC<ModalReservationProps> = ({
       </div>
       {isEditing && (
         <ModalBtRow
+          className="mt-5"
           fetching={updating}
           cancelText="Back"
           confirmText="Confirm"
@@ -192,9 +162,7 @@ const InfoRow = ({
         <div className="flex justify-between items-center gap-16">
           <div className="flex flex-col">
             <TextField preset="p3" weight="m" text={label} />
-            {description && (
-              <span className="text-xs text-gray-500">{description}</span>
-            )}
+            {description && <span className="text-xs text-gray-500">{description}</span>}
           </div>
           {value ? (
             <TextInput
@@ -218,80 +186,4 @@ const InfoRow = ({
       )}
     </>
   );
-};
-
-const useEditReservation = (data: ReservationInfo) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [occasion, setOccasion] = useState(data.occasion || '');
-  const [tableCapacity, setTableCapacity] = useState<number | null>(null);
-  const [maxTableCapacity, setMaxTableCapacity] = useState<number | undefined>(
-    undefined
-  );
-
-  const [additionalInfo, setAdditionalInfo] = useState(
-    data.additional_info || ''
-  );
-  const [updating, setUpdating] = useState(false);
-
-  useEffect(() => {
-    if (isEditing) {
-      fetchTableCapacity();
-    }
-  }, [isEditing]);
-
-  const fetchTableCapacity = async () => {
-    try {
-      const { data: tableData, error } = await supabase
-        .from('tables')
-        .select('capacity')
-        .eq('id', data.table_id)
-        .single();
-
-      if (error) throw error;
-
-      if (tableData?.capacity) {
-        setMaxTableCapacity(tableData.capacity);
-      }
-    } catch (error) {
-      console.error('Error fetching table capacity:', error);
-      toastHelper.error('Could not fetch table capacity');
-    }
-  };
-
-  const handleUpdate = async () => {
-    try {
-      const { error } = await supabase
-        .from('reservations')
-        .update({
-          occasion: occasion || null,
-          additional_info: additionalInfo || null,
-          party_size: tableCapacity,
-        })
-        .eq('id', data.id);
-
-      if (error) throw error;
-
-      toastHelper.success('Reservation updated successfully');
-      setIsEditing(false);
-    } catch (error: any) {
-      toastHelper.error(error.message || 'Failed to update reservation');
-    } finally {
-      setUpdating(false);
-    }
-  };
-
-  return {
-    setIsEditing,
-    setTableCapacity,
-    setOccasion,
-    setAdditionalInfo,
-    isEditing,
-    occasion,
-    tableCapacity,
-    maxTableCapacity,
-    additionalInfo,
-    updating,
-    fetchTableCapacity,
-    handleUpdate,
-  };
 };
