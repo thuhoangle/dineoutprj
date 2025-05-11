@@ -7,6 +7,7 @@ import { handleError } from '@/services';
 import { UserInfo } from '@/services';
 
 export const useUpdateUser = () => {
+  const authInfo = useUserStore((state) => state.authInfo);
   const portfolioDetail = useUserStore((state) => state.portfolioDetail);
   const [userProfile, setUserProfile] = useState<UserInfo>({
     name: '',
@@ -22,14 +23,14 @@ export const useUpdateUser = () => {
   const [fetching, setFetching] = useState(false);
 
   useEffect(() => {
-    const initializeProfile = async () => {
-      await useUserStore.getState().getPortfolioDetail();
-    };
-    initializeProfile();
-  }, [portfolioDetail]);
+    if (!authInfo) return;
+    _handleGetInitialProfile();
+  }, [portfolioDetail, authInfo]);
 
-  useEffect(() => {
-    if (portfolioDetail) {
+  const _handleGetInitialProfile = async () => {
+    if (!portfolioDetail) {
+      useUserStore.getState().getPortfolioDetail();
+    } else {
       setUserProfile({
         name: portfolioDetail.name || '',
         email: portfolioDetail.email || '',
@@ -41,7 +42,7 @@ export const useUpdateUser = () => {
         auth_id: portfolioDetail.auth_id || '',
       });
     }
-  }, [portfolioDetail]);
+  };
 
   const updateUser = async () => {
     if (!portfolioDetail?.auth_id) {
