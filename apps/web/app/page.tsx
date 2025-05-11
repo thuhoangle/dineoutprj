@@ -6,10 +6,7 @@ import { FiStar } from 'react-icons/fi';
 import { HiOutlineSparkles } from 'react-icons/hi';
 import { FaLocationArrow } from 'react-icons/fa';
 import { useGetUserLocation } from '@/hooks';
-import {
-  HorizontalSection,
-  ReservationInput,
-} from '@/modules/homepage/components';
+import { HorizontalSection, ReservationInput } from '@/modules/homepage/components';
 import { Button, ExploreCard, SimpleLoading, TextField } from '@/components';
 import { useUserStore, useVenueInfoStore } from '@/stores';
 import { useRouter } from 'next/navigation';
@@ -20,12 +17,9 @@ export default function Home() {
   const restaurantList = useVenueInfoStore((state) => state.restaurantList);
   const favRestaurant = useVenueInfoStore((state) => state.favRestaurant);
 
-  const toggleFavRestaurant = useVenueInfoStore(
-    (state) => state.toggleFavRestaurant
-  );
+  const toggleFavRestaurant = useVenueInfoStore((state) => state.toggleFavRestaurant);
 
-  const { location, fetching, locationSharable, checkGeolocationPermission } =
-    useGetUserLocation();
+  const { location, fetching, locationSharable, checkGeolocationPermission } = useGetUserLocation();
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -46,15 +40,9 @@ export default function Home() {
     }
   }, [authInfo]);
 
-  const risingData = restaurantList.filter((restaurant) =>
-    restaurant.keywords?.includes('rising')
-  );
-  const popularData = restaurantList.filter((restaurant) =>
-    restaurant.keywords?.includes('popular')
-  );
-  const newData = restaurantList.filter((restaurant) =>
-    restaurant.keywords?.includes('new')
-  );
+  const risingData = restaurantList.filter((restaurant) => restaurant.keywords?.includes('rising'));
+  const popularData = restaurantList.filter((restaurant) => restaurant.keywords?.includes('popular'));
+  const newData = restaurantList.filter((restaurant) => restaurant.keywords?.includes('new'));
 
   return (
     <div className="flex flex-col items-center gap-4 px-8">

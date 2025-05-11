@@ -2,10 +2,14 @@
 
 import { Button, TextField, TextInput } from '@/components';
 import { useLoginSignup } from '@/hooks';
+import { useUserStore } from '@/stores';
 import { Input } from '@heroui/react';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function LoginPage() {
+  const router = useRouter();
+  const portfolioDetail = useUserStore((state) => state.portfolioDetail);
   const {
     email,
     setEmail,
@@ -22,33 +26,24 @@ export default function LoginPage() {
   const [isSignup, setIsSignup] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
+  useEffect(() => {
+    if (portfolioDetail) {
+      router.push('/');
+    }
+  }, [portfolioDetail]);
+
   return (
     <div className="w-full flex items-center flex-col gap-8 justify-center">
-      <TextField
-        preset="h1"
-        text={isSignup ? 'Welcome to Dineout!' : 'Welcome back to Dineout!'}
-        weight="s"
-      />
+      <TextField preset="h1" text={isSignup ? 'Welcome to Dineout!' : 'Welcome back to Dineout!'} weight="s" />
       <div className="flex flex-col gap-5 w-full max-w-xl">
-        <Input
-          isClearable
-          label="Your email"
-          type="email"
-          onValueChange={setEmail}
-          errorMessage={errorEmail}
-        />
+        <Input isClearable label="Your email" type="email" onValueChange={setEmail} errorMessage={errorEmail} />
         <Input
           label="Your password"
           type={isVisible ? 'text' : 'password'}
           value={password}
           onValueChange={setPassword}
           errorMessage={errorPassword}
-          endContent={
-            <TogglePasswordVisibility
-              isVisible={isVisible}
-              setIsVisible={setIsVisible}
-            />
-          }
+          endContent={<TogglePasswordVisibility isVisible={isVisible} setIsVisible={setIsVisible} />}
         />
         <div className="flex flex-col items-end gap-2 ">
           <Button
@@ -60,10 +55,7 @@ export default function LoginPage() {
           />
           <TextField preset="p4" weight="m" color="g400">
             {isSignup ? 'Already have an account? ' : "Don't have an account? "}
-            <span
-              className="text-red-500 cursor-pointer"
-              onClick={() => setIsSignup(!isSignup)}
-            >
+            <span className="text-red-500 cursor-pointer" onClick={() => setIsSignup(!isSignup)}>
               {isSignup ? 'Log in' : 'Sign up'}
             </span>
           </TextField>
@@ -140,3 +132,6 @@ const EyeFilledIcon = (props: any) => {
     </svg>
   );
 };
+function usePortfolioDetailStore(arg0: (state: any) => any) {
+  throw new Error('Function not implemented.');
+}

@@ -9,6 +9,7 @@ import { MdOutlineDateRange, MdOutlineLogin } from 'react-icons/md';
 import { TextField } from '../text';
 import { IconType } from 'react-icons';
 import { useWindowContext } from '@/contexts';
+import Link from 'next/link';
 
 export const AccountPageLayout = ({ children }: { children: ReactNode }) => {
   const pathnameFromRouter = usePathname();
@@ -46,7 +47,6 @@ export const AccountPageLayout = ({ children }: { children: ReactNode }) => {
         <SideMenu
           currentTab={pathnameFromRouter}
           navItems={NAV_ITEMS}
-          onClickItem={(value) => router.push(value)}
         />
       )}
       {children}
@@ -64,21 +64,10 @@ interface SideMenuItemType {
 interface SideMenuProps {
   className?: string;
   currentTab: string;
-  onClickItem: (value: string) => void;
   navItems: SideMenuItemType[];
 }
 
-const SideMenu: FC<SideMenuProps> = ({
-  className,
-  currentTab,
-  navItems,
-  onClickItem,
-}) => {
-  const _onItemClick = (value: string) => {
-    onClickItem(value);
-  };
-  console.log('navItems', navItems);
-
+const SideMenu: FC<SideMenuProps> = ({ className, currentTab, navItems }) => {
   return (
     <div
       className={clsx(
@@ -93,7 +82,6 @@ const SideMenu: FC<SideMenuProps> = ({
               data={item}
               isSelected={currentTab === item.value}
               key={item.value}
-              onClick={_onItemClick}
             />
           )
       )}
@@ -103,33 +91,19 @@ const SideMenu: FC<SideMenuProps> = ({
 };
 
 const NavItem = memo(
-  ({
-    data,
-    onClick,
-    isSelected,
-  }: {
-    data: SideMenuItemType;
-    onClick: (value: string) => void;
-    isSelected?: boolean;
-  }) => {
-    const { Icon, label, value, disabled } = data || {};
-
-    const _onClick = () => {
-      if (value) {
-        onClick(value);
-      }
-    };
+  ({ data, isSelected }: { data: SideMenuItemType; isSelected?: boolean }) => {
+    const { Icon, label, value } = data || {};
 
     return (
-      <button
-        disabled={disabled}
+      <Link
+        href={`${value || '/'}`}
+        prefetch={true}
         className={clsx(
           'relative w-full my-0.5 flex items-center gap-2 rounded-md px-4 py-2 transition duration-200 ease-in hover:bg-neutral-950 disabled:opacity-50',
           isSelected
             ? 'bg-gray-950 text-red-600 hover:text-red-600'
             : 'text-gray-500 hover:text-gray-500'
         )}
-        onClick={_onClick}
       >
         {Icon && <Icon className="w-6 h-6 text-inherit" />}
         <TextField
@@ -138,7 +112,7 @@ const NavItem = memo(
           text={label}
           weight="s"
         />
-      </button>
+      </Link>
     );
   }
 );

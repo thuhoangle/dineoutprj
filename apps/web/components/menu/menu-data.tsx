@@ -1,24 +1,23 @@
 export interface NavItemType {
   Icon?: any;
   label: string;
-  route?: string;
-  disabled?: boolean;
+  value?: string;
   checkFunction?: (params: any) => boolean;
   iconUrl?: string;
   actionCode?: string;
 }
-const checkPath = ({ pathname, route }: { pathname: string; route: string }) =>
-  pathname.includes(route);
+const checkPath = ({ pathname, value }: { pathname: string; value: string }) =>
+  pathname.includes(value);
 
 export const getNavItems = (): NavItemType[] => [
   {
     label: 'Today',
-    route: '/today',
+    value: '/today',
     checkFunction: checkPath,
   },
   {
     label: 'All Days',
-    route: '/hcmc',
+    value: '/hcmc',
     checkFunction: checkPath,
   },
 ];

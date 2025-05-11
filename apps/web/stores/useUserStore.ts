@@ -46,13 +46,12 @@ export const useUserStore = create<UserStoreState>()(
       logOut: async () => {
         const state = get();
         if (state.authInfo?.id) {
-          const channel = AppSocket.subscribeToCustomerUpdates(
-            state.authInfo.id
-          );
+          const channel = AppSocket.subscribeToCustomerUpdates(state.authInfo.id);
           if (channel) {
             supabase.removeChannel(channel);
           }
         }
+
         set({ authInfo: null, portfolioDetail: undefined });
       },
 

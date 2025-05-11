@@ -10,6 +10,7 @@ import Image from 'next/image';
 import { TextField } from '../text';
 import { IoIosMenu } from 'react-icons/io';
 import { useLoginSignup } from '@/hooks';
+import Link from 'next/link';
 
 interface StickyBottomMenuProps {
   children?: React.ReactNode;
@@ -28,7 +29,7 @@ export const StickyBottomMenu: FC<StickyBottomMenuProps> = ({ children }) => {
         onLogout();
         break;
       default:
-        if (navItem.route) push(navItem.route);
+        if (navItem.value) push(navItem.value);
         break;
     }
   };
@@ -59,8 +60,8 @@ export const StickyBottomMenu: FC<StickyBottomMenuProps> = ({ children }) => {
               {NAV_ITEMS.map((item) => (
                 <NavItem
                   data={item}
-                  key={item.route}
-                  checkParams={{ route: item.route, pathnameFromRouter }}
+                  key={item.label}
+                  checkParams={{ value: item.value, pathnameFromRouter }}
                   onClick={_onItemClick}
                 />
               ))}
@@ -87,57 +88,60 @@ export const StickyBottomMenu: FC<StickyBottomMenuProps> = ({ children }) => {
 
 const NavItem = ({
   data,
-  onClick,
   checkParams,
-  isSelectedTab,
+  onClick,
 }: {
   data: NavItemType;
-  onClick: (data: NavItemType) => void;
   checkParams?: any;
-  isSelectedTab?: boolean;
+  onClick: (data: NavItemType) => void;
 }) => {
-  const { label, disabled, checkFunction } = data || {};
-
-  const _onClick = () => {
-    onClick(data);
-  };
+  const { label, value, checkFunction, actionCode } = data || {};
 
   const isSelected = checkFunction?.(checkParams);
 
-  return (
+  return actionCode ? (
     <button
-      disabled={disabled}
+      onClick={() => onClick(data)}
       className={clsx(
         'flex items-center justify-between rounded-md px-3 py-2 hover:bg-gray-900 hover:text-neutral-300 disabled:opacity-50',
         clsx(isSelected ? 'text-neutral-300' : 'text-neutral-400')
       )}
-      onClick={_onClick}
     >
       <TextField preset="p4" weight="m" text={label} />
     </button>
+  ) : (
+    <Link
+      href={`${value || '/'}`}
+      prefetch={true}
+      className={clsx(
+        'flex items-center justify-between rounded-md px-3 py-2 hover:bg-gray-900 hover:text-neutral-300 disabled:opacity-50',
+        clsx(isSelected ? 'text-neutral-300' : 'text-neutral-400')
+      )}
+    >
+      <TextField preset="p4" weight="m" text={label} />
+    </Link>
   );
 };
 
 export const NAV_ITEMS = [
   {
-    label: 'Homepage',
-    route: '/',
+    label: 'Home',
+    value: '/',
   },
   {
     label: 'All days',
-    route: '/reservation',
+    value: '/reservation',
   },
   {
     label: 'Reservations & Notify',
-    route: '/account/reservations',
+    value: '/account/reservations',
   },
   {
     label: 'Profile',
-    route: '/account/profile',
+    value: '/account/profile',
   },
   {
-    label: 'Logout',
-    route: '/human-resource',
+    label: 'Log out',
     actionCode: 'logout',
   },
 ];

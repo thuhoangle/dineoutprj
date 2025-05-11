@@ -18,25 +18,14 @@ import { useVenueInfoStore } from '@/stores';
 import { RestaurantInfo } from '@/services';
 import { useCheckPressOutSide } from '@/hooks/useCheckPressOutSide';
 import { TextField } from '../text';
-import {
-  FC,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { Input } from '@heroui/input';
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from '@heroui/navbar';
 import { Button, Kbd } from '@heroui/react';
-import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-} from '@heroui/react';
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@heroui/react';
 import { useWindowContext } from '@/contexts';
-
+import { MdEventNote } from 'react-icons/md';
+import { IoLogOutOutline } from 'react-icons/io5';
 interface HeaderMenuProps {
   onGoSamePath?: () => void;
 }
@@ -59,6 +48,10 @@ export const HeaderMenu: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
     useVenueInfoStore.getState().getRestaurantList();
     setSearchString('');
     setSearchResults([]);
+    router.prefetch('/');
+    router.prefetch('/login');
+    router.prefetch('/venues');
+    router.prefetch('/account/profile');
   }, []);
 
   useEffect(() => {
@@ -131,9 +124,7 @@ export const HeaderMenu: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
         endContent={<Kbd keys={['command']}>K</Kbd>}
         labelPlacement="outside"
         placeholder="Search restaurants..."
-        startContent={
-          <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
-        }
+        startContent={<SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />}
         type="search"
       />
       {isSearchPanelVisible &&
@@ -146,18 +137,14 @@ export const HeaderMenu: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
                 onClick={() => handleRestaurantClick(restaurant)}
               >
                 <div className="font-medium">{restaurant.name}</div>
-                <div className="text-sm text-gray-500">
-                  {restaurant.locations?.address}
-                </div>
+                <div className="text-sm text-gray-500">{restaurant.locations?.address}</div>
               </div>
             ))}
           </div>
         ) : (
           !!searchString && (
             <div className="absolute z-10 max-h-80 overflow-y-auto w-full mt-1 bg-white rounded-md shadow-lg">
-              <div className="px-4 py-2 font-medium text-sm text-gray-500">
-                No results found
-              </div>
+              <div className="px-4 py-2 font-medium text-sm text-gray-500">No results found</div>
             </div>
           )
         ))}
@@ -188,9 +175,10 @@ export const HeaderMenu: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
             {siteConfig.navItems.map((item) => (
               <NavbarItem key={item.href}>
                 <NextLink
+                  prefetch={true}
                   className={clsx(
                     linkStyles({ color: 'foreground' }),
-                    'data-[active=true]:text-primary min-w-max text-sm data-[active=true]:font-medium'
+                    'data-[active=true]:text-primary !font-semibold min-w-max text-sm'
                   )}
                   color="foreground"
                   href={item.href}
@@ -211,23 +199,20 @@ export const HeaderMenu: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
 
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
         {!portfolioDetail && (
-          <MyButton
-            color="tred"
-            text="Login"
-            onClick={() => router.push('/login')}
-          />
+          <Button
+            variant="flat"
+            radius="md"
+            className="!bg-transparent font-semibold !border-2 !border-red-500 !text-red-500 text-medium"
+            onPress={() => router.push('/login')}
+          >
+            Login
+          </Button>
         )}
         {portfolioDetail && (
           <Dropdown>
             <DropdownTrigger>
-              <Button
-                variant="bordered"
-                color="danger"
-                className="border-red-600 text-red-500"
-              >
-                {portfolioDetail.name
-                  ? portfolioDetail.name
-                  : portfolioDetail.email}
+              <Button variant="bordered" color="danger" className="border-red-600 font-semibold text-red-500">
+                {portfolioDetail.name ? portfolioDetail.name : portfolioDetail.email}
               </Button>
             </DropdownTrigger>
             <DropdownMenu>
@@ -246,7 +231,14 @@ export const HeaderMenu: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
               >
                 Profile
               </DropdownItem>
-              <DropdownItem key={'logout'} onPress={onLogout}>
+              <DropdownItem
+                key="reservations"
+                onPress={() => router.push('/account/reservations')}
+                startContent={<MdEventNote />}
+              >
+                Reservations
+              </DropdownItem>
+              <DropdownItem key={'logout'} onPress={onLogout} startContent={<IoLogOutOutline />}>
                 Logout
               </DropdownItem>
             </DropdownMenu>
@@ -262,25 +254,10 @@ export const HeaderMenu: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
 const PwHeader = () => {
   return (
     <Navbar isBordered maxWidth="full" position="sticky">
-      <NavbarContent
-        className="flex items-center gap-1 w-full"
-        justify="center"
-      >
-        <Image
-          height={32}
-          width={40}
-          src="/logo.png"
-          priority
-          style={{ width: 'auto', height: 'auto' }}
-          alt="logo"
-        />
+      <NavbarContent className="flex items-center gap-1 w-full" justify="center">
+        <Image height={32} width={40} src="/logo.png" priority style={{ width: 'auto', height: 'auto' }} alt="logo" />
         <NextLink className="flex justify-start items-center gap-1" href="/">
-          <TextField
-            preset="h5"
-            weight="s"
-            className="text-black"
-            text="Dineout"
-          />
+          <TextField preset="h5" weight="s" className="text-black" text="Dineout" />
         </NextLink>
       </NavbarContent>
     </Navbar>
