@@ -89,3 +89,26 @@ export const convertExpireAtToSeconds = (expiredAt: ExpiredAt) => {
       return 0;
   }
 };
+
+export const timeInAMPM = (time: string, date: string) => {
+  return dayjs(`${date} ${time}`).format('h:mm A');
+};
+
+// Function to convert AM/PM time to 24-hour format
+export const AMPMTo24Hour = (time: string): string => {
+  if (!time || !time.includes(':')) {
+    return '00:00:00'; // Default to midnight if invalid time
+  }
+
+  const [timePart, period] = time.split(' ');
+  let [hours, minutes] = timePart.split(':');
+
+  if (period === 'PM' && hours !== '12') {
+    hours = (parseInt(hours, 10) + 12).toString();
+  }
+  if (period === 'AM' && hours === '12') {
+    hours = '00';
+  }
+
+  return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}:00`;
+};

@@ -1,22 +1,25 @@
 'use client';
 
+import { BsFillPeopleFill } from 'react-icons/bs';
+
+import { TextField } from './text';
+import dayjs from 'dayjs';
 import {
+  Input,
+  Select,
+  SelectItem,
+  Button,
   Drawer,
   DrawerContent,
   DrawerHeader,
   DrawerBody,
   DrawerFooter,
-} from "@heroui/drawer";
-import { BsFillPeopleFill } from 'react-icons/bs';
-
-import { TextField } from './text';
-import dayjs from 'dayjs';
-import { Select, SelectItem } from "@heroui/select";
-import { Input } from "@heroui/input";
+} from '@heroui/react';
 import { toastHelper } from './toast-helper';
 import { Button as MyButton } from './button';
-import { Button } from "@heroui/button";
-import { AvailableSeats, RestaurantInfo } from '@/services';
+import { AvailableSeatRestaurant, AvailableSeats, RestaurantInfo } from '@/services';
+import { SlotPickerParamsProps } from './slot-picker';
+import { upperFirst } from 'lodash';
 
 export const BookingDrawer = ({
   isOpen,
@@ -32,25 +35,55 @@ export const BookingDrawer = ({
 }: {
   isOpen: boolean;
   onOpenChange: () => void;
-  data: RestaurantInfo;
+  data: RestaurantInfo | AvailableSeatRestaurant;
   timeSlot: string;
   quantity: number;
   setOccasion: (value: string) => void;
   setAdditionalInfo: (value: string) => void;
   fetching: boolean;
   onReserve: (resId: string, tableId: string, seat_type?: string) => void;
-  selectedOption: AvailableSeats | undefined;
+  selectedOption: AvailableSeats | SlotPickerParamsProps | undefined;
 }) => {
+  const restaurant_id =
+    (data as AvailableSeatRestaurant) && 'restaurant_id' in data
+      ? (data as AvailableSeatRestaurant).restaurant_id
+      : (data as RestaurantInfo).id;
+
+  const table_id =
+    selectedOption && 'tables' in selectedOption && Array.isArray(selectedOption.tables)
+      ? selectedOption.tables[0]?.id
+      : (selectedOption as AvailableSeats)?.table_id;
+  const seat_type =
+    selectedOption && 'tables' in selectedOption && Array.isArray(selectedOption.tables)
+      ? selectedOption.tables[0]?.seat_type
+      : (selectedOption as AvailableSeats)?.tables?.seat_type;
+
+  const locations =
+    (data as AvailableSeatRestaurant) && 'restaurant_id' in data
+      ? (data as AvailableSeatRestaurant).restaurant_locations
+      : (data as RestaurantInfo).locations;
+
+  const name =
+    (data as AvailableSeatRestaurant) && 'restaurant_id' in data
+      ? (data as AvailableSeatRestaurant).restaurant_name
+      : (data as RestaurantInfo).name;
+
+  const cancellation_policy =
+    (data as AvailableSeatRestaurant) && 'restaurant_id' in data
+      ? (data as AvailableSeatRestaurant).restaurant_cancellation_policy
+      : (data as RestaurantInfo).cancellation_policy;
+
+  const reservation_policy =
+    (data as AvailableSeatRestaurant) && 'restaurant_id' in data
+      ? (data as AvailableSeatRestaurant).restaurant_reservation_policy
+      : (data as RestaurantInfo).reservation_policy;
+
   const _onReserve = async ({ onClose }: { onClose: () => void }) => {
-    if (!selectedOption?.table_id) {
+    if (!table_id) {
       toastHelper.error('Please select a table');
       return;
     }
-    await onReserve(
-      data.id,
-      selectedOption.table_id,
-      selectedOption.tables.seat_type
-    );
+    await onReserve(restaurant_id, table_id.toString(), seat_type);
     onClose();
   };
 
@@ -73,13 +106,7 @@ export const BookingDrawer = ({
         {(onClose) => (
           <>
             <DrawerHeader className="absolute top-0 inset-x-0 z-50 flex flex-row gap-2 px-2 py-2 border-b border-default-200/50 justify-between bg-content1/50 backdrop-saturate-150 backdrop-blur-lg">
-              <Button
-                isIconOnly
-                className="text-default-400"
-                size="sm"
-                variant="light"
-                onPress={onClose}
-              >
+              <Button isIconOnly className="text-default-400" size="sm" variant="light" onPress={onClose}>
                 <svg
                   fill="none"
                   height="20"
@@ -101,12 +128,8 @@ export const BookingDrawer = ({
               </div>
               <hr className="border-gray-300 !px-0" />
               <div className="flex flex-col gap-2 py-2">
-                <h1 className="text-2xl font-bold leading-7">{data.name}</h1>
-                {data.locations.address && (
-                  <p className="text-sm text-default-500">
-                    {data.locations.address}
-                  </p>
-                )}
+                <h1 className="text-2xl font-bold leading-7">{name}</h1>
+                {locations.address && <p className="text-sm text-default-500">{locations.address}</p>}
                 <div className="mt-4 flex flex-col gap-3">
                   <div className="flex gap-3 items-center">
                     <div className="flex-none border-1 border-default-200/50 rounded-small text-center w-11 overflow-hidden">
@@ -121,9 +144,7 @@ export const BookingDrawer = ({
                       <p className="text-medium text-foreground font-medium">
                         {dayjs(timeSlot).format('dddd, MMMM D')}
                       </p>
-                      <p className="text-small text-default-500">
-                        {dayjs(timeSlot).format('h:mm A')}
-                      </p>
+                      <p className="text-small text-default-500">{dayjs(timeSlot).format('h:mm A')}</p>
                     </div>
                   </div>
                   <div className="flex gap-3 items-center">
@@ -134,57 +155,48 @@ export const BookingDrawer = ({
                       <p className="text-medium text-foreground font-medium">
                         {quantity} {quantity > 1 ? 'People' : 'Person'}
                       </p>
-                      {selectedOption?.tables.seat_type && (
-                        <p className="text-small text-default-500">
-                          {selectedOption?.tables.seat_type}
-                        </p>
-                      )}
+                      {seat_type && <p className="text-small text-default-500">{upperFirst(seat_type)}</p>}
                     </div>
                   </div>
                   <div className="flex flex-col mt-4 gap-5 items-start">
-                    <div className="flex flex-col gap-1">
-                      <TextField preset="p2" weight="s" text="About" />
-                      {/* <TextField
-                        preset="p3"
-                        color="gray"
-                        className="flex flex-col gap-2"
-                      >
-                        {data.reservation_policy.map(
-                          (item: Reservationpolicy) => (
-                            <p key={item.name}>{item.body}</p>
-                          )
-                        )}
-                      </TextField> */}
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <TextField
-                        preset="p2"
-                        weight="s"
-                        text="Cancellation policy"
-                      />
+                    {'restaurant_name' in data && data?.more_info && (
+                      <div className="flex flex-col gap-1">
+                        <TextField preset="p2" weight="s" text="About the table" />
+                        <TextField preset="p3" color="g100" className="flex flex-col gap-2">
+                          {upperFirst(data.more_info)}
+                        </TextField>
+                      </div>
+                    )}
+                    {reservation_policy && (
+                      <div className="flex flex-col gap-1">
+                        <TextField preset="p2" weight="s" text="Reservation policy" />
+                        <TextField preset="p3" color="g100" className="flex flex-col gap-2">
+                          {reservation_policy}
+                        </TextField>
+                      </div>
+                    )}
+                    {cancellation_policy && (
+                      <div className="flex flex-col gap-1">
+                        <TextField preset="p2" weight="s" text="Cancellation policy" />
 
-                      <TextField
-                        preset="p3"
-                        color="g100"
-                        className="flex flex-col gap-2"
-                      >
-                        {data.cancellation_policy}
-                      </TextField>
-                      <p>{data.overview}</p>
-                    </div>
+                        <TextField preset="p3" color="g100" className="flex flex-col gap-2">
+                          {cancellation_policy}
+                        </TextField>
+                      </div>
+                    )}
                     <div className="flex flex-col w-full gap-3">
-                      <TextField
-                        preset="p2"
-                        weight="s"
-                        text="Reservation Details"
-                      />
+                      <TextField preset="p2" weight="s" text="Reservation Details" />
                       <Select
-                        defaultSelectedKeys={['']}
                         label="Occasion"
-                        onChange={(e) => setOccasion(e.target.value)}
+                        selectedKeys={['']}
+                        onSelectionChange={(keys) => {
+                          setOccasion(Array.from(keys)[0] as string);
+                        }}
                       >
                         {OCCASSION_EVENTS.map((item) => (
-                          <SelectItem key={item.label}>{item.value}</SelectItem>
+                          <SelectItem className="font-medium data-[selected=true]:bg-primary-100" key={item.label}>
+                            {item.value}
+                          </SelectItem>
                         ))}
                       </Select>
                       <Input

@@ -50,7 +50,7 @@ export class supaApi {
   getAvailableSeats = (restaurantId: string) =>
     supabase
       .from('available_seats')
-      .select('*, tables(capacity, seat_type)')
+      .select('*, tables(capacity, seat_type, table_number)')
       .eq('restaurant_id', restaurantId);
 
   // RESERVATIONS

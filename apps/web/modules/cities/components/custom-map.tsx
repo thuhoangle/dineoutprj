@@ -3,8 +3,8 @@
 import React, { useRef, useEffect } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { RestaurantInfo } from '../../../services/api-types';
 import clsx from 'clsx';
+import { AvailableSeatRestaurant, RestaurantInfo } from '@/services';
 
 /* eslint-disable @next/next/no-img-element */
 
@@ -14,7 +14,7 @@ export const CustomMap = ({
   className,
   hoveredId,
 }: {
-  markers: RestaurantInfo[];
+  markers: (RestaurantInfo | AvailableSeatRestaurant)[];
   center?: { longitude: number | undefined; latitude: number | undefined };
   className?: string;
   hoveredId?: string | null;
@@ -44,14 +44,21 @@ export const CustomMap = ({
   const updateMarkers = () => {
     if (!map.current) return;
 
-    const existingMarkers =
-      document.getElementsByClassName('maplibregl-marker');
+    const existingMarkers = document.getElementsByClassName('maplibregl-marker');
     while (existingMarkers[0]) {
       existingMarkers[0].remove();
     }
 
     markers.forEach((marker) => {
-      if (marker.locations?.lng && marker.locations?.lat) {
+      const location = (marker as AvailableSeatRestaurant).restaurant_locations ?? (marker as RestaurantInfo).locations;
+      const images = (marker as AvailableSeatRestaurant).restaurant_images ?? (marker as RestaurantInfo).images;
+      const name = (marker as AvailableSeatRestaurant).restaurant_name ?? (marker as RestaurantInfo).name;
+      const slug = (marker as AvailableSeatRestaurant).restaurant_slug ?? (marker as RestaurantInfo).slug;
+      const rating = (marker as AvailableSeatRestaurant).restaurant_rating ?? (marker as RestaurantInfo).rating;
+      const review_count =
+        (marker as AvailableSeatRestaurant).restaurant_review_count ?? (marker as RestaurantInfo).review_count;
+
+      if (location?.lng && location?.lat) {
         const isHovered = hoveredId === marker.id;
 
         const markerElement = document.createElement('div');
@@ -67,19 +74,19 @@ export const CustomMap = ({
           <div class="flex flex-col">
             <div class="flex gap-2">
               <img
-                src="${marker.images?.[0]}"
-                alt="${marker.name}"
+                src="${images?.[0]}"
+                alt="${name}"
                 class="w-16 h-16 rounded-lg object-cover"
               />
               <div class="flex flex-col gap-2">
                 <div class="font-bold outline-none">
-                  <a href="/venues/${marker.slug}" class="hover:underline cursor-pointer">
-                    ${marker.name}
+                  <a href="/venues/${slug}" class="hover:underline cursor-pointer">
+                    ${name}
                   </a>
                 </div>
                 <div class="flex items-center text-red-500 gap-1">
-                  ${marker.rating?.toString() ? `<span>⭐</span>${marker.rating}` : ''}
-                  ${marker.review_count?.toString() ? `<span class="text-gray-500">(${marker.review_count})</span>` : ''}
+                  ${rating?.toString() ? `<span>⭐</span>${rating}` : ''}
+                  ${review_count?.toString() ? `<span class="text-gray-500">(${review_count})</span>` : ''}
                 </div>
               </div>
             </div>
@@ -87,7 +94,7 @@ export const CustomMap = ({
         `;
 
         new maplibregl.Marker({ element: markerElement })
-          .setLngLat([marker.locations.lng, marker.locations.lat])
+          .setLngLat([location.lng, location.lat])
           .setPopup(new maplibregl.Popup({ offset: 25 }).setHTML(popupContent))
           .addTo(map.current!);
       }
