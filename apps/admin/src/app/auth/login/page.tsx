@@ -4,20 +4,9 @@ import { useLogin } from '@/hooks';
 import { Button, TextField } from 'dineout-ui';
 import { Input } from '@heroui/react';
 import { useState } from 'react';
-import { GlobalLoading } from '@/components/global-loading';
-import { toastHelper } from '@/components/toast-helper';
 
 export default function LoginPage() {
-  const {
-    email,
-    setEmail,
-    errorEmail,
-    password,
-    setPassword,
-    errorPassword,
-    fetchingLogin,
-    onLogin,
-  } = useLogin(true);
+  const { email, setEmail, errorEmail, password, setPassword, errorPassword, fetchingLogin, onLogin } = useLogin(true);
 
   const [isVisible, setIsVisible] = useState(false);
 
@@ -25,13 +14,7 @@ export default function LoginPage() {
     <div className="w-full flex items-center flex-col gap-8 justify-center">
       <TextField preset="h1" text="Welcome back to Dineout!" weight="s" />
       <div className="flex flex-col gap-5 w-full max-w-xl">
-        <Input
-          isClearable
-          variant="bordered"
-          label="Email"
-          onValueChange={setEmail}
-          errorMessage={errorEmail}
-        />
+        <Input isClearable variant="bordered" label="Email" onValueChange={setEmail} errorMessage={errorEmail} />
 
         <Input
           variant="bordered"
@@ -40,12 +23,7 @@ export default function LoginPage() {
           value={password}
           onValueChange={setPassword}
           errorMessage={errorPassword}
-          endContent={
-            <TogglePasswordVisibility
-              isVisible={isVisible}
-              setIsVisible={setIsVisible}
-            />
-          }
+          endContent={<TogglePasswordVisibility isVisible={isVisible} setIsVisible={setIsVisible} />}
         />
         <div className="flex-1 ">
           <Button

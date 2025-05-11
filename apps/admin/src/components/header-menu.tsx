@@ -5,7 +5,7 @@ import { Button } from '@heroui/button';
 import NextLink from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { useUserStore } from '@/stores/useUserStore';
 import { useLogin } from '@/hooks';
 import {
@@ -23,6 +23,10 @@ export const HeaderMenu: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
   const router = useRouter();
   const portfolioDetail = useUserStore((state) => state.portfolioDetail);
   const { onLogout } = useLogin();
+
+  useEffect(() => {
+    router.prefetch('/auth/login');
+  }, []);
 
   return (
     <Navbar isBordered maxWidth="full" position="sticky">

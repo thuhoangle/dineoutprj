@@ -20,6 +20,9 @@
 }
 
 @layer components {
+  .bg-red-default {
+    background-color: #ff0a1f;
+  }
   .error-text {
     @apply text-sm text-red-500;
   }

@@ -65,8 +65,8 @@ export interface AvailableSeats {
     seat_type?: string;
     is_available?: boolean;
     table_number?: number;
+    more_info?: string;
   };
-  more_info?: string;
 }
 interface RestaurantDetails {
   overview: string;
@@ -85,13 +85,7 @@ export interface CreateReservationResult {
   occation?: ReservationOccation;
 }
 
-type ReservationOccation =
-  | 'birthday'
-  | 'anniversary'
-  | 'date'
-  | 'business'
-  | 'celebration'
-  | 'other';
+type ReservationOccation = 'birthday' | 'anniversary' | 'date' | 'business' | 'celebration' | 'other';
 
 export interface UserInfo {
   name?: string;

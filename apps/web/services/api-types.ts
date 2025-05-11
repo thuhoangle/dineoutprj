@@ -15,7 +15,7 @@ export interface RestaurantInfo {
   phone?: string;
   website?: string;
   cancellation_policy: string;
-  reservation_policy: Reservationpolicy[];
+  reservation_policy?: string;
   working_time: WorkingTime[];
 }
 
@@ -38,6 +38,41 @@ interface WorkingTime {
   time: string;
 }
 
+export interface AvailableSeatRestaurant {
+  id: string; // UUID of the table
+  restaurant_id: string; // UUID of the restaurant
+  table_number: number; // Table number
+  capacity: number; // Number of people the table can accommodate
+  seat_type: string; // Type of seat (e.g., Indoor, Outdoor)
+  available_seat_date: string; // Date of availability from available_seats
+  available_seat_time: string; // Time of availability from available_seats
+  more_info: string; // Additional information about the seat from available_seats
+  is_available: boolean; // Whether the table is available or not
+  restaurant_name: string; // Restaurant name
+  restaurant_slug: string; // Slug of the restaurant
+  restaurant_images: string[]; // Images (as JSON)
+  restaurant_rating: number; // Restaurant rating
+  restaurant_review_count: number; // Number of reviews
+  restaurant_price_range: number; // Price range (smallint, so it may be in range 1-5)
+  restaurant_district: string; // Restaurant district
+  restaurant_overview: string; // Overview of the restaurant
+  restaurant_cancellation_policy?: string; // Cancellation policy of the restaurant
+  restaurant_reservation_policy?: string; // Reservation policy of the restaurant
+  restaurant_locations: Locations;
+}
+
+export interface AvailableSeatRestaurantWithTables extends AvailableSeatRestaurant {
+  tables: {
+    id: string;
+    table_number: number;
+    capacity: number;
+    seat_type: string;
+    is_available: boolean;
+    available_seat_time: string;
+    available_seat_date?: string;
+  }[];
+}
+
 export interface GetAvailableSeats {
   id: string;
   restaurant_id: string;
@@ -54,8 +89,10 @@ export interface AvailableSeats {
   time: string;
   tables: {
     capacity: number;
-    seat_type: string;
+    seat_type?: string;
+    table_number: number;
   };
+  more_info?: string;
 }
 interface RestaurantDetails {
   overview: string;
@@ -74,13 +111,7 @@ export interface CreateReservationResult {
   occation?: ReservationOccation;
 }
 
-type ReservationOccation =
-  | 'birthday'
-  | 'anniversary'
-  | 'date'
-  | 'business'
-  | 'celebration'
-  | 'other';
+type ReservationOccation = 'birthday' | 'anniversary' | 'date' | 'business' | 'celebration' | 'other';
 
 export interface UserInfo {
   name?: string;
