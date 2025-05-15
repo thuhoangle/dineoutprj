@@ -1,21 +1,10 @@
 'use client';
 
-import {
-  ModalPortal,
-  HeaderMenu,
-  SideMenu,
-  OverlayRestrict,
-} from '@/components';
+import { ModalPortal, HeaderMenu, SideMenu, OverlayRestrict } from '@/components';
 import { usePathname, useRouter } from 'next/navigation';
 import { useWindowContext, WindowProvider } from '@/contexts/window-context';
 import { Toaster } from 'react-hot-toast';
-import {
-  MdDashboard,
-  MdPeople,
-  MdRestaurant,
-  MdEventNote,
-  MdHistory,
-} from 'react-icons/md';
+import { MdDashboard, MdPeople, MdRestaurant, MdEventNote, MdHistory } from 'react-icons/md';
 import ClientToaster from '@/config/client-toaster';
 import { GlobalLoading } from './global-loading';
 import { OverlayBlockMobileMode } from './overlay-block-mobile-mode';
@@ -51,14 +40,9 @@ export function RootLayoutClient({ children }: RootLayoutClientProps) {
         <HeaderMenu />
         <div className="flex flex-1 w-full border-t border-t-gray-200 gap-2 px-2 ipadMini:flex-1 overflow-hidden">
           {pathnameFromRouter.includes('/auth') ? null : (
-            <SideMenu
-              currentTab={pathnameFromRouter || ''}
-              navItems={NAV_ITEMS}
-            />
+            <SideMenu currentTab={pathnameFromRouter || ''} navItems={NAV_ITEMS} />
           )}
-          <main className="flex-1 pt-5 pb-2 h-full overflow-auto scrollbar-main">
-            {children}
-          </main>
+          <main className="flex-1 pt-5 pb-2 h-full overflow-auto scrollbar-main">{children}</main>
         </div>
       </div>
       <ClientToaster />
@@ -76,8 +60,8 @@ export const NAV_ITEMS: MenuItemType[] = [
     Icon: <MdDashboard className="w-6 h-6" />,
   },
   {
-    label: 'Reservation',
-    value: '/reservation',
+    label: 'Reservations',
+    value: '/reservations',
     Icon: <MdEventNote className="w-6 h-6" />,
   },
   {

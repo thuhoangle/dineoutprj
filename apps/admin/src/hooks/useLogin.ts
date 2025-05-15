@@ -2,12 +2,7 @@
 
 import { toastHelper } from '@/components';
 // import { AppSocket } from '@/services/supa-socket';
-import {
-  useAvailableSeatsStore,
-  useVenueInfoStore,
-  useUserStore,
-  useTablesStore,
-} from '@/stores';
+import { useAvailableSeatsStore, useUserStore, useTablesStore } from '@/stores';
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 
@@ -93,7 +88,6 @@ export const useLogin = (goToHomePage?: boolean) => {
     }
     localStorage.clear(); // Clear local storage
     sessionStorage.clear(); // Clear session storage
-    useVenueInfoStore.getState().clearFavRestaurants();
     useUserStore.getState().logOut();
     toastHelper.success('Logout successfully');
     // revalidatePath('/', 'layout');

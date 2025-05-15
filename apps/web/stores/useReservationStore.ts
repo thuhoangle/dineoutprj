@@ -8,6 +8,9 @@ import { useUserStore } from '.';
 import { toastHelper } from '@/components';
 
 interface ReservationStore {
+  rehydrated: boolean;
+  setRehydrated: () => void;
+
   passReservations: ReservationInfo[];
   setPassReservations: (reservations: ReservationInfo[]) => void;
   getPassReservations: () => void;
@@ -27,19 +30,18 @@ interface ReservationStore {
 export const useReservationStore = create<ReservationStore>()(
   persist(
     (set, get) => ({
+      rehydrated: false,
+      setRehydrated: () => set({ rehydrated: true }),
+
       passReservations: [],
-      setPassReservations: (reservations: ReservationInfo[]) =>
-        set({ passReservations: reservations }),
+      setPassReservations: (reservations: ReservationInfo[]) => set({ passReservations: reservations }),
       getPassReservations: async () => {
         const { data, error } = await supabase
           .from('reservations')
           .select('*, restaurants(name, images, locations->address, phone)')
           .eq('user_id', useUserStore.getState().authInfo?.id)
           // .eq('status', 'pending')
-          .lt(
-            'reservation_time',
-            dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss')
-          );
+          .lt('reservation_time', dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss'));
         if (error) {
           toastHelper.error(error.message);
           return;
@@ -48,21 +50,14 @@ export const useReservationStore = create<ReservationStore>()(
       },
 
       todayReservations: [],
-      setTodayReservations: (reservations: ReservationInfo[]) =>
-        set({ todayReservations: reservations }),
+      setTodayReservations: (reservations: ReservationInfo[]) => set({ todayReservations: reservations }),
       getTodayReservations: async () => {
         const { data, error } = await supabase
           .from('reservations')
           .select('*, restaurants(name, images, locations->address, phone)')
           .eq('user_id', useUserStore.getState().authInfo?.id)
-          .gte(
-            'reservation_time',
-            dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss')
-          )
-          .lt(
-            'reservation_time',
-            dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss')
-          );
+          .gte('reservation_time', dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss'))
+          .lt('reservation_time', dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss'));
         if (error) {
           toastHelper.error(error.message);
           return;
@@ -71,22 +66,15 @@ export const useReservationStore = create<ReservationStore>()(
       },
 
       upcomingReservations: [],
-      setUpcomingReservations: (reservations: ReservationInfo[]) =>
-        set({ upcomingReservations: reservations }),
+      setUpcomingReservations: (reservations: ReservationInfo[]) => set({ upcomingReservations: reservations }),
       getUpcomingReservations: async () => {
         const { data, error } = await supabase
           .from('reservations')
           .select('*, restaurants(name, images, locations->address, phone)')
           .eq('user_id', useUserStore.getState().authInfo?.id)
           // .eq('status', 'pending')
-          .gte(
-            'reservation_time',
-            dayjs().add(1, 'day').startOf('day').format('YYYY-MM-DD HH:mm:ss')
-          )
-          .lt(
-            'reservation_time',
-            dayjs().add(1, 'day').endOf('day').format('YYYY-MM-DD HH:mm:ss')
-          );
+          .gte('reservation_time', dayjs().add(1, 'day').startOf('day').format('YYYY-MM-DD HH:mm:ss'))
+          .lt('reservation_time', dayjs().add(1, 'day').endOf('day').format('YYYY-MM-DD HH:mm:ss'));
         if (error) {
           toastHelper.error(error.message);
           return;
@@ -136,6 +124,13 @@ export const useReservationStore = create<ReservationStore>()(
     }),
     {
       name: 'reservation-storage',
+      onRehydrateStorage: () => (state, error) => {
+        if (error) {
+          // console.log('an error happened during hydration', error);
+        } else {
+          state?.setRehydrated();
+        }
+      },
     }
   )
 );
