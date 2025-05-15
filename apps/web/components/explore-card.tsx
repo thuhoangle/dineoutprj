@@ -8,6 +8,7 @@ import { Button } from './button';
 import { RestaurantInfo } from '@/services';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
+import { EMPTY_RESTAURANT_IMAGE, getImageUrl } from '@/utils';
 export const ExploreCard = ({
   Icon,
   title,
@@ -43,12 +44,7 @@ export const ExploreCard = ({
       <div className="absolute flex justify-center items-center -top-8 left-1/2 aspect-square w-16 -translate-x-1/2 rounded-full border border-gray-800 bg-white dark:bg-gray-900">
         <Icon className="w-9 h-auto text-red-500" />
       </div>
-      <TextField
-        className="text-center my-2"
-        preset="h5"
-        weight="m"
-        text={title}
-      />
+      <TextField className="text-center my-2" preset="h5" weight="m" text={title} />
       <div className="flex flex-col border-gray-800 border-t-1 flex-1 justify-start divide-y divide-solid divide-gray-800">
         {dataList.slice(0, 5).map((data, index) => (
           <div
@@ -57,7 +53,7 @@ export const ExploreCard = ({
             onClick={() => handleOnClick(data?.slug || '')}
           >
             <img
-              src={data?.images?.[0] || '/images/hero.jpg'}
+              src={getImageUrl(data?.images?.[0] || EMPTY_RESTAURANT_IMAGE)}
               alt={data.name}
               className="object-cover object-center w-20 rounded-md aspect-square"
             />

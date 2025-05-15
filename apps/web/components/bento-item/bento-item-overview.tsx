@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { AvailableSeatRestaurant, AvailableSeatRestaurantWithTables, RestaurantInfo } from '@/services/api-types';
 import { useUserStore, useVenueInfoStore } from '@/stores';
 import { SlotPicker, SlotPickerParamsProps } from '../slot-picker';
+import { EMPTY_RESTAURANT_IMAGE, getImageUrl } from '@/utils';
 
 interface BentoItemProps {
   className?: string;
@@ -66,10 +67,7 @@ export const BentoItem = ({
     >
       <div className="flex justify-start gap-4 flex-row">
         <Image
-          src={
-            images?.[0] ??
-            'https://oissfgnrpjfveyjaokgk.supabase.co/storage/v1/object/public/restaurant//photo-unavail.png'
-          }
+          src={getImageUrl(images?.[0] ?? EMPTY_RESTAURANT_IMAGE)}
           alt="bento"
           width={192}
           height={156}

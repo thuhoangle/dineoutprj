@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import { RestaurantInfo } from '@/services';
 import { useRouter } from 'next/navigation';
-import { getPriceRange } from '@/utils';
+import { EMPTY_RESTAURANT_IMAGE, getImageUrl, getPriceRange } from '@/utils';
 
 export const BigWidget = ({
   data,
@@ -26,21 +26,18 @@ export const BigWidget = ({
   const router = useRouter();
 
   return (
-    <div
-      className={clsx('flex flex-col gap-3', className)}
-      onClick={() => router.push(`/venues/${data.slug}`)}
-    >
+    <div className={clsx('flex flex-col gap-3', className)} onClick={() => router.push(`/venues/${data.slug}`)}>
       <div className="relative rounded-lg aspect-square w-72">
         <Image
-          //   layout="responsive"
           fill
+          sizes="288"
           style={{
             cursor: 'pointer',
             borderRadius: '8px',
             objectFit: 'cover',
             objectPosition: 'center',
           }}
-          src={data.images?.[0] || ''}
+          src={getImageUrl(data.images?.[0] || EMPTY_RESTAURANT_IMAGE)}
           alt="food"
         />
         <div className="absolute right-0 top-0">
@@ -57,10 +54,7 @@ export const BigWidget = ({
       <div className="flex flex-col justify-center gap-1">
         <TextField preset="p3" weight="b" text={data.name} />
         <div className="flex items-centergap-0.5">
-          <TextField
-            preset="p3"
-            className="flex items-center text-red-500 gap-0.5"
-          >
+          <TextField preset="p3" className="flex items-center text-red-500 gap-0.5">
             <FaStar className="text-inherit w-5" />
             {data.rating}
           </TextField>
