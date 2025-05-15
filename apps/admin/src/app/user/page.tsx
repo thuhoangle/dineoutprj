@@ -1,5 +1,4 @@
 import { ProfilePanel } from '@/modules/profile/account-panel';
-import { OverlayRestrict } from '@/components';
 
 const Profile = () => (
   <>

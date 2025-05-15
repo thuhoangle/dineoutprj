@@ -22,12 +22,7 @@ export const BaseModal: FC<BaseModalProps> = ({
   children,
 }) => {
   return (
-    <Dialog
-      open={!!isVisible}
-      as="div"
-      className="relative z-40"
-      onClose={hideModalCB}
-    >
+    <Dialog open={!!isVisible} as="div" className="relative z-40" onClose={hideModalCB}>
       <DialogBackdrop
         transition
         className={clsx(
@@ -35,12 +30,7 @@ export const BaseModal: FC<BaseModalProps> = ({
           backdropClassName || 'bg-black/60 backdrop-blur-sm'
         )}
       />
-      <div
-        className={clsx(
-          'fixed inset-0 z-10 overflow-y-auto',
-          panelWrapperClassName
-        )}
-      >
+      <div className={clsx('fixed inset-0 z-10 overflow-y-auto', panelWrapperClassName)}>
         <DialogPanel
           transition
           className={clsx(
@@ -74,8 +64,7 @@ export const SimpleModal: FC<SimpleModalProps> = ({
   return (
     <BaseModal
       panelWrapperClassName={clsx(
-        overridePanelWrapperClassName ||
-          'flex h-full w-full flex-col items-center justify-center p-2 ipadMini:p-4',
+        overridePanelWrapperClassName || 'flex h-full w-full flex-col items-center justify-center p-2 ipadMini:p-4',
         panelWrapperClassName
       )}
       panelClassName={clsx(
@@ -88,10 +77,7 @@ export const SimpleModal: FC<SimpleModalProps> = ({
     >
       {showCloseIcon ? (
         <button className="absolute right-2 top-2 p-4">
-          <IoCloseSharp
-            className="w-7 h-7 self-end text-gray-800 hover:text-gray-700"
-            onClick={hideModalCB}
-          />
+          <IoCloseSharp className="w-7 h-7 self-end text-gray-800 hover:text-gray-700" onClick={hideModalCB} />
         </button>
       ) : null}
       {children}
@@ -111,18 +97,11 @@ export const ModalHeader = ({
   className?: string;
 }) => {
   return (
-    <div
-      className={clsx(
-        'relative -z-10 flex flex-col items-start gap-4',
-        className
-      )}
-    >
+    <div className={clsx('relative -z-10 flex flex-col items-start gap-4', className)}>
       {children || (
         <div className="flex flex-col gap-1">
-          <TextField preset="p1" weight="m" text={title} />
-          {subtitle ? (
-            <TextField preset="p3" className="text-gray-700" text={subtitle} />
-          ) : null}
+          <TextField preset="p1" className="text-white" weight="m" text={title} />
+          {subtitle ? <TextField preset="p3" className="text-gray-700" text={subtitle} /> : null}
         </div>
       )}
     </div>
@@ -200,12 +179,8 @@ export const SimpleModalPanel: FC<SimpleModalPanelProps> = ({
 }) => {
   return (
     <div className="flex flex-col">
-      {ModalHeaderComponent || (
-        <ModalHeader title={title}>{titleChildren}</ModalHeader>
-      )}
-      <div className={clsx('flex flex-col py-4', contentClassName)}>
-        {children}
-      </div>
+      {ModalHeaderComponent || <ModalHeader title={title}>{titleChildren}</ModalHeader>}
+      <div className={clsx('flex flex-col py-4', contentClassName)}>{children}</div>
       {ModalBtRowComponent || (
         <ModalBtRow
           fetching={fetching}

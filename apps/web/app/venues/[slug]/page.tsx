@@ -4,29 +4,21 @@ import { useParams } from 'next/navigation';
 import { IoShareOutline } from 'react-icons/io5';
 import { useEffect, useMemo, useState } from 'react';
 import { Button, globalLoading, TextField, toastHelper } from '@/components';
-import {
-  OverviewSection,
-  BookingSection,
-  Carousel,
-  MiniMap,
-} from '@/modules/venue/components';
+import { OverviewSection, BookingSection, Carousel, MiniMap } from '@/modules/venue/components';
 import { RestaurantInfo, supaApiInstance } from '@/services';
 import { useGetAvailableSeats } from '@/hooks';
 import { useVenueInfoStore } from '@/stores';
 import { FaHeart, FaRegHeart, FaStar } from 'react-icons/fa';
-import { FaLocationDot } from "react-icons/fa6";
+import { FaLocationDot } from 'react-icons/fa6';
 import { getPriceRange } from '@/utils';
 
 const VenueDetailPage = () => {
   const param = useParams();
   const slug = typeof param.slug === 'string' ? param.slug : '';
   const favRestaurant = useVenueInfoStore((state) => state.favRestaurant);
-  const toggleFavRestaurant = useVenueInfoStore(
-    (state) => state.toggleFavRestaurant
-  );
+  const toggleFavRestaurant = useVenueInfoStore((state) => state.toggleFavRestaurant);
   const [restaurant, setRestaurant] = useState<RestaurantInfo | null>(null);
-  const { getAvailableSeats, dataList: availableSeatsList } =
-    useGetAvailableSeats();
+  const { getAvailableSeats, dataList: availableSeatsList } = useGetAvailableSeats();
 
   const createShareLink = useMemo(() => {
     if (typeof window !== 'undefined') {
@@ -73,14 +65,14 @@ const VenueDetailPage = () => {
                   <FaStar className="text-inherit w-5" />
                   {restaurant?.rating ? (
                     <>
-                  {restaurant?.rating}
-                  {!!restaurant?.review_count && (
-                    <span className="text-gray-500 text-[12px]">{`(${restaurant?.review_count})`}</span>
+                      {restaurant?.rating}
+                      {!!restaurant?.review_count && (
+                        <span className="text-gray-500 text-[12px]">{`(${restaurant?.review_count})`}</span>
+                      )}
+                    </>
+                  ) : (
+                    <div>N/A</div>
                   )}
-                  </>
-                ) : (
-                  <div>N/A</div>
-                )}
                 </div>
                 <div className="">
                   {'\u00A0•\u00A0'}
@@ -108,9 +100,7 @@ const VenueDetailPage = () => {
                 <Button
                   className="text-sm"
                   preset="linkGray"
-                  LeftHeroIcon={
-                    favRestaurant[restaurant.id] ? FaHeart : FaRegHeart
-                  }
+                  LeftHeroIcon={favRestaurant[restaurant.id] ? FaHeart : FaRegHeart}
                   iconClassName="text-red-500"
                   onClick={(e) => {
                     e.stopPropagation();
@@ -123,17 +113,12 @@ const VenueDetailPage = () => {
           </div>
           <hr className="h-1.5 my-2 border-t border-gray-400" />
           {restaurant && <OverviewSection description={restaurant.overview} />}
-          <BookingSection
-            data={restaurant}
-            availableSeatsList={availableSeatsList}
-          />
+          <BookingSection data={restaurant} availableSeatsList={availableSeatsList} />
         </div>
       </div>
       <div className="w-full ipadMini:w-2/5">
         <div className="flex h-screen sticky top-0 w-full overflow-x-auto flex-col gap-4 ">
-          {restaurant!.images && restaurant!.images.length > 0 && (
-            <Carousel data={restaurant!.images} />
-          )}
+          {restaurant!.images && restaurant!.images.length > 0 && <Carousel data={restaurant!.images} />}
           {/* <Carousel data={restaurant!.images} /> */}
           <MiniMap data={restaurant!} />
           {/* <AdditionalInfo /> */}

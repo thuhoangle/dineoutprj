@@ -8,12 +8,7 @@ import { useRouter } from 'next/navigation';
 import { FC, useEffect } from 'react';
 import { useUserStore } from '@/stores/useUserStore';
 import { useLogin } from '@/hooks';
-import {
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-} from '@heroui/dropdown';
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@heroui/dropdown';
 
 interface HeaderMenuProps {
   onGoSamePath?: () => void;
@@ -26,14 +21,12 @@ export const HeaderMenu: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
 
   useEffect(() => {
     router.prefetch('/auth/login');
+    router.prefetch('/user');
   }, []);
 
   return (
     <Navbar isBordered maxWidth="full" position="sticky">
-      <NavbarContent
-        className="flex items-center justify-betweenr"
-        justify="start"
-      >
+      <NavbarContent className="flex items-center justify-betweenr" justify="start">
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
             <Image
@@ -62,17 +55,12 @@ export const HeaderMenu: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
         {portfolioDetail && (
           <Dropdown>
             <DropdownTrigger>
-              <Button
-                variant="flat"
-                className="!bg-transparent font-semibold !border-2 !border-red-500 !text-red-500"
-              >
-                {portfolioDetail.name
-                  ? portfolioDetail.name
-                  : useUserStore.getState().authInfo?.email}
+              <Button variant="flat" className="!bg-transparent font-semibold !border-2 !border-red-500 !text-red-500">
+                {portfolioDetail.name ? portfolioDetail.name : useUserStore.getState().authInfo?.email}
               </Button>
             </DropdownTrigger>
             <DropdownMenu>
-              <DropdownItem key={'profile'} href="/user">
+              <DropdownItem key={'profile'} onPress={() => router.push('/user')}>
                 Restaurant Managing
               </DropdownItem>
               <DropdownItem key={'logout'} onPress={onLogout}>

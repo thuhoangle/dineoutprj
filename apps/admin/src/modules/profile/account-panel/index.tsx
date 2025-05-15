@@ -1,23 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
 import { useUserStore } from '@/stores';
-import {
-  EditRestaurantProps,
-  useUpdateRestaurantInfo,
-  useUploadImage,
-} from '@/hooks';
+import { EditRestaurantProps, useUpdateRestaurantInfo, useUploadImage } from '@/hooks';
 import clsx from 'clsx';
-import {
-  Input,
-  Select,
-  SelectItem,
-  Textarea,
-  Image,
-  Radio,
-  RadioGroup,
-  Accordion,
-  AccordionItem,
-} from '@heroui/react';
+import { Input, Select, SelectItem, Textarea, Image, Radio, RadioGroup, Accordion, AccordionItem } from '@heroui/react';
 import { useWindowContext } from '@/contexts';
 import { Button, SimpleLoading } from 'dineout-ui';
 import { useEffect, useState } from 'react';
@@ -53,8 +39,7 @@ export const ProfilePanel = () => {
   };
 
   const handleDeleteImage = (imageUrl: string) => {
-    const updatedImages =
-      params.images?.filter((img) => img !== imageUrl) || [];
+    const updatedImages = params.images?.filter((img) => img !== imageUrl) || [];
     setParams({ ...params, images: updatedImages });
   };
 
@@ -77,20 +62,11 @@ export const ProfilePanel = () => {
         {!!params.images?.length ? (
           <div className="flex flex-wrap items-center gap-3">
             {params.images?.map((image) => (
-              <div
-                key={image}
-                className="relative flex flex-col items-center gap-3"
-              >
+              <div key={image} className="relative flex flex-col items-center gap-3">
                 <div className="relative z-0">
-                  <Image
-                    className="object-cover"
-                    height={200}
-                    width={200}
-                    src={image}
-                    alt="restaurant image"
-                  />
+                  <Image className="object-cover" height={200} width={200} src={image} alt="restaurant image" />
                   <MdOutlineCancel
-                    className="absolute cursor-pointer z-10 top-2 right-2 text-white rounded-full w-5 h-5 flex items-center justify-center"
+                    className="absolute cursor-pointer z-10 top-2 right-2 text-red-500 rounded-full w-5 h-5 flex items-center justify-center"
                     onClick={() => handleDeleteImage(image)}
                   />
                 </div>
@@ -102,11 +78,7 @@ export const ProfilePanel = () => {
                 htmlFor="images-upload"
               >
                 {uploading ? 'Uploading' : 'Upload Images'}
-                {uploading ? (
-                  <SimpleLoading size={20} />
-                ) : (
-                  <FiUpload className="h-5 w-5" />
-                )}
+                {uploading ? <SimpleLoading size={20} /> : <FiUpload className="h-5 w-5" />}
               </label>
               <input
                 id="images-upload"
@@ -129,11 +101,7 @@ export const ProfilePanel = () => {
               htmlFor="images-upload"
             >
               {uploading ? 'Uploading' : 'Upload Images'}
-              {uploading ? (
-                <SimpleLoading size={15} />
-              ) : (
-                <FiUpload className="h-5 w-5" />
-              )}
+              {uploading ? <SimpleLoading size={15} /> : <FiUpload className="h-5 w-5" />}
             </label>
             <input
               id="images-upload"
@@ -149,9 +117,7 @@ export const ProfilePanel = () => {
             />
           </div>
         )}
-        <div
-          className={clsx('justify-center items-center flex flex-col gap-4')}
-        >
+        <div className={clsx('justify-center items-center flex flex-col gap-4')}>
           <Input
             className="w-full"
             label="Restaurant Name"
@@ -168,18 +134,14 @@ export const ProfilePanel = () => {
             label="Overview"
             className="w-full"
             value={params.overview || ''}
-            onChange={(e) =>
-              _setParams({ ...params, overview: e.target.value })
-            }
+            onChange={(e) => _setParams({ ...params, overview: e.target.value })}
           />
           <Input
             label="Short Bio"
             description="To display in the small bio section"
             className="w-full"
             value={params.short_overview || ''}
-            onValueChange={(value) =>
-              _setParams({ ...params, short_overview: value })
-            }
+            onValueChange={(value) => _setParams({ ...params, short_overview: value })}
           />
           <div className="flex justify-between w-full items-start gap-8">
             <RadioGroup
@@ -187,11 +149,9 @@ export const ProfilePanel = () => {
               color="danger"
               className="w-full flex"
               orientation="horizontal"
-              defaultValue={params.price_range?.toString() || ''}
+              value={params.price_range?.toString() || ''}
               label="Select Price Range"
-              onValueChange={(value) =>
-                _setParams({ ...params, price_range: Number(value) })
-              }
+              onValueChange={(value) => _setParams({ ...params, price_range: Number(value) })}
             >
               <Radio value="1">$</Radio>
               <Radio value="2">$$</Radio>
@@ -230,18 +190,14 @@ export const ProfilePanel = () => {
                 label="Website"
                 className="w-full"
                 value={params.website || ''}
-                onValueChange={(value) =>
-                  _setParams({ ...params, website: value })
-                }
+                onValueChange={(value) => _setParams({ ...params, website: value })}
               />
               <Input
                 variant="underlined"
                 label="Google Map URL"
                 className="w-full"
                 value={params.ggUrl || ''}
-                onValueChange={(value) =>
-                  _setParams({ ...params, ggUrl: value })
-                }
+                onValueChange={(value) => _setParams({ ...params, ggUrl: value })}
               />
             </AccordionItem>
           </Accordion>
@@ -273,15 +229,7 @@ export const ProfilePanel = () => {
                   base: 'bg-[#F4F4F5] rounded-xl !-mx-3',
                 }}
               >
-                {[
-                  'Monday',
-                  'Tuesday',
-                  'Wednesday',
-                  'Thursday',
-                  'Friday',
-                  'Saturday',
-                  'Sunday',
-                ].map((day) => (
+                {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) => (
                   <AccordionItem
                     key={day.toLowerCase()}
                     aria-label={day}
@@ -295,14 +243,9 @@ export const ProfilePanel = () => {
                       <Input
                         label="Opening Time"
                         placeholder="9 AM"
-                        value={
-                          params.opening_hours?.[day]?.split(' to ')[0] ||
-                          '9 AM'
-                        }
+                        value={params.opening_hours?.[day]?.split(' to ')[0] || '9 AM'}
                         onChange={(e) => {
-                          const closingTime =
-                            params.opening_hours?.[day]?.split(' to ')[1] ||
-                            '11 PM';
+                          const closingTime = params.opening_hours?.[day]?.split(' to ')[1] || '11 PM';
                           _setParams({
                             ...params,
                             opening_hours: {
@@ -316,14 +259,9 @@ export const ProfilePanel = () => {
                       <Input
                         label="Closing Time"
                         placeholder="11 PM"
-                        value={
-                          params.opening_hours?.[day]?.split(' to ')[1] ||
-                          '11 PM'
-                        }
+                        value={params.opening_hours?.[day]?.split(' to ')[1] || '11 PM'}
                         onChange={(e) => {
-                          const openingTime =
-                            params.opening_hours?.[day]?.split(' to ')[0] ||
-                            '9 AM';
+                          const openingTime = params.opening_hours?.[day]?.split(' to ')[0] || '9 AM';
                           _setParams({
                             ...params,
                             opening_hours: {
@@ -382,9 +320,7 @@ export const ProfilePanel = () => {
             <Select
               isRequired
               selectedKeys={params.district ? [params.district] : []}
-              onSelectionChange={(keys) =>
-                _setParams({ ...params, district: String(Array.from(keys)[0]) })
-              }
+              onSelectionChange={(keys) => _setParams({ ...params, district: String(Array.from(keys)[0]) })}
               label="District"
               placeholder="Select a district"
             >
@@ -397,17 +333,13 @@ export const ProfilePanel = () => {
             label="Reservation Policy"
             description="We will share the reservation policy publicly with customers in the Reservation page."
             value={params.reservation_policy || ''}
-            onValueChange={(value) =>
-              _setParams({ ...params, reservation_policy: value })
-            }
+            onValueChange={(value) => _setParams({ ...params, reservation_policy: value })}
           />
           <Textarea
             label="Cancellation Policy"
             description="We will share the cancellation policy publicly with customers in the Reservation page."
             value={params.cancellation_policy || ''}
-            onValueChange={(value) =>
-              _setParams({ ...params, cancellation_policy: value })
-            }
+            onValueChange={(value) => _setParams({ ...params, cancellation_policy: value })}
           />
           <div className="mt-10 w-full">
             <Button
