@@ -2,7 +2,6 @@
 
 import { SimpleLoading } from '@/components/simple-loading';
 import { TextField } from '@/components/text';
-import { ReservationInfo } from '@/services';
 import { useReservationStore } from '@/stores';
 import { useEffect, useState } from 'react';
 import { ReservationCard } from './reservation-card';
@@ -28,14 +27,9 @@ export const TodayReservation = ({ className }: { className?: string }) => {
         {fetching ? (
           <SimpleLoading />
         ) : todayReservations?.length ? (
-          todayReservations.map((data) => (
-            <ReservationCard data={data} key={data.id} />
-          ))
+          todayReservations.map((data) => <ReservationCard data={data} key={data.id} />)
         ) : (
-          <TextField
-            preset="p4"
-            text="You don’t have any reservations for today."
-          />
+          <TextField preset="p4" text="You don’t have any reservations for today." />
         )}
       </div>
     </div>

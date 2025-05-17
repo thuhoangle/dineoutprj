@@ -1,7 +1,7 @@
 import { useUserStore } from '@/stores/useUserStore';
-import { useAvailableSeatsStore } from '@/stores';
+import { useAvailableSeatsStore, useReservationStore } from '@/stores';
 import { supabase } from '@/utils';
-import { AvailableSeats } from './api-types';
+import { AvailableSeats, ReservationInfo } from './api-types';
 
 class SupaSocket {
   subscribeToRestaurantUpdates = (userId: string) => {
@@ -40,28 +40,45 @@ class SupaSocket {
         },
         (payload) => {
           console.log('Available seats updated:', payload.new);
-          const data = Array.isArray(payload.new)
-            ? payload.new
-            : [payload.new as AvailableSeats];
+          const data = Array.isArray(payload.new) ? payload.new : [payload.new as AvailableSeats];
           useAvailableSeatsStore.getState().setAvailableSlots(data);
         }
       )
       .subscribe();
   };
 
-  //   subscribeToReservationUpdates = (userId: string) => {
-  //     if (!userId) return;
-  //     return supabase
-  //       .channel('custom-all-channel')
-  //       .on(
-  //         'postgres_changes',
-  //         { event: '*', schema: 'public', table: 'reservations' },
-  //         (payload) => {
-  //           console.log('Change received!', payload);
-  //         }
-  //       )
-  //       .subscribe();
-  //   };
+  subscribeToReservationUpdates = (restaurantId: string) => {
+    if (!restaurantId) return;
+
+    return supabase
+      .channel('reservation-realtime')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'reservations',
+          filter: `restaurant_id=eq.${restaurantId}`,
+        },
+        (payload) => {
+          const reservation = payload.new as ReservationInfo;
+          const resTime = new Date(reservation.reservation_time);
+          const now = new Date();
+
+          const resDate = resTime.toISOString().split('T')[0];
+          const todayDate = now.toISOString().split('T')[0];
+
+          if (resTime < now && resDate !== todayDate) {
+            useReservationStore.getState().setPassReservations([reservation]);
+          } else if (resDate === todayDate) {
+            useReservationStore.getState().setTodayReservations([reservation]);
+          } else {
+            useReservationStore.getState().setUpcomingReservations([reservation]);
+          }
+        }
+      )
+      .subscribe();
+  };
 }
 
 export const AppSocket = new SupaSocket();

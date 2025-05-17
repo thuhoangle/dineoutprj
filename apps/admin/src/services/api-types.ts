@@ -105,53 +105,37 @@ export interface GetRestaurantAvailableList {
 }
 
 export interface ReservationInfo {
-  id?: string;
-  restaurants?: {
-    name: string;
-    images?: string[];
-    address: string;
-    phone: string;
-  };
   created_at: string;
+  id: string;
+  user_id: string;
   restaurant_id: string;
   table_id: string;
+  reservation_time: string;
   party_size: number;
   status: string;
-  occasion: string;
-  additional_info: string;
-  reservation_time: string;
-  seat_type: string;
+  occasion?: string;
+  additional_info?: string;
+  seat_type?: string;
+  customer?: Customer;
+  guest_name?: string;
+  guest_phone?: string;
+  guest_email?: string;
+  table?: {
+    id: string;
+    table_number: number;
+    capacity: number;
+  };
 }
 
-// export interface AvailableForReservation {
-//   available_time: string[];
-// }
-
-// export interface GetRestaurantsList {
-//   restaurantList: {
-//     id: string;
-//     heroImgUrl: any[];
-//     contact: RestaurantContact;
-//     name: string;
-//     metadata: {
-//       description: string;
-//       keywords: string[];
-//       cuisine: string[];
-//       price_range: string;
-//       hasMenu: boolean;
-//       menuUrl: null | string;
-//     };
-//     averageRating: number;
-//     userReviewCount: number;
-//     is_open: boolean;
-//   }[];
-// }
-// export interface ReviewSnippets {
-//   reviewSnippetsList: {
-//     reviewText: string;
-//     reviewUrl: string;
-//   }[];
-// }
+interface Customer {
+  auth_id: string;
+  name: string;
+  phone?: string;
+  email?: string;
+  allergies?: string[];
+  additional_info?: string;
+  bio?: string;
+}
 
 export interface GeoLocationResponse {
   address: {
@@ -160,23 +144,3 @@ export interface GeoLocationResponse {
     city?: string;
   };
 }
-
-// export interface GetRestaurantAvailableList {
-
-// export interface GetVenueSearch {
-//   available: boolean;
-//   geo: {
-//     long: number;
-//     lat: number;
-//   };
-//   page: number;
-//   last_page: number;
-//   total: number;
-//   slot_filter: {
-//     day: string;
-//     guest_number: number;
-//   };
-//   venue_filter: {
-//     keyword: string[];
-//   };
-// }

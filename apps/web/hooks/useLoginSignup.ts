@@ -8,6 +8,7 @@ import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 
 import { useState } from 'react';
+import { silentlyLinkGuestReservationsToUser } from './useLinkGuestToUser';
 
 export const useLoginSignup = (goToHomePage?: boolean) => {
   const router = useRouter();
@@ -47,6 +48,7 @@ export const useLoginSignup = (goToHomePage?: boolean) => {
       await useUserStore.getState().getAuthInfo();
       await useUserStore.getState().getPortfolioDetail();
       await useVenueInfoStore.getState().getFavRestaurants();
+      await silentlyLinkGuestReservationsToUser(useUserStore.getState().authInfo);
       const userId = useUserStore.getState().authInfo?.id;
       if (userId) {
         AppSocket.subscribeToCustomerUpdates(userId);

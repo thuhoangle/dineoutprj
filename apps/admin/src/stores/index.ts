@@ -1,4 +1,4 @@
 export * from './useUserStore';
-export * from './useVenueInfoStore';
+export * from './useReservationStore';
 export * from './useAvailableSeatsStore';
 export * from './useTablesStore';

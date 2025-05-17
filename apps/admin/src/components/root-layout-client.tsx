@@ -1,14 +1,11 @@
 'use client';
 
 import { ModalPortal, HeaderMenu, SideMenu, OverlayRestrict } from '@/components';
-import { usePathname, useRouter } from 'next/navigation';
-import { useWindowContext, WindowProvider } from '@/contexts/window-context';
-import { Toaster } from 'react-hot-toast';
-import { MdDashboard, MdPeople, MdRestaurant, MdEventNote, MdHistory } from 'react-icons/md';
+import { usePathname } from 'next/navigation';
+import { WindowProvider } from '@/contexts/window-context';
+import { MdDashboard, MdPeople, MdRestaurant, MdEventNote, MdHistory, MdManageAccounts } from 'react-icons/md';
 import ClientToaster from '@/config/client-toaster';
-import { GlobalLoading } from './global-loading';
 import { OverlayBlockMobileMode } from './overlay-block-mobile-mode';
-
 export interface MenuItemType {
   Icon?: any;
   label: string;
@@ -65,19 +62,19 @@ export const NAV_ITEMS: MenuItemType[] = [
     Icon: <MdEventNote className="w-6 h-6" />,
   },
   {
-    label: 'Table-management',
+    label: 'Table Managing',
     value: '/management',
     Icon: <MdRestaurant className="w-6 h-6" />,
   },
   {
-    label: 'Open-tables',
+    label: 'Open Tables',
     value: '/open-tables',
     Icon: <MdPeople className="w-6 h-6" />,
   },
   {
-    label: 'History',
-    value: '/history',
-    Icon: <MdHistory className="w-6 h-6" />,
+    label: 'Management',
+    value: '/user',
+    Icon: <MdManageAccounts className="w-6 h-6" />,
   },
   // {
   //   label: 'Human-resource',

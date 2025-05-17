@@ -46,18 +46,17 @@ export const useUserStore = create<UserStoreState>()(
       logOut: async () => {
         const state = get();
         if (state.authInfo?.id && state.portfolioDetail?.id) {
-          const channelRestaurant = AppSocket.subscribeToRestaurantUpdates(
-            state.authInfo.id
-          );
-          const channelAvailableSeats =
-            AppSocket.subscribeToAvailableSeatsUpdates(
-              state.portfolioDetail?.id
-            );
+          const channelRestaurant = AppSocket.subscribeToRestaurantUpdates(state.authInfo.id);
+          const channelAvailableSeats = AppSocket.subscribeToAvailableSeatsUpdates(state.portfolioDetail?.id);
+          const channelReservation = AppSocket.subscribeToReservationUpdates(state.authInfo.id);
           if (channelRestaurant) {
             supabase.removeChannel(channelRestaurant);
           }
           if (channelAvailableSeats) {
             supabase.removeChannel(channelAvailableSeats);
+          }
+          if (channelReservation) {
+            supabase.removeChannel(channelReservation);
           }
         }
         set({ authInfo: null, portfolioDetail: undefined });

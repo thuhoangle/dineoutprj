@@ -1,8 +1,8 @@
 'use client';
 
 import { toastHelper } from '@/components';
-// import { AppSocket } from '@/services/supa-socket';
-import { useAvailableSeatsStore, useUserStore, useTablesStore } from '@/stores';
+import { AppSocket } from '@/services/supa-socket';
+import { useAvailableSeatsStore, useUserStore, useTablesStore, useReservationStore } from '@/stores';
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 
@@ -52,10 +52,11 @@ export const useLogin = (goToHomePage?: boolean) => {
       await useTablesStore.getState().getTables();
       await useAvailableSeatsStore.getState().getAvailableSlots();
       const userId = useUserStore.getState().authInfo?.id;
-      // if (userId) {
-      //   AppSocket.subscribeToCustomerUpdates(userId);
-      //   AppSocket.subscribeToReservationUpdates(userId);
-      // }
+
+      if (userId) {
+        //     AppSocket.subscribeToCustomerUpdates(userId);
+        AppSocket.subscribeToReservationUpdates(userId);
+      }
       setFetchingLogin(false);
 
       // revalidatePath('/', 'layout');
