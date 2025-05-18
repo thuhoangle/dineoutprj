@@ -3,11 +3,36 @@
 import { useUserStore } from '@/stores';
 import { EditRestaurantProps, useUpdateRestaurantInfo, useUploadImage } from '@/hooks';
 import clsx from 'clsx';
-import { Input, Select, SelectItem, Textarea, Image, Radio, RadioGroup, Accordion, AccordionItem } from '@heroui/react';
-import { Button, SimpleLoading } from 'dineout-ui';
+import {
+  Input,
+  Select,
+  SelectItem,
+  Textarea,
+  Image,
+  Radio,
+  RadioGroup,
+  Accordion,
+  AccordionItem,
+  Switch,
+  Button,
+} from '@heroui/react';
+import { Button as MyButton, SimpleLoading } from 'dineout-ui';
 import { useEffect, useState } from 'react';
 import { MdOutlineCancel } from 'react-icons/md';
 import { FiUpload } from 'react-icons/fi';
+import { FiCopy } from 'react-icons/fi';
+
+const DEFAULT_OPENING_HOURS = {
+  Monday: '9 AM to 11 PM',
+  Tuesday: '9 AM to 11 PM',
+  Wednesday: '9 AM to 11 PM',
+  Thursday: '9 AM to 11 PM',
+  Friday: '9 AM to 11 PM',
+  Saturday: '9 AM to 11 PM',
+  Sunday: '9 AM to 11 PM',
+};
+
+const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
 export const ProfilePanel = () => {
   const authInfo = useUserStore((state) => state.authInfo);
@@ -23,7 +48,10 @@ export const ProfilePanel = () => {
     },
   });
 
-  const [params, setParams] = useState<EditRestaurantProps>(query);
+  const [params, setParams] = useState<EditRestaurantProps>({
+    ...query,
+    opening_hours: query.opening_hours || DEFAULT_OPENING_HOURS,
+  });
 
   useEffect(() => {
     if (!!params) {
@@ -32,8 +60,18 @@ export const ProfilePanel = () => {
   }, [query]);
 
   const _setParams = (params: EditRestaurantProps) => {
-    setParams(params);
-    setQuery((prev) => ({ ...prev, ...params }));
+    const completeOpeningHours = {
+      ...DEFAULT_OPENING_HOURS,
+      ...params.opening_hours,
+    };
+
+    const updatedParams = {
+      ...params,
+      opening_hours: completeOpeningHours,
+    };
+
+    setParams(updatedParams);
+    setQuery((prev) => ({ ...prev, ...updatedParams }));
   };
 
   const handleDeleteImage = (imageUrl: string) => {
@@ -42,8 +80,30 @@ export const ProfilePanel = () => {
   };
 
   const _handleSave = async () => {
-    await setQuery({ ...params });
+    const formattedParams = {
+      ...params,
+      categories: params.categories?.map((cat) => cat.trim()).filter((cat) => cat.length > 0),
+    };
+    await setQuery(formattedParams);
     updateUser();
+  };
+
+  const applyHoursToOtherDays = (currentDay: string, hours: string) => {
+    const newOpeningHours = {
+      ...params.opening_hours,
+      ...DAYS.reduce(
+        (acc, day) => ({
+          ...acc,
+          ...(day !== currentDay && { [day]: hours }),
+        }),
+        {}
+      ),
+    };
+
+    _setParams({
+      ...params,
+      opening_hours: newOpeningHours,
+    });
   };
 
   return (
@@ -142,6 +202,13 @@ export const ProfilePanel = () => {
             value={params.short_overview || ''}
             onValueChange={(value) => _setParams({ ...params, short_overview: value })}
           />
+          <Textarea
+            label="Categories"
+            description="To reach to the right audience"
+            className="w-full"
+            value={params.categories?.join(', ') || ''}
+            onChange={(e) => _setParams({ ...params, categories: e.target.value.split(', ') })}
+          />
           <div className="flex justify-between w-full items-start gap-8">
             <RadioGroup
               size="sm"
@@ -228,50 +295,87 @@ export const ProfilePanel = () => {
                   base: 'bg-[#F4F4F5] rounded-xl !-mx-3',
                 }}
               >
-                {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) => (
+                {DAYS.map((day) => (
                   <AccordionItem
                     key={day.toLowerCase()}
                     aria-label={day}
                     title={day}
                     classNames={{
-                      content: 'flex items-center gap-2 px-3 pb-4',
+                      content: 'flex flex-col gap-2 px-3 pb-4',
                       title: '!text-foreground',
                     }}
                   >
-                    <div className="flex items-center gap-4">
-                      <Input
-                        label="Opening Time"
-                        placeholder="9 AM"
-                        value={params.opening_hours?.[day]?.split(' to ')[0] || '9 AM'}
-                        onChange={(e) => {
-                          const closingTime = params.opening_hours?.[day]?.split(' to ')[1] || '11 PM';
+                    <div className="flex items-center justify-between mb-2">
+                      <Switch
+                        size="sm"
+                        isSelected={params.opening_hours?.[day] !== 'closed'}
+                        onValueChange={(isOpen) => {
+                          const newHours = isOpen ? '9 AM to 11 PM' : 'closed';
                           _setParams({
                             ...params,
                             opening_hours: {
                               ...params.opening_hours,
-                              [day]: `${e.target.value} to ${closingTime}`,
+                              [day]: newHours,
                             },
                           });
                         }}
-                        className="w-full"
-                      />
-                      <Input
-                        label="Closing Time"
-                        placeholder="11 PM"
-                        value={params.opening_hours?.[day]?.split(' to ')[1] || '11 PM'}
-                        onChange={(e) => {
-                          const openingTime = params.opening_hours?.[day]?.split(' to ')[0] || '9 AM';
-                          _setParams({
-                            ...params,
-                            opening_hours: {
-                              ...params.opening_hours,
-                              [day]: `${openingTime} to ${e.target.value}`,
-                            },
-                          });
-                        }}
-                        className="w-full"
-                      />
+                      >
+                        {params.opening_hours?.[day] === 'closed' ? 'Closed' : 'Open'}
+                      </Switch>
+                      {params.opening_hours?.[day] !== 'closed' && (
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="text-xs"
+                            onPress={() => {
+                              const currentHours = params.opening_hours?.[day];
+                              if (currentHours) {
+                                applyHoursToOtherDays(day, currentHours);
+                              }
+                            }}
+                          >
+                            <FiCopy className="mr-1" /> Apply to other days
+                          </Button>
+                        </div>
+                      )}
                     </div>
+                    {params.opening_hours?.[day] !== 'closed' && (
+                      <div className="flex items-center gap-4">
+                        <Input
+                          label="Opening Time"
+                          placeholder="9 AM"
+                          value={params.opening_hours?.[day]?.split(' to ')[0] || '9 AM'}
+                          onChange={(e) => {
+                            const closingTime = params.opening_hours?.[day]?.split(' to ')[1] || '11 PM';
+                            _setParams({
+                              ...params,
+                              opening_hours: {
+                                ...params.opening_hours,
+                                [day]: `${e.target.value} to ${closingTime}`,
+                              },
+                            });
+                          }}
+                          className="w-full"
+                        />
+                        <Input
+                          label="Closing Time"
+                          placeholder="11 PM"
+                          value={params.opening_hours?.[day]?.split(' to ')[1] || '11 PM'}
+                          onChange={(e) => {
+                            const openingTime = params.opening_hours?.[day]?.split(' to ')[0] || '9 AM';
+                            _setParams({
+                              ...params,
+                              opening_hours: {
+                                ...params.opening_hours,
+                                [day]: `${openingTime} to ${e.target.value}`,
+                              },
+                            });
+                          }}
+                          className="w-full"
+                        />
+                      </div>
+                    )}
                   </AccordionItem>
                 ))}
               </Accordion>
@@ -341,7 +445,7 @@ export const ProfilePanel = () => {
             onValueChange={(value) => _setParams({ ...params, cancellation_policy: value })}
           />
           <div className="mt-10 w-full">
-            <Button
+            <MyButton
               // disabled={JSON.stringify(params) === JSON.stringify(query)}
               size="xl"
               className="w-full !p-3 bg-red-500 text-white"

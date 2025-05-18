@@ -13,6 +13,7 @@ import { useDateStore, useEventStore, useViewStore } from './hooks';
 import { useEffect } from 'react';
 import { AvailableSeats } from '@/services';
 import { useTablesStore, useAvailableSeatsStore } from '@/stores';
+import dayjs from 'dayjs';
 
 export const OpenTablesPanel = () => {
   const { selectedView } = useViewStore();
@@ -63,6 +64,7 @@ export const OpenTablesPanel = () => {
           isOpen={isPopoverOpen}
           onClose={closePopover}
           date={userSelectedDate.format('YYYY-MM-DD')}
+          disableCreate={userSelectedDate.isBefore(dayjs())}
         />
       )}
       {isEventSummaryOpen && selectedEvent && (
@@ -71,6 +73,3 @@ export const OpenTablesPanel = () => {
     </>
   );
 };
-function dayjs(date: string): any {
-  throw new Error('Function not implemented.');
-}

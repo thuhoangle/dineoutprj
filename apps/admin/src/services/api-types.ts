@@ -7,6 +7,7 @@ export interface RestaurantInfo {
   short_overview?: string;
   overview?: string;
   images?: string[];
+  categories?: string[];
   locations?: Locations;
   keywords?: string[];
   price_range?: number;

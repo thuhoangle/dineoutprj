@@ -56,11 +56,7 @@ export const TableCard: React.FC<Props> = ({ table, onClick, isSelected }) => {
         }
 
         return (
-          <div
-            key={i}
-            className={`absolute w-4 h-4 rounded-full ${color} border border-gray-300`}
-            style={style}
-          />
+          <div key={i} className={`absolute w-4 h-4 rounded-full ${color} border border-gray-300`} style={style} />
         );
       })}
 

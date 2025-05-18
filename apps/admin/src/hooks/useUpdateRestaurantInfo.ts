@@ -10,6 +10,7 @@ export interface EditRestaurantProps {
   short_overview?: string;
   overview?: string;
   images?: string[];
+  categories?: string[];
   locations?: Locations;
   price_range?: number;
   price?: string;
@@ -32,9 +33,11 @@ export const useUpdateRestaurantInfo = () => {
     name: portfolioDetail?.name,
     district: portfolioDetail?.district,
     overview: portfolioDetail?.overview,
+    short_overview: portfolioDetail?.short_overview,
     images: portfolioDetail?.images,
     locations: portfolioDetail?.locations,
     price_range: portfolioDetail?.price_range,
+    categories: portfolioDetail?.categories,
     price: portfolioDetail?.price,
     slug: portfolioDetail?.slug,
     ggUrl: portfolioDetail?.ggUrl,
@@ -61,11 +64,7 @@ export const useUpdateRestaurantInfo = () => {
     fetchDetail();
   }, [portfolioDetail]);
 
-  const getCoordinatesFromAddress = async (
-    address: string,
-    neighborhood: string,
-    district: string
-  ) => {
+  const getCoordinatesFromAddress = async (address: string, neighborhood: string, district: string) => {
     const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_API_KEY;
     const geocodeUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
       `${address}, ${neighborhood}, ${district}, Ho Chi Minh City, Vietnam`
@@ -100,11 +99,7 @@ export const useUpdateRestaurantInfo = () => {
       if (lat && lng) {
         return query.locations; // Return existing locations if coordinates already exist
       } else if (address && neighborhood && district) {
-        const coords = await getCoordinatesFromAddress(
-          address,
-          neighborhood,
-          district
-        );
+        const coords = await getCoordinatesFromAddress(address, neighborhood, district);
         if (coords) {
           const { latitude, longitude } = coords;
 
@@ -144,6 +139,7 @@ export const useUpdateRestaurantInfo = () => {
         images: query.images,
         locations: updatedLocations,
         price_range: query.price_range,
+        categories: query.categories,
         price: query.price,
         slug: query.slug,
         ggUrl: query.ggUrl,

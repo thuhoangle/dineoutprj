@@ -1,10 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  compiler: {
-    // Remove console.logs during build
-    removeConsole: true,
-  },
   async redirects() {
     return [
       {
