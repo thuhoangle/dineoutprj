@@ -2,9 +2,7 @@ import '../styles/global.css';
 import { RootLayoutClient } from '@/components/root-layout-client';
 import { ibmPlexSans, robotoMono } from '@/assets/fonts';
 import clsx from 'clsx';
-import { HeroUIProvider } from '@heroui/react';
 import { Providers } from './providers';
-import { GlobalLoading } from '@/components/global-loading';
 
 export const metadata = {
   title: 'Admin System',
@@ -21,7 +19,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Providers>
           <RootLayoutClient>{children}</RootLayoutClient>
-          <GlobalLoading />
         </Providers>
       </body>
     </html>

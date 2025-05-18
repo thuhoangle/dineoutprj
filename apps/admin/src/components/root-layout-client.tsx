@@ -3,12 +3,13 @@
 import { ModalPortal, HeaderMenu, SideMenu, OverlayRestrict } from '@/components';
 import { usePathname } from 'next/navigation';
 import { WindowProvider } from '@/contexts/window-context';
-import { MdDashboard, MdPeople, MdRestaurant, MdEventNote, MdHistory, MdManageAccounts } from 'react-icons/md';
+import { MdDashboard, MdPeople, MdRestaurant, MdEventNote, MdManageAccounts } from 'react-icons/md';
 import ClientToaster from '@/config/client-toaster';
 import { OverlayBlockMobileMode } from './overlay-block-mobile-mode';
 import { useSocketManager } from '@/hooks/useSocketManager';
 import { useEffect } from 'react';
 import { useAvailableSeatsStore, useReservationStore, useTablesStore, useUserStore } from '@/stores';
+import { GlobalLoading } from './global-loading';
 
 export interface MenuItemType {
   Icon?: any;
@@ -59,6 +60,7 @@ export function RootLayoutClient({ children }: RootLayoutClientProps) {
       </div>
       <ClientToaster />
       <ModalPortal />
+      <GlobalLoading />
       <OverlayBlockMobileMode />
       {!pathnameFromRouter.includes('/auth/login') ? <OverlayRestrict /> : null}
     </WindowProvider>
