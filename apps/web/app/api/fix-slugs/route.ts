@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { createSerClient } from '@/utils/supabase/server';
 import { NextResponse } from 'next/server';
 import slugify from 'slugify';
@@ -7,9 +9,7 @@ export async function GET() {
     const supabase = await createSerClient();
 
     // 1. Fetch all restaurants (with name and slug)
-    const { data: allRestaurants, error: fetchError } = await supabase
-      .from('restaurants')
-      .select('id, name, slug');
+    const { data: allRestaurants, error: fetchError } = await supabase.from('restaurants').select('id, name, slug');
 
     if (fetchError || !allRestaurants) {
       throw fetchError || new Error('Failed to fetch restaurants');
@@ -42,16 +42,10 @@ export async function GET() {
 
     await Promise.all(
       updates.map(async (u) => {
-        const { error } = await supabase
-          .from('restaurants')
-          .update({ slug: u.slug })
-          .eq('id', u.id);
+        const { error } = await supabase.from('restaurants').update({ slug: u.slug }).eq('id', u.id);
 
         if (error) {
-          console.error(
-            `Failed to update slug for restaurant ID ${u.id}:`,
-            error
-          );
+          console.error(`Failed to update slug for restaurant ID ${u.id}:`, error);
           failedUpdates.push({ id: u.id, error });
         } else {
           console.log(`Updated restaurant ID ${u.id} → ${u.slug}`);
@@ -67,9 +61,6 @@ export async function GET() {
     });
   } catch (err: any) {
     console.error('🔥 Server Error in /api/fix-slugs:', err);
-    return NextResponse.json(
-      { success: false, error: err.message || 'Unknown error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: err.message || 'Unknown error' }, { status: 500 });
   }
 }
