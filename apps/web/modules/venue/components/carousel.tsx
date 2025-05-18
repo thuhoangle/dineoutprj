@@ -29,7 +29,7 @@ export const Carousel = ({ data }: { data: string[] }) => {
             width={510}
             height={600}
             objectFit="cover"
-            className="min-w-max"
+            className="min-w-max object-cover w-full"
             src={item}
             alt={`venue img ${index}`}
           />
