@@ -86,7 +86,6 @@ export const VenueBookItem = ({
       )}
       <div className="grid grid-cols-4 gap-4">
         {Object.values(groupedSeats).map((seats) => {
-          console.log('🚀 ~ {Object.values ~ groupedSeats:', groupedSeats);
           const representativeSeat = seats[0];
           const formattedTime = timeInAMPM(representativeSeat.time, representativeSeat.date);
           const seatType = upperFirst(representativeSeat.tables.seat_type);
