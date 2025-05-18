@@ -1,0 +1,94 @@
+'use client';
+
+import clsx from 'clsx';
+import { usePathname, useRouter } from 'next/navigation';
+import { ReactNode, FC, memo } from 'react';
+import { CgProfile } from 'react-icons/cg';
+import { IoIosSettings } from 'react-icons/io';
+import { MdOutlineDateRange, MdOutlineLogin } from 'react-icons/md';
+import { TextField } from '../text';
+import { IconType } from 'react-icons';
+import { useWindowContext } from '@/contexts';
+import Link from 'next/link';
+
+export const AccountPageLayout = ({ children }: { children: ReactNode }) => {
+  const pathnameFromRouter = usePathname();
+  const { isMobileMode } = useWindowContext();
+
+  const router = useRouter();
+
+  const NAV_ITEMS = [
+    {
+      Icon: CgProfile,
+      label: 'Profile',
+      value: '/account/profile',
+    },
+    {
+      Icon: MdOutlineDateRange,
+      label: 'Reservations & Notify',
+      value: '/account/reservations',
+    },
+
+    // {
+    //   Icon: IoIosSettings,
+    //   label: 'Settings',
+    //   value: '/account/settings',
+    // },
+
+    // {
+    //   Icon: MdOutlineLogin,
+    //   label: 'Logout',
+    //   value: '/logout',
+    // },
+  ];
+
+  return (
+    <div className="flex w-full gap-2 px-2 ipadMini:h-0 ipadMini:flex-1">
+      {!isMobileMode && <SideMenu currentTab={pathnameFromRouter} navItems={NAV_ITEMS} />}
+      {children}
+    </div>
+  );
+};
+
+interface SideMenuItemType {
+  Icon: IconType;
+  label: string;
+  value?: string;
+  disabled?: boolean;
+}
+
+interface SideMenuProps {
+  className?: string;
+  currentTab: string;
+  navItems: SideMenuItemType[];
+}
+
+const SideMenu: FC<SideMenuProps> = ({ className, currentTab, navItems }) => {
+  return (
+    <div className={clsx('w-96 flex-col rounded-lg bg-bg-primary px-3 py-6', className)}>
+      {navItems.map(
+        (item) => item.value && <NavItem data={item} isSelected={currentTab === item.value} key={item.value} />
+      )}
+      <div className="flex-1" />
+    </div>
+  );
+};
+
+const NavItem = memo(({ data, isSelected }: { data: SideMenuItemType; isSelected?: boolean }) => {
+  const { Icon, label, value } = data || {};
+
+  return (
+    <Link
+      href={`${value || '/'}`}
+      prefetch={true}
+      className={clsx(
+        'relative w-full my-0.5 flex items-center gap-2 rounded-md px-4 py-2 transition duration-200 ease-in hover:bg-neutral-950 disabled:opacity-50',
+        isSelected ? 'bg-gray-950 text-red-600 hover:text-red-600' : 'text-gray-500 hover:text-gray-500'
+      )}
+    >
+      {Icon && <Icon className="w-6 h-6 text-inherit" />}
+      <TextField className="flex-1 text-left" preset="p2" text={label} weight="s" />
+    </Link>
+  );
+});
+NavItem.displayName = 'NavItem';
