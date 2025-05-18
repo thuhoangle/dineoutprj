@@ -3,6 +3,8 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
+    "build:admin": "turbo build:admin --filter=admin",
+    "build:web": "turbo build:web --filter=web",
     "dev": "turbo dev",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
@@ -29,6 +31,7 @@
     "@supabase/supabase-js": "^2.48.1",
     "clsx": "^2.1.1",
     "lodash": "^4.17.21",
+    "next": "14.1.0",
     "react-hot-toast": "^2.4.0",
     "tailwind-config": "^0.1.2",
     "tailwind-scrollbar": "^4.0.1",
