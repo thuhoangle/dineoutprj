@@ -7,24 +7,16 @@ import { Providers } from './providers';
 import { GlobalLoading } from '@/components/global-loading';
 
 export const metadata = {
-  title: 'Admin Dashboard',
-  description: 'Admin dashboard for DineOut',
+  title: 'Admin System',
+  description: 'Admin System for DineOut',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
       suppressHydrationWarning
-      className={clsx(
-        'scroll-smooth',
-        robotoMono.variable,
-        ibmPlexSans.variable
-      )}
+      className={clsx('scroll-smooth', robotoMono.variable, ibmPlexSans.variable)}
     >
       <body>
         <Providers>

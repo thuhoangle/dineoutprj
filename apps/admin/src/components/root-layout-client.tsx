@@ -6,6 +6,10 @@ import { WindowProvider } from '@/contexts/window-context';
 import { MdDashboard, MdPeople, MdRestaurant, MdEventNote, MdHistory, MdManageAccounts } from 'react-icons/md';
 import ClientToaster from '@/config/client-toaster';
 import { OverlayBlockMobileMode } from './overlay-block-mobile-mode';
+import { useSocketManager } from '@/hooks/useSocketManager';
+import { useEffect } from 'react';
+import { useAvailableSeatsStore, useReservationStore, useTablesStore, useUserStore } from '@/stores';
+
 export interface MenuItemType {
   Icon?: any;
   label: string;
@@ -31,15 +35,26 @@ interface RootLayoutClientProps {
 export function RootLayoutClient({ children }: RootLayoutClientProps) {
   const pathnameFromRouter = usePathname();
 
+  // Initialize socket manager at the root level
+  useSocketManager();
+
+  useEffect(() => {
+    // rehydrate
+    useUserStore.persist.rehydrate();
+    useAvailableSeatsStore.persist.rehydrate();
+    useReservationStore.persist.rehydrate();
+    useTablesStore.persist.rehydrate();
+  }, []);
+
   return (
     <WindowProvider>
-      <div className="w-full bg-background flex flex-col h-screen">
+      <div className="w-full bg-[#E5E5E5] flex flex-col h-screen">
         <HeaderMenu />
-        <div className="flex flex-1 w-full border-t border-t-gray-200 gap-2 px-2 ipadMini:flex-1 overflow-hidden">
+        <div className="flex flex-1 mt-3 mb-2 w-full gap-3 px-2 ipadMini:flex-1 overflow-hidden">
           {pathnameFromRouter.includes('/auth') ? null : (
             <SideMenu currentTab={pathnameFromRouter || ''} navItems={NAV_ITEMS} />
           )}
-          <main className="flex-1 pt-5 pb-2 h-full overflow-auto scrollbar-main">{children}</main>
+          <main className="flex-1 px-3 py-5 h-full rounded-lg bg-white overflow-y-auto scrollbar-main">{children}</main>
         </div>
       </div>
       <ClientToaster />
@@ -62,14 +77,14 @@ export const NAV_ITEMS: MenuItemType[] = [
     Icon: <MdEventNote className="w-6 h-6" />,
   },
   {
-    label: 'Table Managing',
-    value: '/management',
-    Icon: <MdRestaurant className="w-6 h-6" />,
-  },
-  {
     label: 'Open Tables',
     value: '/open-tables',
     Icon: <MdPeople className="w-6 h-6" />,
+  },
+  {
+    label: 'Table Managing',
+    value: '/management',
+    Icon: <MdRestaurant className="w-6 h-6" />,
   },
   {
     label: 'Management',

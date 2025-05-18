@@ -27,7 +27,7 @@
     @apply text-sm text-red-500;
   }
   .scrollbar-main {
-    @apply scrollbar scrollbar-track-transparent scrollbar-thumb-gray-800 scrollbar-thumb-rounded-full scrollbar-w-0.5 scrollbar-h-0.5;
+    @apply scrollbar scrollbar-track-transparent scrollbar-thumb-gray-300 scrollbar-thumb-rounded-full scrollbar-w-px scrollbar-h-px;
   }
   .component-panel {
     @apply border border-neutral-900 bg-neutral-950 rounded-lg;

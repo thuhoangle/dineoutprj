@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  compiler: {
+    // Remove console.logs during build
+    removeConsole: true,
+  },
   images: {
     domains: ['lh5.googleusercontent.com', 'lh3.googleusercontent.com'],
     remotePatterns: [

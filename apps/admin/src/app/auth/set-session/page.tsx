@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
-import { GlobalLoading } from '@/components';
+import { GlobalLoading } from 'dineout-ui';
 
 export default function AuthSetSessionPage() {
   const router = useRouter();
@@ -21,15 +21,13 @@ export default function AuthSetSessionPage() {
     const refresh_token = params.get('refresh_token');
 
     if (access_token && refresh_token) {
-      supabase.auth
-        .setSession({ access_token, refresh_token })
-        .then(({ error }) => {
-          if (error) {
-            console.error('Failed to set session', error);
-          } else {
-            router.replace('/dashboard');
-          }
-        });
+      supabase.auth.setSession({ access_token, refresh_token }).then(({ error }) => {
+        if (error) {
+          console.error('Failed to set session', error);
+        } else {
+          router.replace('/dashboard');
+        }
+      });
     }
   };
 
