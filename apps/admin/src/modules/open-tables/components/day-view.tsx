@@ -50,7 +50,7 @@ export const DayView = () => {
           <div className="w-16 border-r border-gray-300">
             {getHours(minTime, maxTime).map((hour, i) => (
               <div key={i} className="relative h-16">
-                <div className="absolute -top-2 text-xs text-gray-600">{hour.format('HH:mm')}</div>
+                <div className="absolute -top-2 text-xs text-gray-600">{hour?.format('HH:mm')}</div>
               </div>
             ))}
           </div>
