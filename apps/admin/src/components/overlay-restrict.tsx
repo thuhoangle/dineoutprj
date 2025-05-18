@@ -6,6 +6,7 @@ import { Button } from 'dineout-ui';
 import { TextField } from 'dineout-ui';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { IoIosLogIn } from 'react-icons/io';
 
 export const OverlayRestrict = ({
   className,
@@ -13,12 +14,14 @@ export const OverlayRestrict = ({
   description,
   buttonText,
   onButtonClick,
+  Icon,
 }: {
   className?: string;
   title?: string;
   description?: string;
   buttonText?: string;
   onButtonClick?: () => void;
+  Icon?: React.ReactNode;
 }) => {
   const router = useRouter();
   const authInfo = useUserStore((state) => state.authInfo);
@@ -40,16 +43,23 @@ export const OverlayRestrict = ({
         className
       )}
     >
-      <div className="flex w-full max-w-md flex-col rounded-xl border border-gray-300 bg-gray-100 px-6 pb-6">
-        <div className="flex flex-col items-center justify-center gap-1 pb-8 pt-6 text-center">
+      <div className="flex border border-gray-200 w-full max-w-md flex-col rounded-xl border border-gray-400 bg-gray-200 px-6 py-6">
+        {Icon || <IoIosLogIn className="p-2 h-12 w-12 border-2 self-center shadow border-gray-300 rounded-xl" />}
+        <div className="flex flex-col items-center justify-center gap-1 pb-8 pt-4 text-center">
+          <TextField preset="h6" weight="m">
+            {title || (
+              <>
+                Log in to
+                <span className="text-red-700 font-semibold"> DineOut</span>
+              </>
+            )}
+          </TextField>
           <TextField
-            preset="h6"
-            text={title || 'You have to log in to access'}
+            preset="p3"
+            className="text-gray-700"
+            text={description || 'You have to log in to access'}
             weight="m"
           />
-          {description && (
-            <TextField preset="p3" text={description} color="g400" />
-          )}
         </div>
         <Button
           className="w-full self-end !bg-transparent border-2 border-red-500 font-semibold !text-red-500"

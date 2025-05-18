@@ -166,9 +166,9 @@ export const HeaderMenu: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
             <Image
-              height={32}
-              width={40}
-              src="/logo.png"
+              height={48}
+              width={48}
+              src="/dineout.jpg"
               priority
               style={{ width: 'auto', height: 'auto' }}
               alt="logo"
@@ -176,14 +176,24 @@ export const HeaderMenu: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
           </NextLink>
         </NavbarBrand>
         {!isMobileMode && (
-          <ul className="hidden ipadMini:flex gap-4  justify-start ml-2">
+          <ul className="hidden ipadMini:flex gap-4 justify-start items-center">
+            <NextLink className="w-12 mr-1 rounded-full border border-gray-800" href="/">
+              <Image
+                height={48}
+                width={48}
+                src="/dineout.jpg"
+                priority
+                style={{ width: 'auto', height: 'auto', borderRadius: '100%' }}
+                alt="logo"
+              />
+            </NextLink>
             {siteConfig.navItems.map((item) => (
               <NavbarItem key={item.href}>
                 <NextLink
                   prefetch={true}
                   className={clsx(
                     linkStyles({ color: 'foreground' }),
-                    'data-[active=true]:text-primary !font-semibold min-w-max text-sm'
+                    'data-[active=true]:text-primary !font-medium min-w-max text-md'
                   )}
                   color="foreground"
                   href={item.href}

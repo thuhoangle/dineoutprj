@@ -15,7 +15,7 @@ import {
 import { BsPeople } from 'react-icons/bs';
 import { useEffect, useState } from 'react';
 import { TbReservedLine } from 'react-icons/tb';
-import { useReservationStore } from '@/stores';
+import { useReservationStore, useUserStore } from '@/stores';
 import { HiOutlineSwitchHorizontal } from 'react-icons/hi';
 import { upperFirst } from 'lodash';
 import dayjs from 'dayjs';
@@ -24,6 +24,7 @@ import { ReservationInfo } from '@/services';
 import { DrawerReservation } from '@/modules/reservations';
 
 export const ReservationSection = () => {
+  const authInfo = useUserStore((state) => state.authInfo);
   const todayReservations = useReservationStore((state) => state.todayReservations);
 
   const [fetching, setFetching] = useState(false);
@@ -31,6 +32,7 @@ export const ReservationSection = () => {
   const [selectedItem, setSelectedItem] = useState<ReservationInfo | null>(null);
 
   useEffect(() => {
+    if (!authInfo) return;
     _getData();
   }, []);
 

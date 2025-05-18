@@ -12,7 +12,8 @@ export default function LoginPage() {
 
   return (
     <div className="w-full flex items-center flex-col gap-8 justify-center">
-      <TextField preset="h1" text="Welcome back to Dineout!" weight="s" />
+      {/* <TextField preset="h1" text="Welcome back to Dineout!" weight="s" /> */}
+      <div className="text-2xl font-semibold">Welcome back to Dineout!</div>
       <div className="flex flex-col gap-5 w-full max-w-xl">
         <Input isClearable variant="bordered" label="Email" onValueChange={setEmail} errorMessage={errorEmail} />
 

@@ -26,7 +26,7 @@ export const HeaderMenu: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
 
   return (
     <Navbar isBordered maxWidth="full" position="sticky">
-      <NavbarContent className="flex items-center justify-betweenr" justify="start">
+      <NavbarContent className="flex items-center justify-between" justify="start">
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
             <Image
@@ -37,6 +37,7 @@ export const HeaderMenu: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
               style={{ width: 'auto', height: 'auto' }}
               alt="logo"
             />
+            <div className="text-2xl font-bold text-red-600">DineOut</div>
           </NextLink>
         </NavbarBrand>
       </NavbarContent>

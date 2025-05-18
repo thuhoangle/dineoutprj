@@ -11,6 +11,7 @@ import { DayView } from './day-view';
 import dayjs from 'dayjs';
 
 export const CalendarReservations = () => {
+  const authInfo = useUserStore((state) => state.authInfo);
   const { selectedView } = useViewStore();
   const allReservations = useReservationStore((state) => state.allReservations);
 
@@ -24,6 +25,7 @@ export const CalendarReservations = () => {
   };
 
   useEffect(() => {
+    if (!authInfo) return;
     _getData();
   }, []);
 

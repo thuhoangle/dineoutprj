@@ -49,6 +49,7 @@ export const useLogin = (goToHomePage?: boolean) => {
       await useUserStore.getState().getAuthInfo();
       await useUserStore.getState().getPortfolioDetail();
       await useTablesStore.getState().getTables();
+      await useReservationStore.getState().getAllReservations();
       await useAvailableSeatsStore.getState().getAvailableSlots();
       const userId = useUserStore.getState().authInfo?.id;
 
