@@ -54,12 +54,7 @@ export const BentoGridItem = ({
       />
       <div className="transition flex flex-col justify-start flex-1 mt-2 duration-200">
         <div className="flex justify-between">
-          <TextField
-            preset="p1"
-            weight="b"
-            className="underline"
-            text={title}
-          />
+          <TextField preset="p1" weight="b" className="underline" text={title} />
           <Button
             preset="linkRed"
             RightHeroIcon={saved ? FaHeart : FaRegHeart}
@@ -73,9 +68,7 @@ export const BentoGridItem = ({
           <div className="flex items-center text-red-500 gap-0.5">
             <FaStar className="text-inherit w-5" />
             {rate}
-            {!!review_counts && (
-              <span className="ml-2 text-gray-500">{`(${review_counts})`}</span>
-            )}
+            {!!review_counts && <span className="ml-2 text-gray-500">{`(${review_counts})`}</span>}
           </div>
           <div className="flex items-center text-gray-500 gap-0.5">
             <GrLocation className="text-inherit w-5" />
