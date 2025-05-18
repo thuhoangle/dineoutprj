@@ -2,10 +2,10 @@
 
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
-import { EventRenderer, useDateStore, useEventStore } from '../hooks';
 import clsx from 'clsx';
 import { getHours, isCurrentDay } from '@/utils';
 import { ScrollShadow } from '@heroui/react';
+import { EventRenderer, useDateStore, useEventStore } from '../../hooks';
 
 export const DayView = () => {
   const [currentTime, setCurrentTime] = useState(dayjs());
@@ -48,9 +48,9 @@ export const DayView = () => {
         <div className="grid grid-cols-[auto_1fr] p-4">
           {/* Time Column */}
           <div className="w-16 border-r border-gray-300">
-            {getHours(minTime, maxTime).map((hour, i) => (
-              <div key={i} className="relative h-16">
-                <div className="absolute -top-2 text-xs text-gray-600">{hour.format('HH:mm')}</div>
+            {getHours(minTime, maxTime).map((hour, index) => (
+              <div key={index} className="relative h-16">
+                <div className="absolute -top-2 text-xs text-gray-600">{hour?.format('HH:mm')}</div>
               </div>
             ))}
           </div>
@@ -72,6 +72,7 @@ export const DayView = () => {
               </div>
             ))}
 
+            {/* Current time indicator */}
             {isCurrentDay(userSelectedDate) && (
               <div
                 className={clsx('absolute h-0.5 w-full bg-red-500')}

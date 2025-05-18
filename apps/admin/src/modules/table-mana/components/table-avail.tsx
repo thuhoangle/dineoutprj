@@ -16,14 +16,10 @@ import { TABLE_CONFIG } from './config';
 export default function TableAvailability() {
   const authInfo = useUserStore((state) => state.authInfo);
   const portfolioDetail = useUserStore((state) => state.portfolioDetail);
-  const tables: RestaurantTableProps[] = useTablesStore(
-    (state) => state.tables
-  );
+  const tables: RestaurantTableProps[] = useTablesStore((state) => state.tables);
 
-  const [availTables, setAvailTables] =
-    useState<RestaurantTableProps[]>(tables);
-  const [selectedTable, setSelectedTable] =
-    useState<RestaurantTableProps | null>(null);
+  const [availTables, setAvailTables] = useState<RestaurantTableProps[]>(tables);
+  const [selectedTable, setSelectedTable] = useState<RestaurantTableProps | null>(null);
 
   const [fetchingUpdate, setFetchingUpdate] = useState(false);
 
@@ -60,11 +56,7 @@ export default function TableAvailability() {
     const updatedTable = { ...selectedTable, [field]: value };
     setSelectedTable(updatedTable);
 
-    setAvailTables((prev) =>
-      prev.map((t) =>
-        t.table_number === updatedTable.table_number ? updatedTable : t
-      )
-    );
+    setAvailTables((prev) => prev.map((t) => (t.table_number === updatedTable.table_number ? updatedTable : t)));
   };
 
   const _handleCreateTable = () => {
@@ -73,9 +65,7 @@ export default function TableAvailability() {
   };
 
   const _handleDeleteTable = () => {
-    setAvailTables(
-      availTables.filter((t) => t.table_number !== selectedTable?.table_number)
-    );
+    setAvailTables(availTables.filter((t) => t.table_number !== selectedTable?.table_number));
     setSelectedTable(null);
   };
 
@@ -117,17 +107,13 @@ export default function TableAvailability() {
   };
 
   return (
-    <div className="flex desktop:flex-row flex-col-reverse desktop:flex-wrap border-1.5 py-5 px-10 rounded-md shadow-lg border-gray-100 gap-4 justify-between w-full h-screen">
+    <div className="flex desktop:flex-row flex-col-reverse desktop:flex-wrap gap-4 justify-between w-full h-full">
       {/* Table Plan */}
       <div className="flex-1 w-full flex flex-col gap-10">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-4 justify-between">
-            <h2 className="text-xl font-semibold">Table Plan</h2>
-            <Button
-              variant="bordered"
-              startContent={<FaPlus />}
-              onPress={_handleCreateTable}
-            >
+            <div className="text-2xl font-semibold">Table Plan</div>
+            <Button variant="bordered" startContent={<FaPlus />} onPress={_handleCreateTable}>
               Add Table
             </Button>
           </div>
@@ -135,9 +121,7 @@ export default function TableAvailability() {
             {TABLE_CONFIG.filter((t) => t.seat_type).map((t) => (
               <div key={t.color} className="flex items-center gap-1">
                 <div className={`rounded-full h-3 w-3 ${t.color}`} />
-                <div className="text-sm font-medium">
-                  {upperFirst(t.seat_type)}
-                </div>
+                <div className="text-sm font-medium">{upperFirst(t.seat_type)}</div>
               </div>
             ))}
             <div className="flex items-center gap-1">
@@ -147,11 +131,9 @@ export default function TableAvailability() {
           </div>
         </div>
         {!availTables.length ? (
-          <div className="italic flex justify-center w-full p-5 font-medium text-base">
-            Empty Table
-          </div>
+          <div className="italic flex justify-center w-full p-5 font-medium text-base">Empty Table</div>
         ) : (
-          <div className="grid grid-cols-4 gap-x-8 gap-y-16">
+          <div className="grid grid-cols-4 mx-8 gap-x-8 gap-y-16">
             {availTables.map((table, index) => (
               <TableCard
                 isSelected={selectedTable?.table_number === table.table_number}
@@ -168,9 +150,7 @@ export default function TableAvailability() {
       <TableDetails
         disableSave={
           JSON.stringify(selectedTable) ===
-          JSON.stringify(
-            tables.find((t) => t.table_number === selectedTable?.table_number)
-          )
+          JSON.stringify(tables.find((t) => t.table_number === selectedTable?.table_number))
         }
         fetchingSave={fetchingUpdate}
         handleSave={updateTable}

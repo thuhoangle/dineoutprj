@@ -2,14 +2,14 @@
 
 import { useCallback, useMemo, useState } from 'react';
 import { Tabs, Tab, Chip } from '@heroui/react';
-import { PassReservation, TodayReservation, UpcomingReservation } from './components';
+import { PassReservation, TodayReservation, UpcomingReservation } from '.';
 import { useReservationStore } from '@/stores';
 import { ReservationInfo } from '@/services';
 
 export const ReservationsPanel = () => {
-  const { todayReservations } = useReservationStore((state) => state);
-  const { upcomingReservations } = useReservationStore((state) => state);
-  const { passReservations } = useReservationStore((state) => state);
+  const todayReservations = useReservationStore((state) => state.todayReservations);
+  const upcomingReservations = useReservationStore((state) => state.upcomingReservations);
+  const passReservations = useReservationStore((state) => state.passReservations);
 
   const [renderId, setRenderId] = useState(0);
   const [currentTab, setCurrentTab] = useState('today');
@@ -17,15 +17,11 @@ export const ReservationsPanel = () => {
 
   const handleRefresh = () => {
     setRenderId((prev) => prev + 1);
-    _getData();
+    useReservationStore.getState().getAllReservations();
   };
 
   const _getData = async () => {
-    await Promise.all([
-      useReservationStore.getState().getTodayReservations(),
-      useReservationStore.getState().getUpcomingReservations(),
-      useReservationStore.getState().getPassReservations(),
-    ]);
+    await useReservationStore.getState().getAllReservations();
   };
 
   const handleSwitchTab = async (currentTab: string) => {
@@ -75,9 +71,8 @@ export const ReservationsPanel = () => {
 
   return (
     <div className="flex flex-col gap-5 w-full">
-      <div className="font-semibold text-2xl">Reservations</div>
-
-      <div className="flex items-center justify-between gap-5">
+      <div className="flex items-center justify-between">
+        <div className="font-semibold text-2xl">Reservations</div>
         <Tabs
           aria-label="Time period"
           color="primary"
@@ -92,7 +87,7 @@ export const ReservationsPanel = () => {
                 <div className="flex items-center gap-1">
                   <span>{item.label}</span>
                   {item.tag && (
-                    <Chip size="sm" variant="bordered" color="primary">
+                    <Chip size="sm" radius="sm" variant="solid">
                       {item.tag}
                     </Chip>
                   )}
@@ -101,6 +96,9 @@ export const ReservationsPanel = () => {
             />
           ))}
         </Tabs>
+      </div>
+
+      <div className="flex items-center justify-between gap-5">
         <Tabs
           aria-label="status"
           variant="bordered"
@@ -139,14 +137,13 @@ const STATUS_OPTS = [
     label: 'All',
     value: 'all',
   },
-
-  {
-    label: 'Pending',
-    value: 'pending',
-  },
   {
     label: 'Confirmed',
     value: 'confirmed',
+  },
+  {
+    label: 'Pending',
+    value: 'pending',
   },
   {
     label: 'Completed',

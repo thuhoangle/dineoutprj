@@ -32,16 +32,11 @@ interface SideMenuProps {
   navItems: SideMenuItemType[];
   extraData?: any;
 }
-export const SideMenu: FC<SideMenuProps> = ({
-  className,
-  currentTab,
-  navItems,
-  extraData,
-}) => {
+export const SideMenu: FC<SideMenuProps> = ({ className, currentTab, navItems, extraData }) => {
   return (
     <div
       className={clsx(
-        'w-64 flex-col rounded-lg bg-white px-3 py-6 flex',
+        'w-64 flex-col rounded-lg bg-white px-3 py-4 flex shadow-md',
         // 'hidden w-72 flex-col min-h-screen rounded-lg bg-white px-3 py-6 ipadMini:flex',
         className
       )}
@@ -49,19 +44,9 @@ export const SideMenu: FC<SideMenuProps> = ({
       <div className="flex flex-col gap-2">
         {navItems.map((item) =>
           item.subItems ? (
-            <NavItemCategory
-              currentTab={currentTab}
-              data={item}
-              extraData={extraData}
-              key={item.value}
-            />
+            <NavItemCategory currentTab={currentTab} data={item} extraData={extraData} key={item.value} />
           ) : item.value ? (
-            <NavItem
-              data={item}
-              extraData={extraData}
-              isSelected={currentTab === item.value}
-              key={item.value}
-            />
+            <NavItem data={item} extraData={extraData} isSelected={currentTab === item.value} key={item.value} />
           ) : null
         )}
       </div>
@@ -71,15 +56,7 @@ export const SideMenu: FC<SideMenuProps> = ({
 };
 
 const NavItem = memo(
-  ({
-    data,
-    isSelected,
-    extraData,
-  }: {
-    data: SideMenuItemType;
-    isSelected?: boolean;
-    extraData?: any;
-  }) => {
+  ({ data, isSelected, extraData }: { data: SideMenuItemType; isSelected?: boolean; extraData?: any }) => {
     const { Icon, label, value, getTag, getConfig } = data || {};
     const config = getConfig ? getConfig(extraData) : {};
 
@@ -90,19 +67,12 @@ const NavItem = memo(
         prefetch={true}
         className={clsx(
           'relative my-0.5 flex items-center gap-2 rounded-md px-4 py-2 transition duration-200 ease-in hover:bg-gray-200 hover:text-text-400 disabled:opacity-50',
-          isSelected ? 'bg-gray-200 text-gray-900' : 'text-gray-500'
+          isSelected ? 'bg-gray-100 text-gray-900' : 'text-gray-500'
         )}
       >
         {Icon || null}
-        <TextField
-          className="flex-1 text-left"
-          preset="p3"
-          text={upperFirst(label)}
-          weight="s"
-        />
-        {getTag && anyToInt(getTag?.(extraData)) ? (
-          <Badge color="gray" size="xs" text={getTag(extraData)} />
-        ) : null}
+        <div className="flex-1 text-left font-semibold text-base">{upperFirst(label)}</div>
+        {getTag && anyToInt(getTag?.(extraData)) ? <Badge color="gray" size="xs" text={getTag(extraData)} /> : null}
       </Link>
     );
   }
@@ -110,15 +80,7 @@ const NavItem = memo(
 NavItem.displayName = 'NavItem';
 
 const NavItemCategory = memo(
-  ({
-    data,
-    currentTab,
-    extraData,
-  }: {
-    data: SideMenuItemType;
-    currentTab?: string;
-    extraData?: any;
-  }) => {
+  ({ data, currentTab, extraData }: { data: SideMenuItemType; currentTab?: string; extraData?: any }) => {
     const { Icon, label, subItems, value, getTag, getConfig } = data || {};
     const config = getConfig ? getConfig(extraData) : {};
 
@@ -128,28 +90,13 @@ const NavItemCategory = memo(
     return (
       <div className="flex flex-col pb-1">
         <div className="relative flex items-center gap-3 rounded-md px-4 py-2.5 text-gray-400 transition duration-200 ease-in hover:bg-gray-200 hover:text-gray-400 disabled:opacity-50">
-          <Link
-            href={`${value || '/'}`}
-            prefetch={true}
-            className="flex flex-1 items-center gap-2"
-          >
+          <Link href={`${value || '/'}`} prefetch={true} className="flex flex-1 items-center gap-2">
             {Icon || null}
-            <TextField
-              className="flex-1 text-left"
-              preset="p3"
-              text={label}
-              weight="s"
-            />
-            {getTag && anyToInt(getTag?.(extraData)) ? (
-              <Tag size="lg" text={getTag(extraData)} />
-            ) : null}
+            <TextField className="flex-1 text-left" preset="p3" text={label} weight="s" />
+            {getTag && anyToInt(getTag?.(extraData)) ? <Tag size="lg" text={getTag(extraData)} /> : null}
           </Link>
           <button onClick={() => setShowSubItems((prev) => !prev)}>
-            {showSubItems ? (
-              <ChevronUpIcon className="w-5" />
-            ) : (
-              <ChevronDownIcon className="w-5" />
-            )}
+            {showSubItems ? <ChevronUpIcon className="w-5" /> : <ChevronDownIcon className="w-5" />}
           </button>
         </div>
 
@@ -157,12 +104,7 @@ const NavItemCategory = memo(
           ? subItems
               ?.filter((item) => !item.isHidden)
               .map((item) => (
-                <NavSubItem
-                  data={item}
-                  extraData={extraData}
-                  isSelected={currentTab === item.value}
-                  key={item.value}
-                />
+                <NavSubItem data={item} extraData={extraData} isSelected={currentTab === item.value} key={item.value} />
               ))
           : null}
       </div>
@@ -172,15 +114,7 @@ const NavItemCategory = memo(
 NavItemCategory.displayName = 'NavItemCategory';
 
 const NavSubItem = memo(
-  ({
-    data,
-    isSelected,
-    extraData,
-  }: {
-    data: SideMenuSubItemType;
-    isSelected: boolean;
-    extraData?: any;
-  }) => {
+  ({ data, isSelected, extraData }: { data: SideMenuSubItemType; isSelected: boolean; extraData?: any }) => {
     const { label, value, getTag, getConfig } = data || {};
     const config = getConfig ? getConfig(extraData) : {};
 
@@ -195,15 +129,8 @@ const NavSubItem = memo(
           isSelected ? 'bg-gray-200 text-gray-400' : 'text-gray-400'
         )}
       >
-        <TextField
-          className="flex-1 text-left"
-          preset="p3"
-          text={label}
-          weight="s"
-        />
-        {getTag && anyToInt(getTag(extraData)) ? (
-          <Tag size="lg" text={getTag(extraData)} />
-        ) : null}
+        <TextField className="flex-1 text-left" preset="p3" text={label} weight="s" />
+        {getTag && anyToInt(getTag(extraData)) ? <Tag size="lg" text={getTag(extraData)} /> : null}
       </Link>
     );
   }

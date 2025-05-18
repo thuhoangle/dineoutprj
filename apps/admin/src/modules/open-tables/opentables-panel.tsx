@@ -45,10 +45,10 @@ export const OpenTablesPanel = () => {
   }, [availableSlots, setEvents]);
 
   return (
-    <div className="flex desktop:flex-row flex-col-reverse desktop:flex-wrap border-1.5 py-5 px-10 rounded-md shadow-lg border-gray-100 gap-4 justify-between w-full h-full">
+    <>
       <div className="flex-1 w-full flex flex-col gap-10">
-        <div className="flex flex-col gap-1">
-          <h2 className="text-xl font-semibold">Open Tables</h2>
+        <div className="flex flex-col gap-3">
+          <div className="text-2xl font-semibold">Open Tables</div>
           <div className="flex items-center w-full gap-8 justify-between">
             <DaySelect />
             <CalendarRange />
@@ -68,7 +68,7 @@ export const OpenTablesPanel = () => {
       {isEventSummaryOpen && selectedEvent && (
         <CheckTableSlotDrawer isOpen={isEventSummaryOpen} onClose={closeEventSummary} data={selectedEvent} />
       )}
-    </div>
+    </>
   );
 };
 function dayjs(date: string): any {

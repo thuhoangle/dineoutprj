@@ -13,7 +13,6 @@ export const useLogin = (goToHomePage?: boolean) => {
   const [email, setEmail] = useState('');
   const [errorEmail, setErrorEmail] = useState('');
   const [fetchingLogin, setFetchingLogin] = useState(false);
-  const [fetchingSignup, setFetchingSignup] = useState(false);
 
   const [password, setPassword] = useState('');
   const [errorPassword, setErrorPassword] = useState('');
@@ -103,7 +102,6 @@ export const useLogin = (goToHomePage?: boolean) => {
     setPassword,
     errorPassword,
     fetchingLogin,
-    fetchingSignup,
     onLogin,
     onLogout,
   };

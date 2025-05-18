@@ -35,8 +35,8 @@ export const TableDetails: FC<TableDetailsProps> = ({
   });
 
   return (
-    <div className="desktop:w-1/3 w-full bg-white border rounded-lg shadow p-4 min-w-[300px]">
-      <h2 className="text-lg font-semibold mb-4">Table Details</h2>
+    <div className="desktop:w-1/3 w-full flex flex-col gap-3 p-4 min-w-[300px] rounded-lg border border-gray-100">
+      <div className="text-lg font-semibold">Table Details</div>
 
       {selectedTable ? (
         <>
@@ -93,9 +93,7 @@ export const TableDetails: FC<TableDetailsProps> = ({
             <Select
               variant="bordered"
               label="Seat Type"
-              selectedKeys={
-                selectedTable.seat_type ? [selectedTable.seat_type] : []
-              }
+              selectedKeys={selectedTable.seat_type ? [selectedTable.seat_type] : []}
               onSelectionChange={(e) => handleUpdate('seat_type', e.currentKey)}
             >
               <SelectItem key="indoor">Indoor</SelectItem>
@@ -115,9 +113,7 @@ export const TableDetails: FC<TableDetailsProps> = ({
                 >
                   <span
                     className={`${
-                      selectedTable.is_available
-                        ? 'translate-x-6'
-                        : 'translate-x-1'
+                      selectedTable.is_available ? 'translate-x-6' : 'translate-x-1'
                     } inline-block h-4 w-4 transform bg-white rounded-full transition`}
                   />
                 </Switch>
@@ -155,9 +151,7 @@ export const TableDetails: FC<TableDetailsProps> = ({
           </div>
         </>
       ) : (
-        <div className="text-sm text-gray-500">
-          Select a table to edit its details.
-        </div>
+        <div className="text-sm text-gray-500">Select a table to edit its details.</div>
       )}
     </div>
   );

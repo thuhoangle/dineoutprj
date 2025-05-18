@@ -5,10 +5,10 @@ import { useEffect, useState } from 'react';
 import { ReservationCard } from './reservation-card';
 import clsx from 'clsx';
 import { SimpleLoading, TextField } from 'dineout-ui';
-import { groupAndMergeReservations } from '../constant';
+import { groupAndMergeReservations } from '../hooks';
 import { ReservationInfo } from '@/services';
 
-export const TodayReservation = ({
+export const UpcomingReservation = ({
   dataList,
   className,
   renderId,
@@ -25,19 +25,18 @@ export const TodayReservation = ({
 
   const _getData = async () => {
     setFetching(true);
-    await useReservationStore.getState().getTodayReservations();
+    await useReservationStore.getState().getUpcomingReservations();
     setFetching(false);
   };
 
   return (
     <div className={clsx('flex flex-col gap-2', className)}>
-      <div className="font-semibold text-lg">Today reservations</div>
-      <div className="flex items-center overflow-y-auto gap-4">
-        {fetching ? (
-          <SimpleLoading />
-        ) : dataList?.length ? (
+      <div className="font-semibold text-lg">Upcoming reservations</div>
+      <div className="flex items-center flex-wrap overflow-y-auto gap-4">
+        {dataList?.length ? (
           groupAndMergeReservations(dataList).map((group, i) => (
             <ReservationCard
+              fetching={fetching}
               key={i}
               data={group.reservations[0]}
               timeRange={{ start: group.start, end: group.end }}
@@ -45,7 +44,7 @@ export const TodayReservation = ({
             />
           ))
         ) : (
-          <TextField preset="p4" text="You don’t have any reservations for today." />
+          <TextField preset="p4" text="You don’t have any upcoming reservations." />
         )}
       </div>
     </div>

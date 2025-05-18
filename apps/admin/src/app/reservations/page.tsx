@@ -1,4 +1,4 @@
-import { ReservationsPanel } from '@/modules/reserations';
+import { ReservationsPanel } from '@/modules/reservations';
 
 export default function ReservationPage() {
   return <ReservationsPanel />;

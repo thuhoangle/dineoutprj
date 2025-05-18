@@ -4,7 +4,6 @@ import { useUserStore } from '@/stores';
 import { EditRestaurantProps, useUpdateRestaurantInfo, useUploadImage } from '@/hooks';
 import clsx from 'clsx';
 import { Input, Select, SelectItem, Textarea, Image, Radio, RadioGroup, Accordion, AccordionItem } from '@heroui/react';
-import { useWindowContext } from '@/contexts';
 import { Button, SimpleLoading } from 'dineout-ui';
 import { useEffect, useState } from 'react';
 import { MdOutlineCancel } from 'react-icons/md';
@@ -12,7 +11,6 @@ import { FiUpload } from 'react-icons/fi';
 
 export const ProfilePanel = () => {
   const authInfo = useUserStore((state) => state.authInfo);
-  const { isMobileMode } = useWindowContext();
 
   const { updateUser, fetching, query, setQuery } = useUpdateRestaurantInfo();
   const { uploading, uploadImages } = useUploadImage({
@@ -45,36 +43,37 @@ export const ProfilePanel = () => {
 
   const _handleSave = async () => {
     await setQuery({ ...params });
-
     updateUser();
   };
 
   return (
     <div className="flex flex-col gap-5">
-      <div
-        className={clsx(
-          'relative border-1.5 border-gray-100 flex flex-col mt-2 p-5 rounded-md shadow-lg gap-5',
-          isMobileMode ? 'px-5' : 'px-10'
-        )}
-      >
-        <div className="text-3xl font-bold">Restaurant Information</div>
-
+      <div className={clsx('relative flex flex-col gap-5')}>
+        <div className="text-xl font-semibold">Restaurant Profile</div>
         {!!params.images?.length ? (
-          <div className="flex flex-wrap items-center gap-3">
-            {params.images?.map((image) => (
-              <div key={image} className="relative flex flex-col items-center gap-3">
-                <div className="relative z-0">
-                  <Image className="object-cover" height={200} width={200} src={image} alt="restaurant image" />
-                  <MdOutlineCancel
-                    className="absolute cursor-pointer z-10 top-2 right-2 text-red-500 rounded-full w-5 h-5 flex items-center justify-center"
-                    onClick={() => handleDeleteImage(image)}
-                  />
+          <div className="relative ">
+            <div className="flex items-center max-w-[680px] overflow-x-auto gap-3">
+              {params.images?.map((image) => (
+                <div key={image} className="relative flex items-center gap-3">
+                  <div className="relative z-0">
+                    <Image
+                      className="object-cover min-w-[200px] min-h-[200px]"
+                      height={200}
+                      width={200}
+                      src={image}
+                      alt="restaurant image"
+                    />
+                    <MdOutlineCancel
+                      className="absolute cursor-pointer z-10 top-2 right-2 text-red-500 rounded-full w-5 h-5 flex items-center justify-center"
+                      onClick={() => handleDeleteImage(image)}
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
-            <div className="self-center">
+              ))}
+            </div>
+            <div className="absolute top-0 right-0 self-center">
               <label
-                className="flex gap-1 font-semibold text-[16px] cursor-pointer flex-col items-center justify-center h-[200px] w-[200px] p-3 rounded-[14px] bg-gray-100 border-2 border-gray-300"
+                className="flex gap-1 text-center font-semibold text-[14px] cursor-pointer flex-col items-center justify-center h-[200px] w-[100px] p-3 rounded-[14px] bg-gray-50 border border-dashed border-gray-300"
                 htmlFor="images-upload"
               >
                 {uploading ? 'Uploading' : 'Upload Images'}
@@ -97,7 +96,7 @@ export const ProfilePanel = () => {
         ) : (
           <div className="self-center">
             <label
-              className="text-[14px] flex gap-2 font-semibold items-center p-3 cursor-pointer rounded-md bg-transparent border-2 border-foreground-500"
+              className="text-[14px] flex gap-2 font-semibold items-center p-3 cursor-pointer rounded-md bg-transparent border border-dashed border-foreground-500"
               htmlFor="images-upload"
             >
               {uploading ? 'Uploading' : 'Upload Images'}

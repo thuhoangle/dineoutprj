@@ -89,38 +89,39 @@ export const useReservationStore = create<ReservationStore>()(
           restaurant_id: useUserStore.getState().portfolioDetail?.id,
         });
         set({ allReservations: data });
+
+        // Update all filtered states
+        const pass = data.filter((res: ReservationInfo) =>
+          dayjs(res.reservation_time).isBefore(dayjs().startOf('day'))
+        );
+        const today = data.filter((res: ReservationInfo) => dayjs(res.reservation_time).isSame(dayjs(), 'day'));
+        const upcoming = data.filter((res: ReservationInfo) =>
+          dayjs(res.reservation_time).isAfter(dayjs().add(1, 'day').startOf('day'))
+        );
+
+        set({
+          passReservations: pass,
+          todayReservations: today,
+          upcomingReservations: upcoming,
+        });
       },
 
       passReservations: [],
       setPassReservations: (reservations: ReservationInfo[]) => set({ passReservations: reservations }),
       getPassReservations: async () => {
-        const all = await get().fetchReservationsWithCustomers({
-          restaurant_id: useUserStore.getState().portfolioDetail?.id,
-        });
-        const pass = all.filter((res: ReservationInfo) => dayjs(res.reservation_time).isBefore(dayjs().startOf('day')));
-        set({ passReservations: pass });
+        await get().getAllReservations();
       },
 
       todayReservations: [],
       setTodayReservations: (reservations: ReservationInfo[]) => set({ todayReservations: reservations }),
       getTodayReservations: async () => {
-        const all = await get().fetchReservationsWithCustomers({
-          restaurant_id: useUserStore.getState().portfolioDetail?.id,
-        });
-        const today = all.filter((res: ReservationInfo) => dayjs(res.reservation_time).isSame(dayjs(), 'day'));
-        set({ todayReservations: today });
+        await get().getAllReservations();
       },
 
       upcomingReservations: [],
       setUpcomingReservations: (reservations: ReservationInfo[]) => set({ upcomingReservations: reservations }),
       getUpcomingReservations: async () => {
-        const all = await get().fetchReservationsWithCustomers({
-          restaurant_id: useUserStore.getState().portfolioDetail?.id,
-        });
-        const upcoming = all.filter((res: ReservationInfo) =>
-          dayjs(res.reservation_time).isAfter(dayjs().add(1, 'day').startOf('day'))
-        );
-        set({ upcomingReservations: upcoming });
+        await get().getAllReservations();
       },
 
       subscribeToReservationUpdates: () => {
@@ -132,17 +133,14 @@ export const useReservationStore = create<ReservationStore>()(
           .on(
             'postgres_changes',
             {
-              event: '*', // Listen to all events (INSERT, UPDATE, DELETE)
+              event: '*',
               schema: 'public',
               table: 'reservations',
               filter: `restaurant_id=eq.${restaurantId}`,
             },
             async (payload) => {
-              // Refresh all reservation lists
-              get().getTodayReservations();
-              get().getUpcomingReservations();
+              await get().getAllReservations();
 
-              // Show notification for updates
               if (payload.eventType === 'UPDATE') {
                 toastHelper.success('Reservation updated');
               }
@@ -150,7 +148,6 @@ export const useReservationStore = create<ReservationStore>()(
           )
           .subscribe();
 
-        // Store subscription for cleanup
         (window as any).__reservationSubscription = subscription;
       },
 

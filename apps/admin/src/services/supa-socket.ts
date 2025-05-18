@@ -60,21 +60,8 @@ class SupaSocket {
           table: 'reservations',
           filter: `restaurant_id=eq.${restaurantId}`,
         },
-        (payload) => {
-          const reservation = payload.new as ReservationInfo;
-          const resTime = new Date(reservation.reservation_time);
-          const now = new Date();
-
-          const resDate = resTime.toISOString().split('T')[0];
-          const todayDate = now.toISOString().split('T')[0];
-
-          if (resTime < now && resDate !== todayDate) {
-            useReservationStore.getState().setPassReservations([reservation]);
-          } else if (resDate === todayDate) {
-            useReservationStore.getState().setTodayReservations([reservation]);
-          } else {
-            useReservationStore.getState().setUpcomingReservations([reservation]);
-          }
+        async (payload) => {
+          await useReservationStore.getState().getAllReservations();
         }
       )
       .subscribe();

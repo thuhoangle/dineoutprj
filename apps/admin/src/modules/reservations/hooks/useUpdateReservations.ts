@@ -1,7 +1,9 @@
 'use client';
+
 import { toastHelper } from '@/components';
 import { createClient } from '@/utils/supabase/client';
 import { useState } from 'react';
+import { useReservationStore } from '@/stores';
 
 export const useUpdateReservations = () => {
   const supabase = createClient();
@@ -10,14 +12,17 @@ export const useUpdateReservations = () => {
 
   const updateReservation = async (reservationId: string, updates: Partial<{ status: string }>) => {
     setIsLoading(true);
+    const id = toastHelper.loading('Updating reservation...');
     try {
-      const id = toastHelper.loading('Updating reservation...');
       const { error } = await supabase.from('reservations').update(updates).eq('id', reservationId);
 
       if (error) {
         toastHelper.error(`Failed to update reservation: ${error.message}`, { id });
         throw error;
       }
+
+      // No need since i have socket
+      // await useReservationStore.getState().getAllReservations();
 
       toastHelper.success('Reservation updated successfully!', { id });
     } catch (error) {
