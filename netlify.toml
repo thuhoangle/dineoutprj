@@ -1,23 +1,23 @@
-# Web app deployment #
 [build]
-  base = "."
+  base = ""  # root of the repo
+  publish = "apps/web/.next"
+  command = "npm run build:web"
+
+[functions]
+  directory = "apps/web/netlify/functions"
+
+# Web site
+[[context.web]]
   command = "npm run build:web"
   publish = "apps/web/.next"
-  environment = { NODE_VERSION = "20" }
+  base = "apps/web"
+  functions = "apps/web/netlify/functions"
+  ignore = "git diff --quiet HEAD^ HEAD -- apps/web packages"
 
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
-
-[context.web.environment]
-  NEXT_PRIVATE_TARGET = "web"
-
-# Admin app deployment #
-[context.admin]
-  [context.admin.build]
-    base = "."
-    command = "npm run build:admin"
-    publish = "apps/admin/.next"
-    environment = { NODE_VERSION = "20" }
-
-  [[context.admin.plugins]]
-    package = "@netlify/plugin-nextjs"
+# Admin site
+[[context.admin]]
+  command = "npm run build:admin"
+  publish = "apps/admin/.next"
+  base = "apps/admin"
+  functions = "apps/admin/netlify/functions"
+  ignore = "git diff --quiet HEAD^ HEAD -- apps/admin packages"
