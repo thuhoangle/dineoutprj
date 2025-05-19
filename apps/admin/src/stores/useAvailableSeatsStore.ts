@@ -1,7 +1,9 @@
-import { toastHelper } from '@/components';
-import { AvailableSeats, supaApiInstance } from '@/services';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+
+import { toastHelper } from '@/components';
+import { AvailableSeats, supaApiInstance } from '@/services';
+
 import { useUserStore } from './useUserStore';
 
 interface AvailableSeatsState {
@@ -20,14 +22,11 @@ export const useAvailableSeatsStore = create<AvailableSeatsState>()(
       setRehydrated: () => set({ rehydrated: true }),
 
       availableSlots: [],
-      setAvailableSlots: (availableSlots: AvailableSeats[]) =>
-        set({ availableSlots }),
+      setAvailableSlots: (availableSlots: AvailableSeats[]) => set({ availableSlots }),
       getAvailableSlots: async () => {
         const portfolioDetail = useUserStore.getState().portfolioDetail;
         if (!portfolioDetail) return;
-        const { data, error } = await supaApiInstance.getAvailableSeats(
-          portfolioDetail.id
-        );
+        const { data, error } = await supaApiInstance.getAvailableSeats(portfolioDetail.id);
         if (error) {
           toastHelper.error(error.message);
         } else {

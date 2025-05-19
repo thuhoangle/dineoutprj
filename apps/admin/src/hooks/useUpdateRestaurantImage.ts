@@ -1,22 +1,17 @@
 'use client';
-import { toastHelper } from '@/components';
-import { createClient } from '@/utils/supabase/client';
+
 import { useState } from 'react';
 
-export const useUploadImage = ({
-  id,
-  onUpload,
-}: {
-  id?: string;
-  onUpload: (imageUrls: string[]) => void;
-}) => {
+import { createClient } from '@/utils/supabase/client';
+
+import { toastHelper } from '@/components';
+
+export const useUploadImage = ({ id, onUpload }: { id?: string; onUpload: (imageUrls: string[]) => void }) => {
   const supabase = createClient();
   const [uploading, setUploading] = useState(false);
   const [imageFiles, setImageFiles] = useState<FileList | null>(null);
 
-  const uploadImages: React.ChangeEventHandler<HTMLInputElement> = async (
-    event
-  ) => {
+  const uploadImages: React.ChangeEventHandler<HTMLInputElement> = async (event) => {
     if (!id) return;
     try {
       setUploading(true);
@@ -32,9 +27,7 @@ export const useUploadImage = ({
         const fileExt = file.name.split('.').pop();
         const filePath = `${id}/${Date.now()}-${fileExt}`;
 
-        const { error: uploadError } = await supabase.storage
-          .from('restaurants-images')
-          .upload(filePath, file);
+        const { error: uploadError } = await supabase.storage.from('restaurants-images').upload(filePath, file);
 
         if (uploadError) {
           throw uploadError;

@@ -1,12 +1,14 @@
 'use client';
 
-import clsx from 'clsx';
-import { IoIosClose } from 'react-icons/io';
 import React from 'react';
+
+import clsx from 'clsx';
 import type { Toast, ToastOptions } from 'react-hot-toast';
-import { FaRegSmileWink } from 'react-icons/fa';
-import { MdErrorOutline } from 'react-icons/md';
 import toast from 'react-hot-toast';
+import { FaRegSmileWink } from 'react-icons/fa';
+import { IoIosClose } from 'react-icons/io';
+import { MdErrorOutline } from 'react-icons/md';
+
 import { FeatureIcon, SimpleLoading, TextField } from '@/components';
 
 export const toastHelper = {
@@ -83,7 +85,7 @@ const getColorByType = (type: ToasterType, prefix: string) => {
 type ToasterType = 'success' | 'error' | 'warning' | 'loading';
 const TOASTER_CONFIG: {
   [key in ToasterType]: {
-    Icon: (props: React.SVGProps<SVGSVGElement>) => JSX.Element;
+    Icon: any;
     iconColor: string;
     color: string;
     title?: string;

@@ -1,15 +1,20 @@
 'use client';
 
-import { globalLoading, TextField, toastHelper } from '@/components';
+import { useEffect, useState } from 'react';
+
+import NextLink from 'next/link';
+
+import { SlArrowLeft } from 'react-icons/sl';
+
 import { BentoItem } from '@/components/bento-item';
+
+import { createClient } from '@/utils/supabase/client';
+
+import { TextField, globalLoading, toastHelper } from '@/components';
+import { useWindowContext } from '@/contexts';
 import { useGetUserLocation } from '@/hooks';
 import { CustomMap } from '@/modules/cities/components';
 import { RestaurantInfo } from '@/services';
-import { createClient } from '@/utils/supabase/client';
-import { useEffect, useState } from 'react';
-import { SlArrowLeft } from 'react-icons/sl';
-import NextLink from 'next/link';
-import { useWindowContext } from '@/contexts';
 
 export default function NewPage() {
   const { dataList, getData, fetching } = useGetNewList();
@@ -39,7 +44,7 @@ export default function NewPage() {
         </div>
         <div className="flex flex-col gap-4">
           {!dataList.length && !fetching ? (
-            <div className="flex items-center border-t pt-3 border-t-300 justify-start h-full">
+            <div className="flex items-center border-t pt-3 border-gray-300 justify-start h-full">
               <TextField preset="h6" text="No results found :(" />
             </div>
           ) : (

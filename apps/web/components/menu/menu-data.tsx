@@ -6,8 +6,7 @@ export interface NavItemType {
   iconUrl?: string;
   actionCode?: string;
 }
-const checkPath = ({ pathname, value }: { pathname: string; value: string }) =>
-  pathname.includes(value);
+const checkPath = ({ pathname, value }: { pathname: string; value: string }) => pathname.includes(value);
 
 export const getNavItems = (): NavItemType[] => [
   {

@@ -1,5 +1,6 @@
-import { useUserStore } from '@/stores';
 import { createClient } from '@/utils/supabase/client';
+
+import { useUserStore } from '@/stores';
 
 const supabase = createClient();
 

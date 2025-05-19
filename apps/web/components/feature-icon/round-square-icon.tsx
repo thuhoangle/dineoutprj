@@ -1,12 +1,9 @@
-import clsx from 'clsx';
 import type { FC } from 'react';
 
+import clsx from 'clsx';
+
 import type { ColorPreset, FeatureCoreIconProps } from './types-and-helper';
-import {
-  getFullSizeClassName,
-  getIconColorClassName,
-  getIconSizeClassName,
-} from './types-and-helper';
+import { getFullSizeClassName, getIconColorClassName, getIconSizeClassName } from './types-and-helper';
 
 const getBgColorClassName = (color: ColorPreset) =>
   color === 'primary'
@@ -28,12 +25,7 @@ export const RoundIcon: FC<FeatureCoreIconProps> = ({ Icon, size, color }) => {
         getFullSizeClassName(size)
       )}
     >
-      <Icon
-        className={clsx(
-          getIconColorClassName(color as ColorPreset),
-          getIconSizeClassName(size)
-        )}
-      />
+      <Icon className={clsx(getIconColorClassName(color as ColorPreset), getIconSizeClassName(size))} />
     </div>
   );
 };
@@ -47,12 +39,7 @@ export const SquareIcon: FC<FeatureCoreIconProps> = ({ Icon, size, color }) => {
         getFullSizeClassName(size)
       )}
     >
-      <Icon
-        className={clsx(
-          getIconColorClassName(color as ColorPreset),
-          getIconSizeClassName(size)
-        )}
-      />
+      <Icon className={clsx(getIconColorClassName(color as ColorPreset), getIconSizeClassName(size))} />
     </div>
   );
 };

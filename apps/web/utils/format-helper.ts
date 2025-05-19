@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-globals */
+ 
 
 export function numberWithCommas(value: any, thousandComma?: string, floatSymbol?: string) {
   if (value !== null && value !== undefined && !isNaN(value)) {

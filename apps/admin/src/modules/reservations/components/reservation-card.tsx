@@ -1,15 +1,20 @@
 'use client';
-import { ReservationInfo } from '@/services';
-import dayjs from 'dayjs';
-import { FaRegClock } from 'react-icons/fa6';
-import { upperFirst } from 'lodash';
-import clsx from 'clsx';
-import { MdPeopleAlt } from 'react-icons/md';
-import { BiChair } from 'react-icons/bi';
+
 import { useState } from 'react';
-import { DrawerReservation } from './drawer-reservation';
-import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+
 import { Skeleton } from '@heroui/react';
+import clsx from 'clsx';
+import dayjs from 'dayjs';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import { upperFirst } from 'lodash';
+import { BiChair } from 'react-icons/bi';
+import { FaRegClock } from 'react-icons/fa6';
+import { MdPeopleAlt } from 'react-icons/md';
+
+import { ReservationInfo } from '@/services';
+
+import { DrawerReservation } from './drawer-reservation';
+
 dayjs.extend(isSameOrBefore);
 
 export const ReservationCard = ({
@@ -68,21 +73,21 @@ export const ReservationCard = ({
 
         <div className="flex flex-col text-sm pt-2 gap-1">
           <Skeleton className="rounded-lg" isLoaded={!fetching}>
-            <div className="flex items-center gap-1 font-medium text-default-500">
+            <div className="flex items-center gap-1 font-medium text-gray-500">
               <FaRegClock className="text-inherit" />
               {dayjs(data.reservation_time).format('HH:mm, DD MMM YYYY')}
             </div>
           </Skeleton>
 
           <Skeleton className="rounded-lg" isLoaded={!fetching}>
-            <div className="flex items-center gap-1 font-medium text-default-500">
+            <div className="flex items-center gap-1 font-medium text-gray-500">
               <MdPeopleAlt className="text-inherit" />
               {data.party_size} {data.party_size > 1 ? 'People' : 'Person'}
             </div>
           </Skeleton>
 
           <Skeleton className="rounded-lg" isLoaded={!fetching}>
-            <div className="flex items-center gap-1 font-medium text-default-500">
+            <div className="flex items-center gap-1 font-medium text-gray-500">
               <BiChair className="text-inherit" />
               <div>
                 Table {data.table?.table_number}, {upperFirst(data.seat_type)} seat

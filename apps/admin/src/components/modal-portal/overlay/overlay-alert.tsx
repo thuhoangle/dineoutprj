@@ -1,8 +1,10 @@
-import clsx from 'clsx';
 import type { FC, ReactNode } from 'react';
 import { useEffect, useState } from 'react';
-import { ModalHeader } from '../simple-modal';
+
+import clsx from 'clsx';
 import { Button, TextField } from 'dineout-ui';
+
+import { ModalHeader } from '../simple-modal';
 
 export interface OverlayAlertInfo {
   title: string;
@@ -19,20 +21,10 @@ interface OverlayAlertProps {
 }
 export const OverlayAlert: FC<OverlayAlertProps> = ({ alertInfo }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [currentAlertInfo, setCurrentAlertInfo] = useState<
-    OverlayAlertInfo | undefined
-  >(undefined);
+  const [currentAlertInfo, setCurrentAlertInfo] = useState<OverlayAlertInfo | undefined>(undefined);
 
-  const {
-    title,
-    content,
-    btConfirmText,
-    onConfirm,
-    btCancelText,
-    onCancel,
-    hideModalCB,
-    contentClassName,
-  } = currentAlertInfo || {};
+  const { title, content, btConfirmText, onConfirm, btCancelText, onCancel, hideModalCB, contentClassName } =
+    currentAlertInfo || {};
 
   const dismiss = () => {
     setIsVisible(false);
@@ -67,11 +59,7 @@ export const OverlayAlert: FC<OverlayAlertProps> = ({ alertInfo }) => {
         <ModalHeader title={title} />
         <div className={clsx('pb-6 pt-5', contentClassName)}>
           {typeof content === 'string' ? (
-            <TextField
-              preset="p3"
-              className="text-neutral-400"
-              text={content}
-            />
+            <TextField preset="p3" className="text-neutral-400" text={content} />
           ) : (
             content
           )}
@@ -84,13 +72,7 @@ export const OverlayAlert: FC<OverlayAlertProps> = ({ alertInfo }) => {
             text={btCancelText || 'Cancel'}
             onClick={onCancel}
           />
-          <Button
-            preset="primary"
-            className="flex-1"
-            size="xl"
-            text={btConfirmText || 'Confirm'}
-            onClick={onConfirm}
-          />
+          <Button preset="primary" className="flex-1" size="xl" text={btConfirmText || 'Confirm'} onClick={onConfirm} />
         </div>
       </div>
     </div>

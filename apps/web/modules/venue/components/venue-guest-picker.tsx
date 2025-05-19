@@ -1,6 +1,5 @@
-import { MdOutlinePeopleAlt } from 'react-icons/md';
-
 import { Select, SelectItem } from '@heroui/react';
+import { MdOutlinePeopleAlt } from 'react-icons/md';
 
 export const VenueGuestPicker = ({
   maxGuest,
@@ -30,7 +29,7 @@ export const VenueGuestPicker = ({
       onSelectionChange={(keys) => {
         setSelectedGuest(Number(Array.from(keys)[0]));
       }}
-      startContent={<MdOutlinePeopleAlt className="text-default-500" />}
+      startContent={<MdOutlinePeopleAlt className="text-gray-500" />}
     >
       {Array.from({ length: maxGuest }, (_, i) => i + 1).map((num) => (
         <SelectItem key={num} className="font-medium data-[selected=true]:bg-primary-100">

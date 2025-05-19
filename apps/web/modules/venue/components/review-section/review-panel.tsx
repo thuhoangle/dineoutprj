@@ -1,7 +1,9 @@
+import clsx from 'clsx';
+
 import { TextField } from '@/components';
 import { ReviewsList } from '@/services';
+
 import { ReviewLongCard } from './review-long-card';
-import clsx from 'clsx';
 
 export const ReviewPanel = ({ data, className }: { data: ReviewsList[]; className?: string }) => {
   return (

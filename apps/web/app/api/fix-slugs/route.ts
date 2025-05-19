@@ -1,8 +1,10 @@
-export const dynamic = 'force-dynamic';
+import { NextResponse } from 'next/server';
+
+import slugify from 'slugify';
 
 import { createSerClient } from '@/utils/supabase/server';
-import { NextResponse } from 'next/server';
-import slugify from 'slugify';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {

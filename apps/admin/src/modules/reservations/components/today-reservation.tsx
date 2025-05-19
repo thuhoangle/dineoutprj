@@ -1,12 +1,15 @@
 'use client';
 
-import { useReservationStore } from '@/stores';
 import { useEffect, useState } from 'react';
-import { ReservationCard } from './reservation-card';
+
 import clsx from 'clsx';
 import { TextField } from 'dineout-ui';
-import { groupAndMergeReservations } from '../hooks';
+
 import { ReservationInfo } from '@/services';
+import { useReservationStore } from '@/stores';
+
+import { groupAndMergeReservations } from '../hooks';
+import { ReservationCard } from './reservation-card';
 
 export const TodayReservation = ({
   dataList,

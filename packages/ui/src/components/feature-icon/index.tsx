@@ -1,22 +1,15 @@
-import clsx from 'clsx';
 import type { FC } from 'react';
+
+import clsx from 'clsx';
 
 import { OutlineIcon } from './outline-icon';
 import { RoundIcon, SquareIcon } from './round-square-icon';
 import { RoundStrokeGrayIcon, RoundStrokeIcon } from './round-stroke-icon';
-import {
-  type FeatureIconProps,
-  getSizeModeClassName,
-} from './types-and-helper';
+import { type FeatureIconProps, getSizeModeClassName } from './types-and-helper';
 
 export type { FeatureIconProps } from './types-and-helper';
 
-export const FeatureIcon: FC<FeatureIconProps> = ({
-  preset,
-  className,
-  sizeMode = 'full',
-  ...rest
-}) => {
+export const FeatureIcon: FC<FeatureIconProps> = ({ preset, className, sizeMode = 'full', ...rest }) => {
   return (
     <div
       className={clsx(

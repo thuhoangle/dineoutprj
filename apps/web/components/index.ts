@@ -15,7 +15,6 @@ export * from './bento-item/bento-item';
 export * from './explore-card';
 export * from './bg-pattern';
 export * from './feature-icon';
-export * from './simple-loading';
 export * from './toast-helper';
 export * from './pages';
 export * from './modal-portal';

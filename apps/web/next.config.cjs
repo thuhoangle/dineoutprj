@@ -1,7 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['lh5.googleusercontent.com', 'lh3.googleusercontent.com'],
+    domains: [
+      'plus.unsplash.com',
+      'placebear.com',
+      'resizer.otstatic.com',
+      'oissfgnrpjfveyjaokgk.supabase.co',
+      'images.unsplash.com',
+      'lh5.googleusercontent.com',
+      'lh3.googleusercontent.com',
+    ],
     remotePatterns: [
       {
         protocol: 'https',
@@ -18,6 +26,18 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'images.unsplash.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'lh5.googleusercontent.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
         port: '',
         pathname: '/**',
       },

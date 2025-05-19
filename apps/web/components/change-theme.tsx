@@ -1,15 +1,10 @@
+import clsx from 'clsx';
 import { useTheme } from 'next-themes';
 import { IoMoon, IoSunny } from 'react-icons/io5';
-import clsx from 'clsx';
+
 import { HydrationZustand } from '../utils';
 
-export const ChangeTheme = ({
-  className,
-  disabled,
-}: {
-  className?: string;
-  disabled?: boolean;
-}) => {
+export const ChangeTheme = ({ className, disabled }: { className?: string; disabled?: boolean }) => {
   const { theme, setTheme } = useTheme();
 
   const _onSetTheme = () => {
@@ -28,11 +23,7 @@ export const ChangeTheme = ({
       onClick={_onSetTheme}
     >
       <HydrationZustand>
-        {theme === 'light' ? (
-          <IoMoon className="w-4" />
-        ) : (
-          <IoSunny className="w-4" />
-        )}
+        {theme === 'light' ? <IoMoon className="w-4" /> : <IoSunny className="w-4" />}
       </HydrationZustand>
     </button>
   );

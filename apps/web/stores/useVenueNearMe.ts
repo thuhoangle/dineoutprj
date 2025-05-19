@@ -1,10 +1,12 @@
-import { handleError, RestaurantInfo, supaApiInstance } from '@/services';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+
 import { toastHelper } from '@/components';
-import { useUserStore } from '.';
-import { supabase } from '@/utils';
 import { useGetUserLocation } from '@/hooks';
+import { RestaurantInfo, handleError, supaApiInstance } from '@/services';
+import { supabase } from '@/utils';
+
+import { useUserStore } from '.';
 
 interface VenueNearMeState {
   rehydrated: boolean;
@@ -32,14 +34,11 @@ export const useVenueNearMeStore = create<VenueNearMeState>()(
       restaurantNearMeList: [],
       restaurantNearMeDetail: {},
       getRestaurantNearMeList: async (latitude: number, longitude: number) => {
-        const { data, error } = await supabase.rpc(
-          'get_restaurants_sorted_by_distance',
-          {
-            user_long: longitude,
-            user_lat: latitude,
-            sort_order: 'asc',
-          }
-        );
+        const { data, error } = await supabase.rpc('get_restaurants_sorted_by_distance', {
+          user_long: longitude,
+          user_lat: latitude,
+          sort_order: 'asc',
+        });
         if (error) return;
         const venueDetails: { [key: string]: RestaurantInfo } = {};
         data.forEach((item: RestaurantInfo) => {

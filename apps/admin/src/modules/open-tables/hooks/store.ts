@@ -1,8 +1,9 @@
 import dayjs, { Dayjs } from 'dayjs';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import { getMonth } from '@/utils';
+
 import { AvailableSeats } from '@/services';
+import { getMonth } from '@/utils';
 
 interface ViewStoreType {
   selectedView: string;
@@ -57,9 +58,7 @@ export const useEventStore = create<EventStore>((set, get) => ({
   closePopover: () => set({ isPopoverOpen: false }),
   openEventSummary: (event) => {
     const { events } = get();
-    const tableEvents = events.filter(
-      (e) => e.tables.table_number === event.tables.table_number
-    );
+    const tableEvents = events.filter((e) => e.tables.table_number === event.tables.table_number);
     set({
       isEventSummaryOpen: true,
       selectedEvent: event,
@@ -74,9 +73,7 @@ export const useEventStore = create<EventStore>((set, get) => ({
     }),
   setSelectedTableEvents: (tableNumber) => {
     const { events } = get();
-    const tableEvents = events.filter(
-      (e) => e.tables.table_number === tableNumber
-    );
+    const tableEvents = events.filter((e) => e.tables.table_number === tableNumber);
     set({ selectedTableEvents: tableEvents });
   },
   clearSelectedTableEvents: () => set({ selectedTableEvents: [] }),

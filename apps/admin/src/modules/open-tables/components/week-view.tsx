@@ -1,11 +1,14 @@
 'use client';
 
-import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
+
 import { ScrollShadow } from '@heroui/react';
-import { EventRenderer, useDateStore, useEventStore } from '../hooks';
-import { getHours, getWeekDays } from '@/utils';
 import clsx from 'clsx';
+import dayjs from 'dayjs';
+
+import { getHours, getWeekDays } from '@/utils';
+
+import { EventRenderer, useDateStore, useEventStore } from '../hooks';
 
 export const WeekView = () => {
   const [currentTime, setCurrentTime] = useState(dayjs());

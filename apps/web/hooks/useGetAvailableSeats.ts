@@ -1,9 +1,11 @@
 'use client';
 
-import { supaApiInstance } from '@/services';
 import { useState } from 'react';
-import { AvailableSeats } from '@/services';
+
 import toast from 'react-hot-toast';
+
+import { supaApiInstance } from '@/services';
+import { AvailableSeats } from '@/services';
 
 export const useGetAvailableSeats = () => {
   const [fetching, setFetching] = useState(false);
@@ -12,8 +14,7 @@ export const useGetAvailableSeats = () => {
   const getAvailableSeats = async (restaurantId: string) => {
     setFetching(true);
     try {
-      const { data, error } =
-        await supaApiInstance.getAvailableSeats(restaurantId);
+      const { data, error } = await supaApiInstance.getAvailableSeats(restaurantId);
       if (error) {
         toast.error(error.message);
       } else {

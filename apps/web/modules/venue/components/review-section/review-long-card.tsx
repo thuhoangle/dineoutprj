@@ -1,7 +1,8 @@
-import { ReviewsList } from '@/services';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { FaStar } from 'react-icons/fa6';
+
+import { ReviewsList } from '@/services';
 
 export const ReviewLongCard = ({ review }: { review: ReviewsList }) => {
   const StarRating = () => {
@@ -26,4 +27,3 @@ export const ReviewLongCard = ({ review }: { review: ReviewsList }) => {
     </div>
   );
 };
-

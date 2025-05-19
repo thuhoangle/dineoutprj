@@ -1,12 +1,14 @@
 'use client';
 
-import React, { useRef, useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
+
+import clsx from 'clsx';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import clsx from 'clsx';
+
 import { AvailableSeatRestaurant, RestaurantInfo } from '@/services';
 
-/* eslint-disable @next/next/no-img-element */
+ 
 
 export const CustomMap = ({
   markers = [],

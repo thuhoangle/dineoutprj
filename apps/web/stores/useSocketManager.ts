@@ -1,9 +1,11 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useUserStore } from './useUserStore';
+
 import { AppSocket } from '@/services/supa-socket';
 import { supabase } from '@/utils';
+
+import { useUserStore } from './useUserStore';
 
 export const useSocketManager = () => {
   const { authInfo } = useUserStore();

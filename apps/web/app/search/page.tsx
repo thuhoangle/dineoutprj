@@ -1,16 +1,20 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
-import { SimpleLoading, TextField } from '@/components';
-import { useGetSearchResults, useGetUserLocation } from '@/hooks';
-import { useWindowContext } from '@/contexts';
-import { BentoItem } from '@/components/bento-item';
-import { CustomMap } from '@/modules/cities/components';
+
 import NextLink from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
+
 import { SlArrowLeft } from 'react-icons/sl';
-import { AvailableSeatRestaurantWithTables } from '@/services';
+
+import { BentoItem } from '@/components/bento-item';
+
+import { SimpleLoading, TextField } from '@/components';
+import { useWindowContext } from '@/contexts';
+import { useGetSearchResults, useGetUserLocation } from '@/hooks';
+import { CustomMap } from '@/modules/cities/components';
 import { ReservationInput } from '@/modules/homepage';
+import { AvailableSeatRestaurantWithTables } from '@/services';
 
 function SearchContent() {
   const router = useRouter();
@@ -47,7 +51,7 @@ function SearchContent() {
         </div>
         <div className="flex flex-col gap-4">
           {!searchResults.length && !loading ? (
-            <div className="flex items-center border-t pt-3 border-t-300 justify-start h-full">
+            <div className="flex items-center border-t pt-3 border-gray-300 justify-start h-full">
               <TextField preset="h6" text="No results found :(" />
             </div>
           ) : (

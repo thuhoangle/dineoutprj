@@ -1,10 +1,12 @@
 'use client';
+
 import { useEffect, useState } from 'react';
-import { useUserStore } from '@/stores';
+
 import { toastHelper } from '@/components';
-import { supabase } from '@/utils';
 import { handleError } from '@/services';
 import { UserInfo } from '@/services';
+import { useUserStore } from '@/stores';
+import { supabase } from '@/utils';
 
 export const useUpdateUser = () => {
   const authInfo = useUserStore((state) => state.authInfo);
@@ -62,10 +64,7 @@ export const useUpdateUser = () => {
 
     try {
       setFetching(true);
-      const { error } = await supabase
-        .from('customers')
-        .update(updateData)
-        .eq('auth_id', portfolioDetail.auth_id);
+      const { error } = await supabase.from('customers').update(updateData).eq('auth_id', portfolioDetail.auth_id);
 
       if (error) {
         toastHelper.error(error.message);

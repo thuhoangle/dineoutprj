@@ -1,7 +1,10 @@
-import '../styles/global.css';
-import { RootLayoutClient } from '@/components/root-layout-client';
-import { ibmPlexSans, robotoMono } from '@/assets/fonts';
 import clsx from 'clsx';
+
+import { RootLayoutClient } from '@/components/root-layout-client';
+
+import { ibmPlexSans, robotoMono } from '@/assets/fonts';
+
+import '../styles/global.css';
 import { Providers } from './providers';
 
 export const metadata = {

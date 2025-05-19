@@ -1,15 +1,18 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { Button } from './button';
-import { AvailableSeatRestaurant, AvailableSeatRestaurantWithTables, RestaurantInfo } from '@/services';
-import { useReservation } from '@/hooks';
-import { BookingDrawer } from './booking-drawer';
-import { ModalLogin, ModalPortalController } from './modal-portal';
-import { useUserStore } from '@/stores';
+
 import { useDisclosure } from '@heroui/react';
 import { DateValue } from '@internationalized/date';
+
+import { useReservation } from '@/hooks';
+import { AvailableSeatRestaurant, AvailableSeatRestaurantWithTables, RestaurantInfo } from '@/services';
+import { useUserStore } from '@/stores';
 import { timeInAMPM } from '@/utils';
+
+import { BookingDrawer } from './booking-drawer';
+import { Button } from './button';
+import { ModalLogin, ModalPortalController } from './modal-portal';
 
 export type SlotPickerParamsProps = {
   tables: AvailableSeatRestaurantWithTables[];

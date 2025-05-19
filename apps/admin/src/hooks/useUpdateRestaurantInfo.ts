@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
+
 import { toastHelper } from '@/components';
+import { Locations, handleError } from '@/services';
 import { useUserStore } from '@/stores';
 import { supabase } from '@/utils';
-import { handleError, Locations } from '@/services';
 
 export interface EditRestaurantProps {
   name?: string;

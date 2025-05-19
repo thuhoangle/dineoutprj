@@ -1,9 +1,11 @@
 'use client';
 
-import { OptionObject, SimpleTabSelect, TextField } from '@/components';
 import { useState } from 'react';
-import { TodayReservation, UpcomingReservation, PassReservation } from './components';
+
+import { OptionObject, SimpleTabSelect, TextField } from '@/components';
 import { useReservationStore } from '@/stores';
+
+import { PassReservation, TodayReservation, UpcomingReservation } from './components';
 
 export const ReservationsPanel = () => {
   const todayReservations = useReservationStore((state) => state.todayReservations);

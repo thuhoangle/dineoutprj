@@ -1,7 +1,7 @@
 import type { FC, ReactNode } from 'react';
 
-import type { ModalBaseProps } from '../types';
 import { ModalBtRow, ModalHeader, SimpleModal } from '../simple-modal';
+import type { ModalBaseProps } from '../types';
 
 export interface ModalConfirmProps extends ModalBaseProps {
   title?: string;

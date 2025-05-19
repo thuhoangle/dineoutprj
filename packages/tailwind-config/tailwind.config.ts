@@ -1,5 +1,5 @@
-import type { Config } from 'tailwindcss';
 import scrollbar from 'tailwind-scrollbar';
+import type { Config } from 'tailwindcss';
 
 const config: Config = {
   content: ['./src/**/*.{js,ts,jsx,tsx}'],

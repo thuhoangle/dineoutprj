@@ -1,9 +1,10 @@
-import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react';
-import { IoCloseSharp } from 'react-icons/io5';
-import clsx from 'clsx';
 import type { FC, ReactElement, ReactNode } from 'react';
 import React from 'react';
+
+import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react';
+import clsx from 'clsx';
 import { Button, TextField } from 'dineout-ui';
+import { IoCloseSharp } from 'react-icons/io5';
 
 interface BaseModalProps {
   isVisible: boolean | undefined;

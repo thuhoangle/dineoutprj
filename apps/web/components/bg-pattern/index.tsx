@@ -3,15 +3,12 @@ import type { FC } from 'react';
 import CircleLg from './svg/circle-lg.svg';
 import CircleMd from './svg/circle-md.svg';
 import CircleSm from './svg/circle-sm.svg';
-
 import GridDotLg from './svg/grid-dot-lg.svg';
 import GridDotMd from './svg/grid-dot-md.svg';
 import GridDotSm from './svg/grid-dot-sm.svg';
-
 import GridLg from './svg/grid-lg.svg';
 import GridMd from './svg/grid-md.svg';
 import GridSm from './svg/grid-sm.svg';
-
 import GridSmallDotLg from './svg/grid-small-dot-lg.svg';
 import GridSmallDotMd from './svg/grid-small-dot-md.svg';
 import GridSmallDotSm from './svg/grid-small-dot-sm.svg';

@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { supabase } from '@/utils';
+
 import { AvailableSeatRestaurantWithTables } from '@/services';
+import { supabase } from '@/utils';
 
 export const useGetSearchResults = ({
   seats,

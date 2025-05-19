@@ -1,7 +1,8 @@
 'use client';
 
-import { debounce } from 'lodash';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+
+import { debounce } from 'lodash';
 
 export const useWindowSize = () => {
   const [size, setSize] = useState({
@@ -28,15 +29,9 @@ export const useWindowSize = () => {
     return () => window.removeEventListener('resize', updateSize);
   }, []);
 
-  const responsiveClassName = useMemo(
-    () => getWidthToResponsiveClassName(size.width),
-    [size.width]
-  );
+  const responsiveClassName = useMemo(() => getWidthToResponsiveClassName(size.width), [size.width]);
 
-  const isMobileMode = useMemo(
-    () => size.width < SIZE_MAP.ipadMini,
-    [size.width]
-  );
+  const isMobileMode = useMemo(() => size.width < SIZE_MAP.ipadMini, [size.width]);
 
   return { windowSize: size, responsiveClassName, isMobileMode };
 };

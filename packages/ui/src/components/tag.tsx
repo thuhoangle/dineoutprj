@@ -1,5 +1,6 @@
-import clsx from 'clsx';
 import type { FC } from 'react';
+
+import clsx from 'clsx';
 
 interface TagProps {
   size?: keyof typeof presetSize;
@@ -8,13 +9,7 @@ interface TagProps {
   className?: string;
 }
 
-export const Tag: FC<TagProps> = ({
-  size = 'md',
-  weight = 'n',
-  text,
-  className,
-  ...rest
-}) => {
+export const Tag: FC<TagProps> = ({ size = 'md', weight = 'n', text, className, ...rest }) => {
   return (
     <div
       className={clsx(

@@ -1,6 +1,7 @@
 import apisauce from 'apisauce';
 import axios, { AxiosInstance } from 'axios';
-import { RestaurantInfo, GeoLocationResponse } from './api-types';
+
+import { GeoLocationResponse, RestaurantInfo } from './api-types';
 
 const GEOCODE_API_KEY = process.env.NEXT_PUBLIC_GEOCODE_API_KEY;
 

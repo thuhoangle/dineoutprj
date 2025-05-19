@@ -1,15 +1,12 @@
 'use client';
-import clsx from 'clsx';
+
 import React, { useRef } from 'react';
+
+import clsx from 'clsx';
 
 import { TextField } from './text';
 
-export type SimpleTabSelectPreset =
-  | 'gray1'
-  | 'gray2'
-  | 'underline'
-  | 'grayBg'
-  | 'grayBgDarker';
+export type SimpleTabSelectPreset = 'gray1' | 'gray2' | 'underline' | 'grayBg' | 'grayBgDarker';
 type OptionObject = {
   value: string;
   label: string;
@@ -38,14 +35,7 @@ export const SimpleTabSelect = ({
   preset?: SimpleTabSelectPreset;
 }) => {
   return (
-    <div
-      className={clsx(
-        'flex',
-        preset === 'underline' ? 'gap-3' : 'gap-1',
-        containerPreset[preset](size),
-        className
-      )}
-    >
+    <div className={clsx('flex', preset === 'underline' ? 'gap-3' : 'gap-1', containerPreset[preset](size), className)}>
       {options?.map((item) => (
         <TabItem
           preset={preset}
@@ -67,10 +57,8 @@ const containerPreset: {
   gray1: () => '',
   gray2: () => 'bg-gray-900 rounded-md',
   underline: () => '',
-  grayBg: (size) =>
-    clsx('rounded-lg bg-gray-900', size === 'md' ? 'p-1.5' : 'p-1'),
-  grayBgDarker: (size) =>
-    clsx('rounded-lg bg-gray-800', size === 'md' ? 'p-1.5' : 'p-1'),
+  grayBg: (size) => clsx('rounded-lg bg-gray-900', size === 'md' ? 'p-1.5' : 'p-1'),
+  grayBgDarker: (size) => clsx('rounded-lg bg-gray-800', size === 'md' ? 'p-1.5' : 'p-1'),
 };
 
 const TabItem = ({
@@ -95,9 +83,7 @@ const TabItem = ({
   const isSelected =
     typeof data === 'string'
       ? currentValue === value
-      : currentValue === value ||
-        (data?.subItems &&
-          data.subItems.some((subItem) => subItem.value === currentValue));
+      : currentValue === value || (data?.subItems && data.subItems.some((subItem) => subItem.value === currentValue));
 
   const btnRef = useRef<HTMLButtonElement | null>(null);
 
@@ -121,10 +107,7 @@ const TabItem = ({
 };
 
 const buttonPreset: {
-  [key in SimpleTabSelectPreset]: (
-    isSelected: boolean,
-    size: SizePresets
-  ) => string;
+  [key in SimpleTabSelectPreset]: (isSelected: boolean, size: SizePresets) => string;
 } = {
   gray1: (isSelected: boolean, size: SizePresets) =>
     clsx(

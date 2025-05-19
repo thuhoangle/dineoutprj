@@ -1,9 +1,10 @@
 'use client';
 
-import dayjs from 'dayjs';
-import { AvailableSeats } from '@/services';
-import { upperFirst } from 'lodash';
 import clsx from 'clsx';
+import dayjs from 'dayjs';
+import { upperFirst } from 'lodash';
+
+import { AvailableSeats } from '@/services';
 import { AMPMTo24Hour } from '@/utils';
 
 export const QuickDateSelect = ({

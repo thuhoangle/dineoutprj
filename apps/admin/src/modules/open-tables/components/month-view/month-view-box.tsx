@@ -1,23 +1,17 @@
+import React from 'react';
+
 import clsx from 'clsx';
 import dayjs from 'dayjs';
-import React from 'react';
+
 import { EventRenderer, useDateStore, useEventStore } from '../../hooks';
 
-export const MonthViewBox = ({
-  day,
-  rowIndex,
-}: {
-  day: dayjs.Dayjs | null;
-  rowIndex: number;
-}) => {
+export const MonthViewBox = ({ day, rowIndex }: { day: dayjs.Dayjs | null; rowIndex: number }) => {
   const { openPopover, events } = useEventStore();
 
   const { setDate } = useDateStore();
 
   if (!day) {
-    return (
-      <div className="h-12 bg-red-500 w-full border md:h-28 md:w-full lg:h-full"></div>
-    );
+    return <div className="h-12 bg-red-500 w-full border md:h-28 md:w-full lg:h-full"></div>;
   }
 
   const isFirstDayOfMonth = day.date() === 1;
@@ -39,16 +33,11 @@ export const MonthViewBox = ({
       onClick={handleClick}
     >
       <div className="flex flex-col items-center">
-        {rowIndex === 0 && (
-          <h4 className="text-xs text-gray-700 font-semibold">
-            {day.format('ddd').toUpperCase()}
-          </h4>
-        )}
+        {rowIndex === 0 && <h4 className="text-xs text-gray-700 font-semibold">{day.format('ddd').toUpperCase()}</h4>}
         <h4
           className={clsx(
             'text-center text-sm hover:cursor-pointer',
-            isToday &&
-              'flex h-6 w-6 items-center justify-center rounded-full bg-blue-600 text-white'
+            isToday && 'flex h-6 w-6 items-center justify-center rounded-full bg-blue-600 text-white'
           )}
         >
           {isFirstDayOfMonth ? day.format('MMM D') : day.format('D')}

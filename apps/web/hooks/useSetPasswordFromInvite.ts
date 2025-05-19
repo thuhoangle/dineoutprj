@@ -1,8 +1,10 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { createClient } from '@/utils/supabase/client';
+
 import toast from 'react-hot-toast';
+
+import { createClient } from '@/utils/supabase/client';
 
 export const useSetPasswordFromInvite = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -22,16 +24,14 @@ export const useSetPasswordFromInvite = () => {
     const refresh_token = params.get('refresh_token');
 
     if (access_token && refresh_token) {
-      supabase.auth
-        .setSession({ access_token, refresh_token })
-        .then(({ error }) => {
-          if (error) {
-            setError('Failed to authenticate: ' + error.message);
-          } else {
-            setIsAuthenticated(true);
-          }
-          setFetching(false);
-        });
+      supabase.auth.setSession({ access_token, refresh_token }).then(({ error }) => {
+        if (error) {
+          setError('Failed to authenticate: ' + error.message);
+        } else {
+          setIsAuthenticated(true);
+        }
+        setFetching(false);
+      });
     } else {
       setError('No tokens found in URL');
       setFetching(false);

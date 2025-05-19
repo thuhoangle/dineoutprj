@@ -1,6 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  output: 'standalone',
+  // Disable static optimization
+  optimizeFonts: false,
+  // Disable static image optimization
+  images: {
+    unoptimized: true,
+  },
   async redirects() {
     return [
       {

@@ -1,11 +1,14 @@
 'use client';
 
-import type { ThemeProviderProps } from 'next-themes';
-
 import * as React from 'react';
-import { HeroUIProvider } from '@heroui/react';
+import { useEffect } from 'react';
+
 import { useRouter } from 'next/navigation';
+
+import { HeroUIProvider } from '@heroui/react';
+import type { ThemeProviderProps } from 'next-themes';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
+
 import { GlobalLoading } from '@/components';
 import { WindowProvider } from '@/contexts';
 import {
@@ -16,7 +19,6 @@ import {
   useVenueInfoStore,
   useVenueNearMeStore,
 } from '@/stores';
-import { useEffect } from 'react';
 
 export interface ProvidersProps {
   children: React.ReactNode;

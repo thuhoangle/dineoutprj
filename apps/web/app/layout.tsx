@@ -1,15 +1,18 @@
-import '@/styles/globals.css';
 import { Metadata, Viewport } from 'next';
+
 import clsx from 'clsx';
 
-import { Providers } from './providers';
-
-import { siteConfig } from '@/config/site';
-import { fontSans } from '@/config/fonts';
 import { HeaderMenu } from '@/components/menu/header-menu';
-import ClientToaster from '@/config/client-toaster';
 import { ModalPortal } from '@/components/modal-portal';
+
+import '@/styles/globals.css';
+
 import { StickyBottomMenu } from '@/components';
+import ClientToaster from '@/config/client-toaster';
+import { fontSans } from '@/config/fonts';
+import { siteConfig } from '@/config/site';
+
+import { Providers } from './providers';
 
 export const metadata: Metadata = {
   title: {

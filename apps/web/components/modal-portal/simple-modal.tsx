@@ -1,10 +1,13 @@
-import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react';
-import { IoCloseSharp } from 'react-icons/io5';
-import clsx from 'clsx';
 import type { FC, ReactElement, ReactNode } from 'react';
 import React from 'react';
+
+import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react';
+import clsx from 'clsx';
+import { IoCloseSharp } from 'react-icons/io5';
+
 import { Button } from '../button';
 import { TextField } from '../text';
+
 interface BaseModalProps {
   isVisible: boolean | undefined;
   panelWrapperClassName?: string;

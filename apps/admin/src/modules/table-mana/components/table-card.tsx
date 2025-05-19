@@ -1,9 +1,12 @@
 'use client';
 
 import React from 'react';
-import { GoPeople } from 'react-icons/go';
+
 import clsx from 'clsx';
+import { GoPeople } from 'react-icons/go';
+
 import { RestaurantTableProps } from '@/services/api-types';
+
 import { TABLE_CONFIG } from './config';
 
 interface Props {

@@ -1,41 +1,45 @@
 'use client';
 
-import { link as linkStyles } from '@heroui/theme';
-import NextLink from 'next/link';
-import clsx from 'clsx';
-import { debounce } from 'lodash';
-import Image from 'next/image';
-
-import { siteConfig } from '@/config/site';
-import { useCheckPressOutSide, useLoginSignup } from '@/hooks';
-import { useReservationStore, useUserStore, useVenueInfoStore } from '@/stores';
-import { RestaurantInfo } from '@/services';
-import { TextField } from '../text';
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
+
+import Image from 'next/image';
+import NextLink from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+
 import { Input } from '@heroui/input';
 import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
+  Badge,
   Button,
+  Chip,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
   Kbd,
   Navbar,
-  NavbarContent,
   NavbarBrand,
+  NavbarContent,
   NavbarItem,
-  Chip,
-  Badge,
   Tooltip,
 } from '@heroui/react';
-import { useWindowContext } from '@/contexts';
-import { MdEventNote } from 'react-icons/md';
-import { IoLogOutOutline } from 'react-icons/io5';
-import { usePathname, useRouter } from 'next/navigation';
-import { SearchIcon } from '../icons';
-import { ThemeSwitch } from '../theme-switch';
-import { FaRegCalendar } from 'react-icons/fa6';
+import { link as linkStyles } from '@heroui/theme';
+import clsx from 'clsx';
 import dayjs from 'dayjs';
+import { debounce } from 'lodash';
+import { FaRegCalendar } from 'react-icons/fa6';
+import { IoLogOutOutline } from 'react-icons/io5';
+import { MdEventNote } from 'react-icons/md';
+
+import { siteConfig } from '@/config/site';
+import { useWindowContext } from '@/contexts';
+import { useCheckPressOutSide, useLoginSignup } from '@/hooks';
+import { RestaurantInfo } from '@/services';
+import { useReservationStore, useUserStore, useVenueInfoStore } from '@/stores';
+
+import { SearchIcon } from '../icons';
+import { TextField } from '../text';
+import { ThemeSwitch } from '../theme-switch';
+
 interface HeaderMenuProps {
   onGoSamePath?: () => void;
 }
@@ -299,7 +303,7 @@ export const HeaderMenu: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
               size="sm"
             >
               <Button isIconOnly variant="light" radius="md" onPress={() => router.push('/account/reservations')}>
-                <FaRegCalendar size={22} className="text-default-500" />
+                <FaRegCalendar size={22} className="text-gray-500" />
               </Button>
             </Badge>
           </Tooltip>

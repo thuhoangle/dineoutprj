@@ -1,7 +1,9 @@
-import { ReservationInfo } from '@/services';
 import dayjs, { Dayjs } from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import minMax from 'dayjs/plugin/minMax';
+
+import { ReservationInfo } from '@/services';
+
 dayjs.extend(isSameOrBefore);
 dayjs.extend(minMax);
 

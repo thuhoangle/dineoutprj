@@ -1,10 +1,14 @@
 'use client';
-import { AvailableSeats } from '@/services';
+
 import { FC, useRef } from 'react';
+
 import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader } from '@heroui/react';
 import dayjs from 'dayjs';
-import { useEventStore } from '../../hooks';
 import { upperFirst } from 'lodash';
+
+import { AvailableSeats } from '@/services';
+
+import { useEventStore } from '../../hooks';
 
 interface CheckTableSlotDrawerProps {
   isOpen: boolean;

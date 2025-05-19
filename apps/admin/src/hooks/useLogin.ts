@@ -1,12 +1,14 @@
 'use client';
 
-import { toastHelper } from '@/components';
-import { AppSocket } from '@/services/supa-socket';
-import { useAvailableSeatsStore, useUserStore, useTablesStore, useReservationStore } from '@/stores';
-import { createClient } from '@/utils/supabase/client';
+import { useEffect, useState } from 'react';
+
 import { useRouter } from 'next/navigation';
 
-import { useEffect, useState } from 'react';
+import { createClient } from '@/utils/supabase/client';
+
+import { toastHelper } from '@/components';
+import { AppSocket } from '@/services/supa-socket';
+import { useAvailableSeatsStore, useReservationStore, useTablesStore, useUserStore } from '@/stores';
 
 export const useLogin = (goToHomePage?: boolean) => {
   const router = useRouter();

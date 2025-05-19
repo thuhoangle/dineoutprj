@@ -1,4 +1,5 @@
 'use client';
+
 import { useEffect, useState } from 'react';
 
 import { ModalPortalController } from './modal-portal-controller';
@@ -7,9 +8,7 @@ import { OverlayAlert } from './overlay';
 import type { ModalComponent } from './types';
 
 export const ModalPortal = () => {
-  const [alertInfo, setAlertInfo] = useState<OverlayAlertInfo | undefined>(
-    undefined
-  );
+  const [alertInfo, setAlertInfo] = useState<OverlayAlertInfo | undefined>(undefined);
   //
   const [modals, setModals] = useState<ModalComponent<any>[]>([]);
 

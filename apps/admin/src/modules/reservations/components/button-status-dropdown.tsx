@@ -1,9 +1,11 @@
 'use client';
+
+import { useEffect, useRef, useState } from 'react';
+
+import clsx from 'clsx';
+import { SimpleLoading } from 'dineout-ui';
 import { FaCheck } from 'react-icons/fa6';
 import { LuChevronDown, LuChevronUp } from 'react-icons/lu';
-import clsx from 'clsx';
-import { useEffect, useRef, useState } from 'react';
-import { SimpleLoading } from 'dineout-ui';
 
 const STATUS_OPTIONS = ['pending', 'confirmed', 'cancelled', 'completed'];
 

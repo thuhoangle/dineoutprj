@@ -1,8 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { supaApiInstance, UserInfo } from '@/services';
-import { supabase } from '@/utils';
+
+import { UserInfo, supaApiInstance } from '@/services';
 import { AppSocket } from '@/services/supa-socket';
+import { supabase } from '@/utils';
 
 interface UserStoreState {
   rehydrated: boolean;

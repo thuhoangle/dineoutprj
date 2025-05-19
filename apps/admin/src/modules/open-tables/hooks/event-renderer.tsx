@@ -1,8 +1,11 @@
-import dayjs from 'dayjs';
 import React from 'react';
-import { useEventStore } from './store';
-import { AvailableSeats } from '@/services';
+
 import clsx from 'clsx';
+import dayjs from 'dayjs';
+
+import { AvailableSeats } from '@/services';
+
+import { useEventStore } from './store';
 
 type EventRendererProps = {
   date: dayjs.Dayjs;

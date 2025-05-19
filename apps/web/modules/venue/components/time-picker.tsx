@@ -18,13 +18,7 @@ const getDayOfMonth = (dateString: string) => {
   return date.date(); // Returns the day of the month
 };
 
-export const DatePicker = ({
-  date,
-  onClick,
-}: {
-  date: string;
-  onClick: () => void;
-}) => {
+export const DatePicker = ({ date, onClick }: { date: string; onClick: () => void }) => {
   const shortDayName = getShortDayName(date);
   const dayOfMonth = getDayOfMonth(date);
 

@@ -1,9 +1,11 @@
 'use client';
 
-import { useLogin } from '@/hooks';
-import { Button, TextField } from 'dineout-ui';
-import { Input } from '@heroui/react';
 import { useState } from 'react';
+
+import { Input } from '@heroui/react';
+import { Button, TextField } from 'dineout-ui';
+
+import { useLogin } from '@/hooks';
 
 export default function LoginPage() {
   const { email, setEmail, errorEmail, password, setPassword, errorPassword, fetchingLogin, onLogin } = useLogin(true);

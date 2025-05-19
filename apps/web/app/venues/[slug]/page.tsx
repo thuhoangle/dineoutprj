@@ -1,15 +1,18 @@
 'use client';
 
-import { useParams } from 'next/navigation';
-import { IoShareOutline } from 'react-icons/io5';
 import { useEffect, useMemo, useState } from 'react';
-import { Button, globalLoading, TextField, toastHelper } from '@/components';
-import { OverviewSection, BookingSection, Carousel, MiniMap, ReviewPanel } from '@/modules/venue/components';
-import { RestaurantInfo, supaApiInstance } from '@/services';
-import { useGetAvailableSeats, useGetReviews } from '@/hooks';
-import { useVenueInfoStore } from '@/stores';
+
+import { useParams } from 'next/navigation';
+
 import { FaHeart, FaRegHeart, FaStar } from 'react-icons/fa';
 import { FaLocationDot } from 'react-icons/fa6';
+import { IoShareOutline } from 'react-icons/io5';
+
+import { Button, TextField, globalLoading, toastHelper } from '@/components';
+import { useGetAvailableSeats, useGetReviews } from '@/hooks';
+import { BookingSection, Carousel, MiniMap, OverviewSection, ReviewPanel } from '@/modules/venue/components';
+import { RestaurantInfo, supaApiInstance } from '@/services';
+import { useVenueInfoStore } from '@/stores';
 import { getPriceRange } from '@/utils';
 
 const VenueDetailPage = () => {

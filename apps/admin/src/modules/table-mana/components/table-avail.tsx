@@ -1,17 +1,20 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { TableCard } from './table-card';
-import { FaPlus } from 'react-icons/fa';
+
 import { Button } from '@heroui/react';
 import { upperFirst } from 'lodash';
-import { TableDetails } from './table-details';
+import { FaPlus } from 'react-icons/fa';
+
+import { toastHelper } from '@/components';
+import { handleError } from '@/services';
 import { RestaurantTableProps } from '@/services/api-types';
 import { useTablesStore, useUserStore } from '@/stores';
 import { supabase } from '@/utils';
-import { toastHelper } from '@/components';
-import { handleError } from '@/services';
+
 import { TABLE_CONFIG } from './config';
+import { TableCard } from './table-card';
+import { TableDetails } from './table-details';
 
 export default function TableAvailability() {
   const authInfo = useUserStore((state) => state.authInfo);

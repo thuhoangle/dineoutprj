@@ -1,8 +1,10 @@
-import { persist } from 'zustand/middleware';
-import { RestaurantTableProps, supaApiInstance } from '@/services';
-import { create } from 'zustand';
 import { get } from 'http';
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+
 import { toastHelper } from '@/components';
+import { RestaurantTableProps, supaApiInstance } from '@/services';
+
 import { useUserStore } from './useUserStore';
 
 interface TablesProps {
@@ -26,9 +28,7 @@ export const useTablesStore = create<TablesProps>()(
       getTables: async () => {
         const portfolioDetail = useUserStore.getState().portfolioDetail;
         if (!portfolioDetail) return;
-        const { data, error } = await supaApiInstance.getRestaurantTables(
-          portfolioDetail.id
-        );
+        const { data, error } = await supaApiInstance.getRestaurantTables(portfolioDetail.id);
         if (error) {
           toastHelper.error(error.message);
         } else {

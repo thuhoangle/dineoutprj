@@ -1,12 +1,15 @@
-import { Button } from './button';
-import { FaHeart, FaRegHeart, FaStar } from 'react-icons/fa';
-import { TextField } from './text';
-import { GrLocation } from 'react-icons/gr';
-import clsx from 'clsx';
 import Image from 'next/image';
-import { RestaurantInfo } from '@/services';
 import { useRouter } from 'next/navigation';
+
+import clsx from 'clsx';
+import { FaHeart, FaRegHeart, FaStar } from 'react-icons/fa';
+import { GrLocation } from 'react-icons/gr';
+
+import { RestaurantInfo } from '@/services';
 import { EMPTY_RESTAURANT_IMAGE, getImageUrl, getPriceRange } from '@/utils';
+
+import { Button } from './button';
+import { TextField } from './text';
 
 export const BigWidget = ({
   data,

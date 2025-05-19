@@ -1,14 +1,18 @@
 'use client';
 
-import { FC, useState, useRef } from 'react';
+import { FC, useRef, useState } from 'react';
+
 import { Switch } from '@headlessui/react';
-import { Button, NumberInput, SelectItem, Select } from '@heroui/react';
+import { Button, NumberInput, Select, SelectItem } from '@heroui/react';
 import { FiEdit2 } from 'react-icons/fi';
 import { IoMdCheckmark } from 'react-icons/io';
-import { useCheckPressOutSide } from '@/hooks/useCheckPressOutSide';
-import { RestaurantTableProps } from '@/services/api-types';
+
 import { ModalDeleteTable } from '@/components/modal-portal';
 import { ModalPortalController } from '@/components/modal-portal';
+
+import { useCheckPressOutSide } from '@/hooks/useCheckPressOutSide';
+
+import { RestaurantTableProps } from '@/services/api-types';
 
 interface TableDetailsProps {
   selectedTable: RestaurantTableProps | null;

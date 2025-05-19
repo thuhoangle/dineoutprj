@@ -1,5 +1,7 @@
 'use client';
+
 import { FC, useRef, useState } from 'react';
+
 import {
   Button,
   DatePicker,
@@ -12,13 +14,15 @@ import {
   Tooltip,
 } from '@heroui/react';
 import { DateValue, isSameDay, parseDate } from '@internationalized/date';
-import { useAvailableSeatsStore, useTablesStore, useUserStore } from '@/stores';
+import clsx from 'clsx';
+
 import { toastHelper } from '@/components';
-import { formatDateForAPI, supabase, TimeRange } from '@/utils';
+import { useAvailableSeatsStore, useTablesStore, useUserStore } from '@/stores';
+import { TimeRange, formatDateForAPI, supabase } from '@/utils';
+
+import { RepeatOption, RepeatTimeSlotOptions } from '../repeat-time-slot-options';
 import { TablePicker } from '../time-picker';
 import { TimeRangePicker } from '../time-range-picker';
-import { RepeatOption, RepeatTimeSlotOptions } from '../repeat-time-slot-options';
-import clsx from 'clsx';
 
 export const CreateAvailSlotsDrawer: FC<CreateAvailSlotsDrawerProps> = ({ isOpen, onClose, date, disableCreate }) => {
   const portfolioDetail = useUserStore((state) => state.portfolioDetail);

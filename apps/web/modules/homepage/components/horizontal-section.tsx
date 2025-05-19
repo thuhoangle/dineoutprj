@@ -1,8 +1,11 @@
-import { BigWidget } from '@/components/big-widget';
-import { TextField } from '../../../components/text';
 import { FaRegMoon } from 'react-icons/fa';
+
+import { BigWidget } from '@/components/big-widget';
+
 import { RestaurantInfo } from '@/services';
 import { useVenueInfoStore } from '@/stores';
+
+import { TextField } from '../../../components/text';
 
 export const HorizontalSection = ({
   title,

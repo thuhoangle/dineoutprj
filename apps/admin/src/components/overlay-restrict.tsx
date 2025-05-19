@@ -1,12 +1,15 @@
 'use client';
 
-import { useUserStore } from '@/stores';
+import { useEffect, useState } from 'react';
+
+import { useRouter } from 'next/navigation';
+
 import clsx from 'clsx';
 import { Button } from 'dineout-ui';
 import { TextField } from 'dineout-ui';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import { IoIosLogIn } from 'react-icons/io';
+
+import { useUserStore } from '@/stores';
 
 export const OverlayRestrict = ({
   className,

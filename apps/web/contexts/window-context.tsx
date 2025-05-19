@@ -1,7 +1,8 @@
 'use client';
 
-import { useWindowSize } from '@/hooks';
 import React, { createContext, useContext, useMemo } from 'react';
+
+import { useWindowSize } from '@/hooks';
 
 interface WindowContextProps {
   windowSize: { width: number; height: number };

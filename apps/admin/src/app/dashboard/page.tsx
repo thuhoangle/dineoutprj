@@ -1,9 +1,10 @@
 'use client';
 
 import { FC, useEffect } from 'react';
-import { useUserStore } from '@/stores';
+
 import { ReservationSection } from '@/modules/dashboard/components/reservation-section';
 import { CalendarReservations } from '@/modules/reservations';
+import { useUserStore } from '@/stores';
 
 const DashboardPage: FC = () => {
   const authInfo = useUserStore((state) => state.authInfo);

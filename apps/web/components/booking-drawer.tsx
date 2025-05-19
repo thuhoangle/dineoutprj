@@ -1,25 +1,26 @@
 'use client';
 
-import { BsFillPeopleFill } from 'react-icons/bs';
-
-import { TextField } from './text';
-import dayjs from 'dayjs';
 import {
+  Button,
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
   Input,
   Select,
   SelectItem,
-  Button,
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerBody,
-  DrawerFooter,
 } from '@heroui/react';
-import { toastHelper } from './toast-helper';
-import { Button as MyButton } from './button';
-import { AvailableSeatRestaurant, AvailableSeats, RestaurantInfo } from '@/services';
-import { SlotPickerParamsProps } from './slot-picker';
+import dayjs from 'dayjs';
 import { upperFirst } from 'lodash';
+import { BsFillPeopleFill } from 'react-icons/bs';
+
+import { AvailableSeatRestaurant, AvailableSeats, RestaurantInfo } from '@/services';
+
+import { Button as MyButton } from './button';
+import { SlotPickerParamsProps } from './slot-picker';
+import { TextField } from './text';
+import { toastHelper } from './toast-helper';
 
 export const BookingDrawer = ({
   isOpen,
@@ -131,14 +132,14 @@ export const BookingDrawer = ({
               <hr className="border-gray-300 !px-0" />
               <div className="flex flex-col gap-2 py-2">
                 <h1 className="text-2xl font-bold leading-7">{name}</h1>
-                {locations.address && <p className="text-sm text-default-500">{locations.address}</p>}
+                {locations.address && <p className="text-sm text-gray-500">{locations.address}</p>}
                 <div className="mt-4 flex flex-col gap-3">
                   <div className="flex gap-3 items-center">
-                    <div className="flex-none border-1 border-default-200/50 rounded-small text-center w-11 overflow-hidden">
-                      <div className="text-tiny bg-default-100 py-0.5 text-default-500">
+                    <div className="flex-none border-1 border-default-200/50 rounded-sm text-center w-11 overflow-hidden">
+                      <div className="text-tiny bg-default-100 py-0.5 text-gray-500">
                         {dayjs(timeSlot).format('MMM')}
                       </div>
-                      <div className="flex items-center justify-center font-semibold text-medium h-6 text-default-500">
+                      <div className="flex items-center justify-center font-semibold text-medium h-6 text-gray-500">
                         {dayjs(timeSlot).date()}
                       </div>
                     </div>
@@ -146,18 +147,18 @@ export const BookingDrawer = ({
                       <p className="text-medium text-foreground font-medium">
                         {dayjs(timeSlot).format('dddd, MMMM D')}
                       </p>
-                      <p className="text-small text-default-500">{dayjs(timeSlot).format('h:mm A')}</p>
+                      <p className="text-small text-gray-500">{dayjs(timeSlot).format('h:mm A')}</p>
                     </div>
                   </div>
                   <div className="flex gap-3 items-center">
-                    <div className="flex items-center justify-center border-1 border-default-200/50 rounded-small w-11 h-11">
-                      <BsFillPeopleFill className="h-14 text-default-500" />
+                    <div className="flex items-center justify-center border-1 border-default-200/50 rounded-sm w-11 h-11">
+                      <BsFillPeopleFill className="h-14 text-gray-500" />
                     </div>
                     <div className="flex flex-col gap-0.5">
                       <p className="text-medium text-foreground font-medium">
                         {quantity} {quantity > 1 ? 'People' : 'Person'}
                       </p>
-                      {seat_type && <p className="text-small text-default-500">{upperFirst(seat_type)}</p>}
+                      {seat_type && <p className="text-small text-gray-500">{upperFirst(seat_type)}</p>}
                     </div>
                   </div>
                   <div className="flex flex-col mt-4 gap-5 items-start">

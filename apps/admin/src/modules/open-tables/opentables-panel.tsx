@@ -1,19 +1,22 @@
 'use client';
 
+import { useEffect } from 'react';
+
+import dayjs from 'dayjs';
+
+import { AvailableSeats } from '@/services';
+import { useAvailableSeatsStore, useTablesStore } from '@/stores';
+
 import {
   CalendarRange,
+  CheckTableSlotDrawer,
+  CreateAvailSlotsDrawer,
   DaySelect,
   DayView,
   MonthView,
   WeekView,
-  CreateAvailSlotsDrawer,
-  CheckTableSlotDrawer,
 } from './components';
 import { useDateStore, useEventStore, useViewStore } from './hooks';
-import { useEffect } from 'react';
-import { AvailableSeats } from '@/services';
-import { useTablesStore, useAvailableSeatsStore } from '@/stores';
-import dayjs from 'dayjs';
 
 export const OpenTablesPanel = () => {
   const { selectedView } = useViewStore();

@@ -1,15 +1,16 @@
 'use client';
 
-import clsx from 'clsx';
 import type { FC, ReactElement, ReactNode, SVGProps } from 'react';
+
+import clsx from 'clsx';
+
 import { SimpleLoading } from './simple-loading';
 
-interface SimpleButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface SimpleButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   text?: string;
   className?: string;
-  LeftHeroIcon?: (props: SVGProps<SVGSVGElement>) => ReactElement;
-  RightHeroIcon?: (props: SVGProps<SVGSVGElement>) => ReactElement;
+  LeftHeroIcon?: any;
+  RightHeroIcon?: any;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   fetching?: boolean;
   children?: ReactNode;
@@ -17,18 +18,8 @@ interface SimpleButtonProps
   preset?: ButtonPreset;
 }
 export const SimpleButton: FC<SimpleButtonProps> = (props) => {
-  const {
-    text,
-    className,
-    onClick,
-    fetching,
-    children,
-    disabled,
-    LeftHeroIcon,
-    RightHeroIcon,
-    preset,
-    ...rest
-  } = props;
+  const { text, className, onClick, fetching, children, disabled, LeftHeroIcon, RightHeroIcon, preset, ...rest } =
+    props;
 
   return (
     <button
@@ -45,18 +36,10 @@ export const SimpleButton: FC<SimpleButtonProps> = (props) => {
       disabled={disabled || fetching || !onClick}
       {...rest}
     >
-      {fetching ? (
-        <SimpleLoading size={15} />
-      ) : LeftHeroIcon ? (
-        <LeftHeroIcon className="h-5 w-5 text-inherit" />
-      ) : null}
-      {text && preset !== 'square' ? (
-        <div className="text-center">{text}</div>
-      ) : null}
+      {fetching ? <SimpleLoading size={15} /> : LeftHeroIcon ? <LeftHeroIcon className="h-5 w-5 text-inherit" /> : null}
+      {text && preset !== 'square' ? <div className="text-center">{text}</div> : null}
       {children}
-      {RightHeroIcon ? (
-        <RightHeroIcon className="h-5 w-5 text-inherit" />
-      ) : null}
+      {RightHeroIcon ? <RightHeroIcon className="h-5 w-5 text-inherit" /> : null}
     </button>
   );
 };
@@ -87,32 +70,24 @@ const presetBtClassName = {
   base: '',
   text: '',
 
-  primary:
-    'bg-primary-300 hover:bg-primary-400 focus:ring-2 focus:outline-none focus:ring-primary-600',
-  sgray1:
-    'bg-gray-100 hover:bg-gray-250 focus:ring-2 focus:outline-none focus:ring-gray-500',
-  sgray2:
-    'bg-gray-400 hover:bg-gray-200 focus:ring-2 focus:outline-none focus:ring-gray-500',
-  green:
-    'bg-green-500 hover:bg-green-600 focus:ring-2 focus:outline-none focus:ring-green-500',
+  primary: 'bg-primary-300 hover:bg-primary-400 focus:ring-2 focus:outline-none focus:ring-primary-600',
+  sgray1: 'bg-gray-100 hover:bg-gray-250 focus:ring-2 focus:outline-none focus:ring-gray-500',
+  sgray2: 'bg-gray-400 hover:bg-gray-200 focus:ring-2 focus:outline-none focus:ring-gray-500',
+  green: 'bg-green-500 hover:bg-green-600 focus:ring-2 focus:outline-none focus:ring-green-500',
   red: 'bg-red-500 hover:bg-red-600 focus:ring-2 focus:outline-none focus:ring-red-500',
   tgray1: 'hover:bg-gray-900 hover:text-gray-300',
   tgray2: 'hover:bg-gray-850 hover:text-gray-200',
   tred: 'hover:bg-gray-850 hover:text-red-400',
   link: 'hover:text-primary-700',
-  linkGray:
-    'border-2 py-1.5 px-2.5 border-gray-300 hover:border-gray-500 hover:text-gray-600',
+  linkGray: 'border-2 py-1.5 px-2.5 border-gray-300 hover:border-gray-500 hover:text-gray-600',
   linkRed: 'py-1.5 px-2.5 hover:text-red-600',
 
   // legacy
-  secondary:
-    'bg-neutral-900 enabled:hover:bg-neutral-800 disabled:bg-neutral-800',
-  modalSecondary:
-    'bg-neutral-800 enabled:hover:bg-neutral-700 disabled:bg-neutral-700',
+  secondary: 'bg-neutral-900 enabled:hover:bg-neutral-800 disabled:bg-neutral-800',
+  modalSecondary: 'bg-neutral-800 enabled:hover:bg-neutral-700 disabled:bg-neutral-700',
 
   cancel: 'bg-neutral-900 enabled:hover:bg-neutral-800 disabled:bg-neutral-800',
-  square:
-    'bg-transparent hover:bg-gray-850 focus:bg-gray-850 focus:ring-2 focus:outline-none focus:ring-gray-500',
+  square: 'bg-transparent hover:bg-gray-850 focus:bg-gray-850 focus:ring-2 focus:outline-none focus:ring-gray-500',
 };
 
 const presetTextClassName: {

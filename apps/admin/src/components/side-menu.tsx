@@ -1,12 +1,16 @@
 'use client';
-import { anyToInt } from '@/utils/format-helper';
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline';
-import { Badge, Tag } from 'dineout-ui';
-import clsx from 'clsx';
-import { TextField } from 'dineout-ui';
+
 import { type FC, memo, useState } from 'react';
-import { upperFirst } from 'lodash';
+
 import Link from 'next/link';
+
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline';
+import clsx from 'clsx';
+import { Badge, Tag } from 'dineout-ui';
+import { TextField } from 'dineout-ui';
+import { upperFirst } from 'lodash';
+
+import { anyToInt } from '@/utils/format-helper';
 
 export interface SideMenuItemType {
   Icon?: any;

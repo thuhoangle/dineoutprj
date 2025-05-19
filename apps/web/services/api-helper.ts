@@ -1,6 +1,7 @@
-import { toastHelper } from '@/components';
-import type { ApiResponse, PROBLEM_CODE } from 'apisauce';
 import type { PostgrestError } from '@supabase/supabase-js';
+import type { ApiResponse, PROBLEM_CODE } from 'apisauce';
+
+import { toastHelper } from '@/components';
 
 export type ApiError = {
   message: string | undefined;
@@ -21,9 +22,7 @@ function handleApiError<T, U>(
   options?: {
     toastHelper?: any;
     showToast?: boolean;
-    unauthorizedCB?: (
-      response: ApiResponse<T, U | ApiResponseErrorData>
-    ) => void;
+    unauthorizedCB?: (response: ApiResponse<T, U | ApiResponseErrorData>) => void;
     forbiddenCB?: (response: ApiResponse<T, U | ApiResponseErrorData>) => void;
   }
 ): { result: T | undefined; error: ApiError | undefined } {
@@ -86,10 +85,7 @@ function handleApiError<T, U>(
 }
 
 // ✅ Export function to handle both Supabase and Apisauce errors
-export function handleError<T, U>(
-  response: ApiResponse<T, U> | PostgrestError,
-  showToast?: boolean
-) {
+export function handleError<T, U>(response: ApiResponse<T, U> | PostgrestError, showToast?: boolean) {
   return handleApiError<T, U>(response, {
     showToast,
     toastHelper,

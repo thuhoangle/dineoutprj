@@ -1,15 +1,20 @@
 'use client';
 
-import { ModalPortal, HeaderMenu, SideMenu, OverlayRestrict } from '@/components';
-import { usePathname } from 'next/navigation';
-import { WindowProvider } from '@/contexts/window-context';
-import { MdDashboard, MdPeople, MdRestaurant, MdEventNote, MdManageAccounts } from 'react-icons/md';
-import ClientToaster from '@/config/client-toaster';
-import { OverlayBlockMobileMode } from './overlay-block-mobile-mode';
-import { useSocketManager } from '@/hooks/useSocketManager';
 import { useEffect } from 'react';
+
+import { usePathname } from 'next/navigation';
+
+import { MdDashboard, MdEventNote, MdManageAccounts, MdPeople, MdRestaurant } from 'react-icons/md';
+
+import { useSocketManager } from '@/hooks/useSocketManager';
+
+import { HeaderMenu, ModalPortal, OverlayRestrict, SideMenu } from '@/components';
+import ClientToaster from '@/config/client-toaster';
+import { WindowProvider } from '@/contexts/window-context';
 import { useAvailableSeatsStore, useReservationStore, useTablesStore, useUserStore } from '@/stores';
+
 import { GlobalLoading } from './global-loading';
+import { OverlayBlockMobileMode } from './overlay-block-mobile-mode';
 
 export interface MenuItemType {
   Icon?: any;

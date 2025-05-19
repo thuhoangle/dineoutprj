@@ -1,41 +1,29 @@
 'use client';
 
-import clsx from 'clsx';
-import { IoIosClose } from 'react-icons/io';
 import React from 'react';
-import type { Toast, ToastOptions } from 'react-hot-toast';
-import { FaRegSmileWink } from 'react-icons/fa';
-import { MdErrorOutline } from 'react-icons/md';
-import toast from 'react-hot-toast';
+
+import clsx from 'clsx';
 import { FeatureIcon, SimpleLoading, TextField } from 'dineout-ui';
+import type { Toast, ToastOptions } from 'react-hot-toast';
+import toast from 'react-hot-toast';
+import { FaRegSmileWink } from 'react-icons/fa';
+import { IoIosClose } from 'react-icons/io';
+import { MdErrorOutline } from 'react-icons/md';
 
 export const toastHelper = {
-  success: (message: string | React.ReactNode, options?: ToastOptions) =>
-    Toaster('success', message, options),
-  error: (message: string, options?: ToastOptions) =>
-    Toaster('error', message, options),
-  warning: (message: string, options?: ToastOptions) =>
-    Toaster('warning', message, options),
-  loading: (message: string, options?: ToastOptions) =>
-    Toaster('loading', message, { ...options, duration: Infinity }),
+  success: (message: string | React.ReactNode, options?: ToastOptions) => Toaster('success', message, options),
+  error: (message: string, options?: ToastOptions) => Toaster('error', message, options),
+  warning: (message: string, options?: ToastOptions) => Toaster('warning', message, options),
+  loading: (message: string, options?: ToastOptions) => Toaster('loading', message, { ...options, duration: Infinity }),
 };
 
-const Toaster = (
-  type: ToasterType,
-  message: string | React.ReactNode,
-  options?: ToastOptions
-) => {
+const Toaster = (type: ToasterType, message: string | React.ReactNode, options?: ToastOptions) => {
   const { duration } = options || {};
-  return toast.custom(
-    (t) => (
-      <ToastContent duration={duration} message={message} t={t} type={type} />
-    ),
-    {
-      position: 'top-right',
-      duration: duration || 3000,
-      ...options,
-    }
-  );
+  return toast.custom((t) => <ToastContent duration={duration} message={message} t={t} type={type} />, {
+    position: 'top-right',
+    duration: duration || 3000,
+    ...options,
+  });
 };
 
 const ToastContent = ({
@@ -60,41 +48,18 @@ const ToastContent = ({
     >
       {type !== 'loading' && (
         <button className="absolute right-1.5 top-0.5 p-2">
-          <IoIosClose
-            className="h-8 w-8 self-end text-gray-500"
-            onClick={() => toast.dismiss(t.id)}
-          />
+          <IoIosClose className="h-8 w-8 self-end text-gray-500" onClick={() => toast.dismiss(t.id)} />
         </button>
       )}
       <div className="flex items-start gap-2 p-4">
         {type === 'loading' ? (
-          <SimpleLoading
-            className="self-center px-3"
-            loadingColor="#EAAA08"
-            size={20}
-          />
+          <SimpleLoading className="self-center px-3" loadingColor="#EAAA08" size={20} />
         ) : (
-          <FeatureIcon
-            className="self-start"
-            color={iconColor as any}
-            Icon={Icon as any}
-            preset="outline"
-            size="md"
-          />
+          <FeatureIcon className="self-start" color={iconColor as any} Icon={Icon as any} preset="outline" size="md" />
         )}
         <div className="flex flex-col gap-1">
-          <TextField
-            className={clsx(getColorByType(type, 'text'))}
-            preset="p4"
-            text={title}
-            weight="m"
-          />
-          <TextField
-            color="gray"
-            preset="p4"
-            text={message as string}
-            weight="m"
-          />
+          <TextField className={clsx(getColorByType(type, 'text'))} preset="p4" text={title} weight="m" />
+          <TextField color="gray" preset="p4" text={message as string} weight="m" />
         </div>
       </div>
       {type !== 'loading' && <ProcessBar duration={duration} type={type} />}
@@ -102,19 +67,10 @@ const ToastContent = ({
   );
 };
 
-const ProcessBar = ({
-  type,
-  duration,
-}: {
-  type: ToasterType;
-  duration?: number;
-}) => (
+const ProcessBar = ({ type, duration }: { type: ToasterType; duration?: number }) => (
   <div className="h-1 w-full">
     <div
-      className={clsx(
-        'process-load-to-full h-1 rounded-full',
-        getColorByType(type, 'bg')
-      )}
+      className={clsx('process-load-to-full h-1 rounded-full', getColorByType(type, 'bg'))}
       style={{ animationDuration: `${duration || 3000}ms` }}
     />
   </div>
@@ -128,7 +84,7 @@ const getColorByType = (type: ToasterType, prefix: string) => {
 type ToasterType = 'success' | 'error' | 'warning' | 'loading';
 const TOASTER_CONFIG: {
   [key in ToasterType]: {
-    Icon: (props: React.SVGProps<SVGSVGElement>) => JSX.Element;
+    Icon: any;
     iconColor: string;
     color: string;
     title?: string;

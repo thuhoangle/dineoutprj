@@ -1,17 +1,17 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+
+import { toastHelper } from '@/components';
+
 import { ApiInstance } from '../services';
 import { useLocationStore } from '../stores';
-import { toastHelper } from '@/components';
 
 export const useGetUserLocation = () => {
   const [fetching, setFetching] = useState(false);
   const [location, setLocation] = useState('');
   const [locationSharable, setLocationSharable] = useState(false);
-  const { latitude, longitude, setCoordinate } = useLocationStore(
-    (state) => state
-  );
+  const { latitude, longitude, setCoordinate } = useLocationStore((state) => state);
 
   useEffect(() => {
     getUserLocation();
@@ -74,9 +74,7 @@ export const useGetUserLocation = () => {
         name: 'geolocation',
       });
       if (permissionStatus.state === 'denied') {
-        toastHelper.error(
-          'Geolocation access has been denied. Please enable it in your browser settings.'
-        );
+        toastHelper.error('Geolocation access has been denied. Please enable it in your browser settings.');
       } else {
         getUserLocation();
       }

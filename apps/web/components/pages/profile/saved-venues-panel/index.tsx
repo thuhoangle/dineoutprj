@@ -1,8 +1,11 @@
 'use client';
 
-import { TextField } from '@/components/text';
-import { useVenueInfoStore } from '@/stores';
 import { useEffect } from 'react';
+
+import { TextField } from '@/components/text';
+
+import { useVenueInfoStore } from '@/stores';
+
 import { VenueCard } from './venue-card';
 
 export const SavedVenuesPanel = () => {

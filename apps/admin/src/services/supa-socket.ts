@@ -1,6 +1,7 @@
-import { useUserStore } from '@/stores/useUserStore';
 import { useAvailableSeatsStore, useReservationStore } from '@/stores';
+import { useUserStore } from '@/stores/useUserStore';
 import { supabase } from '@/utils';
+
 import { AvailableSeats, ReservationInfo } from './api-types';
 
 class SupaSocket {

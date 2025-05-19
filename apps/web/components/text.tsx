@@ -1,5 +1,6 @@
-import clsx from 'clsx';
 import type { FC, ReactNode } from 'react';
+
+import clsx from 'clsx';
 
 interface TextProps {
   text?: string;
@@ -11,23 +12,9 @@ interface TextProps {
 }
 
 export const TextField: FC<TextProps> = (props) => {
-  const {
-    text,
-    className,
-    preset = 'p1',
-    weight = 'r',
-    color = 'base',
-    children,
-  } = props;
+  const { text, className, preset = 'p1', weight = 'r', color = 'base', children } = props;
   return (
-    <div
-      className={clsx(
-        presetClassName[preset],
-        presetFontWeight[weight],
-        presetFontColor[color],
-        className
-      )}
-    >
+    <div className={clsx(presetClassName[preset], presetFontWeight[weight], presetFontColor[color], className)}>
       {text || children}
     </div>
   );

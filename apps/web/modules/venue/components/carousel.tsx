@@ -1,8 +1,9 @@
-/* eslint-disable @next/next/no-img-element */
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules';
-import 'swiper/swiper-bundle.css';
+ 
 import NextImage from 'next/image';
+
+import { Navigation, Pagination } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/swiper-bundle.css';
 
 export const Carousel = ({ data }: { data: string[] }) => {
   const _handlePagination = {

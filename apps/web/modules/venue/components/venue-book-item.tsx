@@ -1,12 +1,13 @@
 'use client';
 
-import dayjs from 'dayjs';
 import { useMemo } from 'react';
 
-import { Button, TextField } from '@/components';
 import { type DateValue } from '@heroui/react';
-import { AvailableSeats } from '@/services';
+import dayjs from 'dayjs';
 import { upperFirst } from 'lodash';
+
+import { Button, TextField } from '@/components';
+import { AvailableSeats } from '@/services';
 import { timeInAMPM } from '@/utils';
 
 export const VenueBookItem = ({

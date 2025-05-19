@@ -3,8 +3,8 @@
 import type { ReactNode } from 'react';
 import React, { useEffect, useState } from 'react';
 
-import { globalLoading } from './global-loading-controller';
 import { SimpleLoading } from '../simple-loading';
+import { globalLoading } from './global-loading-controller';
 
 export const GlobalLoading = () => {
   const [loading, setLoading] = useState<boolean | ReactNode>(false);

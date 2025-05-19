@@ -1,9 +1,11 @@
 'use client';
 
+import { useState } from 'react';
+
+import toast from 'react-hot-toast';
+
 import { globalLoading, toastHelper } from '@/components';
 import { RestaurantInfo, supaApiInstance } from '@/services';
-import { useState } from 'react';
-import toast from 'react-hot-toast';
 
 export const useGetRestaurantInfo = () => {
   const [dataList, setDataList] = useState<RestaurantInfo[]>([]);

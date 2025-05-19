@@ -1,12 +1,15 @@
+import NextLink from 'next/link';
+
+import clsx from 'clsx';
+import { FaHeart, FaRegHeart, FaStar } from 'react-icons/fa6';
+import { GrLocation } from 'react-icons/gr';
+
 import { TextField } from '@/components/text';
 import { toastHelper } from '@/components/toast-helper';
+
 import { RestaurantInfo } from '@/services';
 import { useUserStore, useVenueInfoStore } from '@/stores';
 import { EMPTY_RESTAURANT_IMAGE } from '@/utils';
-import clsx from 'clsx';
-import NextLink from 'next/link';
-import { FaHeart, FaRegHeart, FaStar } from 'react-icons/fa6';
-import { GrLocation } from 'react-icons/gr';
 
 export const VenueCard = ({
   data,

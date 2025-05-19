@@ -1,10 +1,13 @@
 'use client';
 
-import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
-import clsx from 'clsx';
-import { getHours, isCurrentDay } from '@/utils';
+
 import { ScrollShadow } from '@heroui/react';
+import clsx from 'clsx';
+import dayjs from 'dayjs';
+
+import { getHours, isCurrentDay } from '@/utils';
+
 import { EventRenderer, useDateStore, useEventStore } from '../../hooks';
 
 export const DayView = () => {

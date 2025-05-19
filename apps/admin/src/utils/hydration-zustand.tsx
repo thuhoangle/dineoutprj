@@ -7,21 +7,12 @@ interface HydrationZustandProps {
   className?: string;
 }
 
-export const HydrationZustand: React.FC<HydrationZustandProps> = ({
-  children,
-  className,
-}) => {
+export const HydrationZustand: React.FC<HydrationZustandProps> = ({ children, className }) => {
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
     setIsHydrated(true);
   }, []);
 
-  return isHydrated ? (
-    className ? (
-      <div className={className}>{children}</div>
-    ) : (
-      <Fragment>{children}</Fragment>
-    )
-  ) : null;
+  return isHydrated ? className ? <div className={className}>{children}</div> : <Fragment>{children}</Fragment> : null;
 };

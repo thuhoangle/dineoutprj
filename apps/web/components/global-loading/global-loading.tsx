@@ -1,8 +1,9 @@
 'use client';
 
-import { SimpleLoading } from '@/components/simple-loading';
 import type { ReactNode } from 'react';
 import React, { useEffect, useState } from 'react';
+
+import { SimpleLoading } from '@/components/simple-loading';
 
 import { globalLoading } from './global-loading-controller';
 

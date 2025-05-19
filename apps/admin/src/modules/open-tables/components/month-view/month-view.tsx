@@ -1,8 +1,9 @@
 'use client';
 
 import React, { Fragment } from 'react';
-import { MonthViewBox } from './month-view-box';
+
 import { useDateStore } from '../../hooks';
+import { MonthViewBox } from './month-view-box';
 
 export const MonthView = () => {
   const { twoDMonthArray } = useDateStore();

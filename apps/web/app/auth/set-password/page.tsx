@@ -1,8 +1,9 @@
 'use client';
 
-import { useSetPasswordFromInvite } from '@/hooks';
-import { TextField, TextInput, Button, GlobalLoading } from '@/components';
 import { createClient } from '@/utils/supabase/client';
+
+import { Button, GlobalLoading, TextField, TextInput } from '@/components';
+import { useSetPasswordFromInvite } from '@/hooks';
 
 export default function SetPasswordPage() {
   const supabase = createClient();

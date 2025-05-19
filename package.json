@@ -1,6 +1,7 @@
 {
   "name": "monodineout",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "turbo build",
     "build:admin": "turbo build:admin --filter=admin",
@@ -10,13 +11,22 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
+    "@repo/eslint-config": "*",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "@typescript-eslint/eslint-plugin": "^8.32.1",
+    "@typescript-eslint/parser": "^8.32.1",
     "autoprefixer": "^10.4.21",
+    "eslint": "^9.27.0",
+    "eslint-plugin-next": "^0.0.0",
     "postcss": "^8.5.3",
     "prettier": "^3.2.5",
-    "tailwindcss": "^4.1.4",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "tailwind-scrollbar": "^3.1.0",
+    "tailwindcss": "^3.4.17",
     "turbo": "^2.3.3",
-    "typescript": "5.5.4"
+    "typescript": "5.5.4",
+    "typescript-eslint": "^8.32.1"
   },
   "engines": {
     "node": ">=18"
@@ -34,7 +44,6 @@
     "next": "14.1.0",
     "react-hot-toast": "^2.4.0",
     "tailwind-config": "^0.1.2",
-    "tailwind-scrollbar": "^4.0.1",
     "tw-colors": "^3.3.2",
     "zustand": "^5.0.3"
   }

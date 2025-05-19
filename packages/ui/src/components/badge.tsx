@@ -1,5 +1,6 @@
-import clsx from 'clsx';
 import type { FC, ReactElement, SVGProps } from 'react';
+
+import clsx from 'clsx';
 
 import { TextField } from './text';
 
@@ -8,8 +9,8 @@ interface BadgeProps {
   size?: keyof typeof presetSize;
   color?: BagdeColor;
   text: string;
-  HeroIcon?: (props: SVGProps<SVGSVGElement>) => ReactElement;
-  RightHeroIcon?: (props: SVGProps<SVGSVGElement>) => ReactElement;
+  HeroIcon?: any;
+  RightHeroIcon?: any;
   className?: string;
 }
 
@@ -35,9 +36,7 @@ export const Badge: FC<BadgeProps> = ({
       <div className="flex items-center gap-1">
         {HeroIcon ? <HeroIcon className="-ml-1 h-3 w-3 text-inherit" /> : null}
         <TextField preset="p5" weight="m" text={text} />
-        {RightHeroIcon ? (
-          <RightHeroIcon className="-mr-1 h-3 w-3 text-inherit" />
-        ) : null}
+        {RightHeroIcon ? <RightHeroIcon className="-mr-1 h-3 w-3 text-inherit" /> : null}
       </div>
     </div>
   );

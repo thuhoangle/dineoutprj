@@ -1,20 +1,16 @@
 'use client';
 
-import React, { useRef, useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
+
+import { Link } from '@heroui/link';
+import clsx from 'clsx';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { RestaurantInfo } from '@/services/api-types';
-import clsx from 'clsx';
-import { TextField } from '@/components';
-import { Link } from "@heroui/link";
 
-export const MiniMap = ({
-  data,
-  className,
-}: {
-  data: RestaurantInfo;
-  className?: string;
-}) => {
+import { TextField } from '@/components';
+import { RestaurantInfo } from '@/services/api-types';
+
+export const MiniMap = ({ data, className }: { data: RestaurantInfo; className?: string }) => {
   const mapContainer = useRef(null);
   const map = useRef<maplibregl.Map | null>(null);
   const zoom = 15;

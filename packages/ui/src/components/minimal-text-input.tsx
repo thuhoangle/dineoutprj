@@ -1,10 +1,11 @@
-import clsx from 'clsx';
 import type { FC } from 'react';
 import React from 'react';
+
+import clsx from 'clsx';
+
 import { TextField } from './text';
 
-interface MinimalTextInputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+interface MinimalTextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   unit?: string | undefined;
   value: string | number;
@@ -44,11 +45,7 @@ export const MinimalTextInput: FC<MinimalTextInputProps> = ({
           value={value}
           {...rest}
         />
-        <TextField
-          preset="p4"
-          className="self-center rounded bg-gray-800 px-1 text-gray-400"
-          text={unit}
-        />
+        <TextField preset="p4" className="self-center rounded bg-gray-800 px-1 text-gray-400" text={unit} />
         {suffix}
       </div>
       {error ? <div className="mt-1 text-xs text-red-500">{error}</div> : null}

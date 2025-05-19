@@ -1,9 +1,12 @@
-import dayjs from 'dayjs';
 import React from 'react';
-import { useEventStore } from './store';
-import { ReservationInfo } from '@/services';
+
 import clsx from 'clsx';
+import dayjs from 'dayjs';
 import { MdPeopleAlt } from 'react-icons/md';
+
+import { ReservationInfo } from '@/services';
+
+import { useEventStore } from './store';
 
 type EventRendererProps = {
   date?: dayjs.Dayjs;

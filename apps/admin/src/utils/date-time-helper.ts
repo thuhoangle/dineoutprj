@@ -19,7 +19,7 @@ export const toServerTime = (datetime: Dayjs) => {
 };
 
 export const toClientTime = (time?: string | undefined): Dayjs => {
-  // eslint-disable-next-line no-restricted-globals
+   
   if (!time || isNaN(+time)) return dayjs();
   const datetime = `${time}`;
   return dayjs(+datetime.slice(0, -6));
@@ -42,10 +42,10 @@ export const nowInNano = () => {
 function hashToUint32(input: string) {
   let hash = 0;
   for (let i = 0; i < input.length; i += 1) {
-    // eslint-disable-next-line no-bitwise
+     
     hash = (hash * 31 + input.charCodeAt(i)) | 0;
   }
-  // eslint-disable-next-line no-bitwise
+   
   return hash >>> 0;
 }
 export const createClientNonce = (address: string | undefined) => {

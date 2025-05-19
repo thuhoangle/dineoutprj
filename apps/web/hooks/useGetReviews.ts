@@ -1,7 +1,8 @@
 'use client';
 
-import { ReviewsList, supaApiInstance } from '@/services';
 import { useState } from 'react';
+
+import { ReviewsList, supaApiInstance } from '@/services';
 
 export const useGetReviews = () => {
   const [allReviews, setAllReviews] = useState<ReviewsList[]>([]);

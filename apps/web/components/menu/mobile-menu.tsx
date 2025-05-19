@@ -1,16 +1,20 @@
 'use client';
 
-import clsx from 'clsx';
-import { usePathname, useRouter } from 'next/navigation';
-import { useWindowContext } from '@/contexts';
 import { type FC, useState } from 'react';
-import { IoMdClose } from 'react-icons/io';
-import type { NavItemType } from './menu-data';
+
 import Image from 'next/image';
-import { TextField } from '../text';
-import { IoIosMenu } from 'react-icons/io';
-import { useLoginSignup } from '@/hooks';
 import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+
+import clsx from 'clsx';
+import { IoMdClose } from 'react-icons/io';
+import { IoIosMenu } from 'react-icons/io';
+
+import { useWindowContext } from '@/contexts';
+import { useLoginSignup } from '@/hooks';
+
+import { TextField } from '../text';
+import type { NavItemType } from './menu-data';
 
 interface StickyBottomMenuProps {
   children?: React.ReactNode;
@@ -39,10 +43,7 @@ export const StickyBottomMenu: FC<StickyBottomMenuProps> = ({ children }) => {
     <div className="h-16">
       {showMenu ? (
         <div className="fixed inset-0 z-40 flex h-full w-full flex-col pr-16 backdrop-blur-lg">
-          <button
-            className="absolute right-1 top-2 p-2"
-            onClick={() => setShowMenu((prev) => !prev)}
-          >
+          <button className="absolute right-1 top-2 p-2" onClick={() => setShowMenu((prev) => !prev)}>
             <IoMdClose className="w-6" />
           </button>
           <div className="pointer-events-auto flex h-screen min-h-0 flex-1 flex-col bg-neutral-950">
@@ -74,11 +75,7 @@ export const StickyBottomMenu: FC<StickyBottomMenuProps> = ({ children }) => {
           className="flex aspect-square h-10 items-center justify-center rounded-md bg-neutral-900"
           onClick={() => setShowMenu((prev) => !prev)}
         >
-          {showMenu ? (
-            <IoMdClose className="w-4" />
-          ) : (
-            <IoIosMenu className="w-4" />
-          )}
+          {showMenu ? <IoMdClose className="w-4" /> : <IoIosMenu className="w-4" />}
         </button>
         {children}
       </div>

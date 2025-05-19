@@ -1,8 +1,9 @@
 'use client';
 
-import clsx from 'clsx';
 import type { FC, InputHTMLAttributes } from 'react';
 import React, { useState } from 'react';
+
+import clsx from 'clsx';
 
 import type { ButtonProps } from '../button';
 import { Button } from '../button';
@@ -60,9 +61,7 @@ export const TextInput: FC<SimpleTextInputProps> = ({
 }) => {
   const [isFocused, setIsFocused] = useState(false);
 
-  const _onChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const _onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const overrideEvent = {
       ...e,
     };
@@ -75,12 +74,7 @@ export const TextInput: FC<SimpleTextInputProps> = ({
     onChangeValue?.(newValue);
   };
   return (
-    <SimpleInputLayout
-      className={className}
-      label={label}
-      error={error}
-      hint={hint}
-    >
+    <SimpleInputLayout className={className} label={label} error={error} hint={hint}>
       <div className="flex">
         <div
           className={clsx(
@@ -127,22 +121,13 @@ export const TextInput: FC<SimpleTextInputProps> = ({
               {...rest}
             />
           )}
-          {unit ? (
-            <Tag className="text-gray-400" size="md" weight="m" text={unit} />
-          ) : null}
+          {unit ? <Tag className="text-gray-400" size="md" weight="m" text={unit} /> : null}
           {RightIcon ? (
             <button aria-label="btn" onClick={onRightIconClick}>
-              <RightIcon
-                className={clsx(
-                  'h-4 w-4',
-                  iconGray ? 'text-gray-400' : 'text-gray-100'
-                )}
-              />
+              <RightIcon className={clsx('h-4 w-4', iconGray ? 'text-gray-400' : 'text-gray-100')} />
             </button>
           ) : null}{' '}
-          {suffix ? (
-            <div className="text-sm text-neutral-300">{suffix}</div>
-          ) : null}
+          {suffix ? <div className="text-sm text-neutral-300">{suffix}</div> : null}
           {RightComponent || null}
         </div>
         {rightButtonProps ? (

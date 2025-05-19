@@ -1,27 +1,30 @@
 'use client';
+
+import { useEffect, useState } from 'react';
+
 import {
+  Button,
   Card,
   CardBody,
   CardHeader,
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
   Skeleton,
-  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
 } from '@heroui/react';
-import { BsPeople } from 'react-icons/bs';
-import { useEffect, useState } from 'react';
-import { TbReservedLine } from 'react-icons/tb';
-import { useReservationStore, useUserStore } from '@/stores';
-import { HiOutlineSwitchHorizontal } from 'react-icons/hi';
-import { upperFirst } from 'lodash';
-import dayjs from 'dayjs';
 import clsx from 'clsx';
-import { ReservationInfo } from '@/services';
+import dayjs from 'dayjs';
+import { upperFirst } from 'lodash';
+import { BsPeople } from 'react-icons/bs';
+import { HiOutlineSwitchHorizontal } from 'react-icons/hi';
+import { TbReservedLine } from 'react-icons/tb';
+
 import { DrawerReservation } from '@/modules/reservations';
+import { ReservationInfo } from '@/services';
+import { useReservationStore, useUserStore } from '@/stores';
 
 export const ReservationSection = () => {
   const authInfo = useUserStore((state) => state.authInfo);

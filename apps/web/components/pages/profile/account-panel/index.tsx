@@ -1,13 +1,21 @@
-/* eslint-disable @next/next/no-img-element */
+ 
 'use client';
-import { useUserStore } from '@/stores';
-import { TextField } from '../../../text';
-import { TextInput } from '@/components/simple-input';
-import { Button } from '@/components/button';
-import { useUpdateUser } from '@/hooks';
-import { Avatar } from '@/components';
+
 import clsx from 'clsx';
+
+import { Button } from '@/components/button';
+import { TextInput } from '@/components/simple-input';
+
+import { Avatar } from '@/components';
 import { useWindowContext } from '@/contexts';
+import { useUpdateUser } from '@/hooks';
+import { useUserStore } from '@/stores';
+
+import { TextField } from '../../../text';
+
+ 
+
+ 
 
 export const ProfilePanel = () => {
   const portfolioDetail = useUserStore((state) => state.portfolioDetail);

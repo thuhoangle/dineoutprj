@@ -1,9 +1,12 @@
-import { handleError, RestaurantInfo, supaApiInstance } from '@/services';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { toastHelper } from '@/components';
-import { useUserStore } from '.';
+
 import { createClient } from '@/utils/supabase/client';
+
+import { toastHelper } from '@/components';
+import { RestaurantInfo, handleError, supaApiInstance } from '@/services';
+
+import { useUserStore } from '.';
 
 const supabase = createClient();
 

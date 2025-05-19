@@ -8,8 +8,7 @@ export const validatePassword = (password: string) => {
   return re.test(password);
 };
 
-export const isObjectExistKeys = (data = {} as any) =>
-  Object.keys(data).some((key) => data[key]);
+export const isObjectExistKeys = (data = {} as any) => Object.keys(data).some((key) => data[key]);
 
 export const limitStringPutEllipsisInMiddle = (str: string, limit: number) => {
   if (!str) return '';
@@ -27,31 +26,17 @@ export function wait(n: number) {
   });
 }
 
-export const getPlaceHolderByIncrement = (increment: string | undefined) =>
-  increment?.replace('1', '0') || '';
+export const getPlaceHolderByIncrement = (increment: string | undefined) => increment?.replace('1', '0') || '';
 
-export function objectToGetParams(object: {
-  [key: string]: string | number | undefined | null;
-}) {
+export function objectToGetParams(object: { [key: string]: string | number | undefined | null }) {
   const params = Object.entries(object)
     .filter(([, value]) => value !== undefined && value !== null)
-    .map(
-      ([key, value]) =>
-        `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`
-    );
+    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`);
 
   return params.length > 0 ? `?${params.join('&')}` : '';
 }
 
 export const getWeekdayName = (day: number): string => {
-  const days = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-  ];
+  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   return days[day];
 };

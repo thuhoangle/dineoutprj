@@ -1,14 +1,14 @@
 'use client';
 
 import { Button } from '@heroui/react';
-import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
-import { useDateStore, useViewStore } from '../../hooks';
 import dayjs from 'dayjs';
+import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
+
+import { useDateStore, useViewStore } from '../../hooks';
 
 export const DaySelect = () => {
   const todaysDate = dayjs();
-  const { userSelectedDate, setDate, setMonth, selectedMonthIndex } =
-    useDateStore();
+  const { userSelectedDate, setDate, setMonth, selectedMonthIndex } = useDateStore();
   const { selectedView } = useViewStore();
 
   const handleTodayClick = () => {
@@ -75,9 +75,7 @@ export const DaySelect = () => {
           className="w-5 h-5 mx-2 text-foreground-500 cursor-pointer hover:text-black"
         />
         <div className="pl-2 text-base font-medium text-black">
-          {dayjs(new Date(dayjs().year(), selectedMonthIndex)).format(
-            'MMMM YYYY'
-          )}
+          {dayjs(new Date(dayjs().year(), selectedMonthIndex)).format('MMMM YYYY')}
         </div>
       </div>
     </div>

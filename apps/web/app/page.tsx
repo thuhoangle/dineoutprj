@@ -1,16 +1,19 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { IoFlashOutline } from 'react-icons/io5';
+
+import { useRouter } from 'next/navigation';
+
+import { FaLocationArrow } from 'react-icons/fa';
 import { FiStar } from 'react-icons/fi';
 import { HiOutlineSparkles } from 'react-icons/hi';
-import { FaLocationArrow } from 'react-icons/fa';
+import { IoFlashOutline } from 'react-icons/io5';
+
+import { Button, ExploreCard, SimpleLoading, TextField } from '@/components';
 import { useGetReviews, useGetUserLocation } from '@/hooks';
 import { HorizontalSection, ReservationInput, ReviewCard } from '@/modules/homepage/components';
-import { Button, ExploreCard, SimpleLoading, TextField } from '@/components';
-import { useUserStore, useVenueInfoStore } from '@/stores';
-import { useRouter } from 'next/navigation';
 import { ReviewsList } from '@/services';
+import { useUserStore, useVenueInfoStore } from '@/stores';
 
 export default function Home() {
   const router = useRouter();
@@ -91,7 +94,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="w-full ipadPro:max-w-8xl flex-1 py-28">
+      <div className="w-full ipadPro:max-w-7xl flex-1 py-28">
         <div className="flex justify-start flex-1 h-max flex-col gap-x-8 gap-y-12 ipadPro:flex-row">
           <ExploreCard
             loading={fetchingList}

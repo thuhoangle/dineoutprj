@@ -1,16 +1,9 @@
-import clsx from 'clsx';
 import type { FC } from 'react';
 
-import type {
-  ColorPreset,
-  FeatureCoreIconProps,
-  SizePreset,
-} from './types-and-helper';
-import {
-  getFullSizeClassName,
-  getIconColorClassName,
-  getIconSizeClassName,
-} from './types-and-helper';
+import clsx from 'clsx';
+
+import type { ColorPreset, FeatureCoreIconProps, SizePreset } from './types-and-helper';
+import { getFullSizeClassName, getIconColorClassName, getIconSizeClassName } from './types-and-helper';
 
 const getColorRing1ClassName = (color: ColorPreset) =>
   color === 'primary'
@@ -35,28 +28,12 @@ const getColorRing2ClassName = (color: ColorPreset) =>
           : 'bg-gray-800/80';
 
 const getSizeRing1ClassName = (size: SizePreset) =>
-  size === 'sm'
-    ? 'w-6 h-6'
-    : size === 'md'
-      ? 'w-8 h-8'
-      : size === 'lg'
-        ? 'w-10 h-10'
-        : 'w-12 h-12';
+  size === 'sm' ? 'w-6 h-6' : size === 'md' ? 'w-8 h-8' : size === 'lg' ? 'w-10 h-10' : 'w-12 h-12';
 
 const getSizeRing2ClassName = (size: SizePreset) =>
-  size === 'sm'
-    ? 'w-4 h-4'
-    : size === 'md'
-      ? 'w-6 h-6'
-      : size === 'lg'
-        ? 'w-8 h-8'
-        : 'w-10 h-10';
+  size === 'sm' ? 'w-4 h-4' : size === 'md' ? 'w-6 h-6' : size === 'lg' ? 'w-8 h-8' : 'w-10 h-10';
 
-export const RoundStrokeIcon: FC<FeatureCoreIconProps> = ({
-  Icon,
-  size,
-  color,
-}) => {
+export const RoundStrokeIcon: FC<FeatureCoreIconProps> = ({ Icon, size, color }) => {
   const colorClassName =
     color === 'primary'
       ? 'bg-primary-950/60'
@@ -90,12 +67,7 @@ export const RoundStrokeIcon: FC<FeatureCoreIconProps> = ({
             getSizeRing2ClassName(size)
           )}
         >
-          <Icon
-            className={clsx(
-              getIconColorClassName(color as ColorPreset),
-              getIconSizeClassName(size)
-            )}
-          />
+          <Icon className={clsx(getIconColorClassName(color as ColorPreset), getIconSizeClassName(size))} />
         </div>
       </div>
     </div>
@@ -103,19 +75,9 @@ export const RoundStrokeIcon: FC<FeatureCoreIconProps> = ({
 };
 
 const getGraySizeRingClassName = (size: SizePreset) =>
-  size === 'sm'
-    ? 'w-6 h-6'
-    : size === 'md'
-      ? 'w-8 h-8'
-      : size === 'lg'
-        ? 'w-10 h-10'
-        : 'w-12 h-12';
+  size === 'sm' ? 'w-6 h-6' : size === 'md' ? 'w-8 h-8' : size === 'lg' ? 'w-10 h-10' : 'w-12 h-12';
 
-export const RoundStrokeGrayIcon: FC<FeatureCoreIconProps> = ({
-  Icon,
-  size,
-  color,
-}) => {
+export const RoundStrokeGrayIcon: FC<FeatureCoreIconProps> = ({ Icon, size, color }) => {
   return (
     <div
       className={clsx(
@@ -130,12 +92,7 @@ export const RoundStrokeGrayIcon: FC<FeatureCoreIconProps> = ({
           getGraySizeRingClassName(size)
         )}
       >
-        <Icon
-          className={clsx(
-            getIconColorClassName(color as ColorPreset),
-            getIconSizeClassName(size)
-          )}
-        />
+        <Icon className={clsx(getIconColorClassName(color as ColorPreset), getIconSizeClassName(size))} />
       </div>
     </div>
   );

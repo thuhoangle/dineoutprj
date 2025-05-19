@@ -1,10 +1,13 @@
 'use client';
 
 import { useCallback, useMemo, useState } from 'react';
-import { Tabs, Tab, Chip } from '@heroui/react';
-import { PassReservation, TodayReservation, UpcomingReservation } from '.';
-import { useReservationStore } from '@/stores';
+
+import { Chip, Tab, Tabs } from '@heroui/react';
+
 import { ReservationInfo } from '@/services';
+import { useReservationStore } from '@/stores';
+
+import { PassReservation, TodayReservation, UpcomingReservation } from '.';
 
 export const ReservationsPanel = () => {
   const todayReservations = useReservationStore((state) => state.todayReservations);

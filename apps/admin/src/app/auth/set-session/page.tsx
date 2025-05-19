@@ -1,9 +1,12 @@
 'use client';
 
 import { useEffect } from 'react';
+
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/utils/supabase/client';
+
 import { GlobalLoading } from 'dineout-ui';
+
+import { createClient } from '@/utils/supabase/client';
 
 export default function AuthSetSessionPage() {
   const router = useRouter();

@@ -1,9 +1,14 @@
 'use client';
+
 import React, { useEffect, useState } from 'react';
+
 import Image from 'next/image';
+
 import { createClient } from '@/utils/supabase/client';
-import { toastHelper } from './toast-helper';
+
 import { useUserStore } from '@/stores';
+
+import { toastHelper } from './toast-helper';
 
 export const Avatar = ({
   url,
@@ -22,9 +27,7 @@ export const Avatar = ({
   useEffect(() => {
     async function downloadImage(path: string) {
       try {
-        const { data, error } = await supabase.storage
-          .from('avatars')
-          .download(path);
+        const { data, error } = await supabase.storage.from('avatars').download(path);
         if (error) {
           throw error;
         }
@@ -38,9 +41,7 @@ export const Avatar = ({
     if (url) downloadImage(url);
   }, [url, supabase]);
 
-  const uploadAvatar: React.ChangeEventHandler<HTMLInputElement> = async (
-    event
-  ) => {
+  const uploadAvatar: React.ChangeEventHandler<HTMLInputElement> = async (event) => {
     try {
       setUploading(true);
 
@@ -53,9 +54,7 @@ export const Avatar = ({
       const fileExt = file.name.split('.').pop();
       const filePath = `${authInfo?.id}-${Math.random()}.${fileExt}`;
 
-      const { error: uploadError } = await supabase.storage
-        .from('avatars')
-        .upload(filePath, file);
+      const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file);
 
       if (uploadError) {
         throw uploadError;
@@ -89,10 +88,7 @@ export const Avatar = ({
           }}
         />
       ) : (
-        <div
-          className="avatar no-image"
-          style={{ height: size, width: size }}
-        />
+        <div className="avatar no-image" style={{ height: size, width: size }} />
       )}
       <div className="self-center">
         <label style={{ fontSize: '14px' }} htmlFor="single">

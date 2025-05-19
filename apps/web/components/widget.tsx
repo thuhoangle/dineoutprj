@@ -1,10 +1,12 @@
+import NextImage from 'next/image';
+
+import clsx from 'clsx';
 import { FaArrowRight } from 'react-icons/fa';
 import { FaRegClock, FaStar } from 'react-icons/fa6';
-import clsx from 'clsx';
-import NextImage from 'next/image';
-import { TextField } from './text';
-import { Button } from './button';
+
 import { Badge } from './badge';
+import { Button } from './button';
+import { TextField } from './text';
 
 export interface ItemProps {
   img: string;
@@ -18,34 +20,11 @@ export interface ItemProps {
   rightBtnOnClick?: () => void;
 }
 
-export const Widget = ({
-  data,
-  className,
-  disabled,
-}: {
-  data: ItemProps;
-  className?: string;
-  disabled?: boolean;
-}) => {
-  const {
-    img,
-    title,
-    subtitle,
-    workTime,
-    rating,
-    leftBtnTitle,
-    rightBtnTitle,
-    rightBtnOnClick,
-    leftBtnOnClick,
-  } = data;
+export const Widget = ({ data, className, disabled }: { data: ItemProps; className?: string; disabled?: boolean }) => {
+  const { img, title, subtitle, workTime, rating, leftBtnTitle, rightBtnTitle, rightBtnOnClick, leftBtnOnClick } = data;
 
   return (
-    <div
-      className={clsx(
-        'flex w-[350px] h-80 flex-col justify-between rounded-md bg-gray-100 p-1',
-        className
-      )}
-    >
+    <div className={clsx('flex w-[350px] h-80 flex-col justify-between rounded-md bg-gray-100 p-1', className)}>
       <div>
         <NextImage
           width={343}
@@ -73,12 +52,7 @@ export const Widget = ({
       </div>
       <div className="flex items-center justify-between gap-3">
         {!!leftBtnOnClick && (
-          <Button
-            preset="sgray2"
-            className="flex-1"
-            text={leftBtnTitle || 'Learn More'}
-            onClick={leftBtnOnClick}
-          />
+          <Button preset="sgray2" className="flex-1" text={leftBtnTitle || 'Learn More'} onClick={leftBtnOnClick} />
         )}
         {!!rightBtnOnClick && !disabled && (
           <Button

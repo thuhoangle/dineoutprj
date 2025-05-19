@@ -1,5 +1,7 @@
 'use client';
-import { SelectItem, Select } from '@heroui/react';
+
+import { Select, SelectItem } from '@heroui/react';
+
 import { useViewStore } from '../../hooks';
 
 export const CalendarRange = () => {

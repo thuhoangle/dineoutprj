@@ -1,15 +1,17 @@
 'use client';
 
-import { FC } from 'react';
-
-import { TextField } from '@/components/text';
-import { Button } from '@/components/button';
-import { useLoginSignup } from '@/hooks';
-import { ModalHeader, SimpleModal } from '../simple-modal';
-
+import type { FC } from 'react';
 import { useState } from 'react';
-import { ModalBaseProps } from '../types';
+
 import { Input } from '@heroui/input';
+
+import { Button } from '@/components/button';
+import { TextField } from '@/components/text';
+
+import { useLoginSignup } from '@/hooks';
+
+import { ModalHeader, SimpleModal } from '../simple-modal';
+import { ModalBaseProps } from '../types';
 
 interface ModalLoginProps extends ModalBaseProps {
   onOpenChange: () => void;

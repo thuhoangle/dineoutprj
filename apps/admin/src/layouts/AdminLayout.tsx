@@ -1,14 +1,12 @@
 'use client';
 
 import { FC, ReactNode } from 'react';
+
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import {
-  MdDashboard,
-  MdPeople,
-  MdRestaurant,
-  MdEventNote,
-} from 'react-icons/md';
+
+import { MdDashboard, MdEventNote, MdPeople, MdRestaurant } from 'react-icons/md';
+
 import { type SideMenuItemType } from '@/components';
 
 interface AdminLayoutProps {

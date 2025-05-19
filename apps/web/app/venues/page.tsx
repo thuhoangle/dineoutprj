@@ -1,14 +1,23 @@
-/* eslint-disable @next/next/no-img-element */
+ 
 'use client';
-import { TextField } from '../../components';
+
 import { useEffect, useState } from 'react';
-import { IoFlashOutline } from 'react-icons/io5';
-import { HiOutlineSparkles } from 'react-icons/hi2';
+
 import { FiStar } from 'react-icons/fi';
-import { CustomMap, SectionSelector, SectionSelectorPreset } from '@/modules/cities/components';
-import { useGetUserLocation } from '@/hooks';
+import { HiOutlineSparkles } from 'react-icons/hi2';
+import { IoFlashOutline } from 'react-icons/io5';
+
 import { BentoItem } from '@/components/bento-item';
+
+import { useGetUserLocation } from '@/hooks';
+import { CustomMap, SectionSelector, SectionSelectorPreset } from '@/modules/cities/components';
 import { useVenueNearMeStore } from '@/stores';
+
+import { TextField } from '../../components';
+
+ 
+
+ 
 
 const SECTION_LIST = [
   {
@@ -55,7 +64,7 @@ export default function VenuesPage() {
     <div className="grid grid-cols-1 pt-5 ipadMini:grid-cols-2">
       <div className="flex flex-col gap-4 p-4 !pt-0">
         <div className="flex flex-col">
-          <TextField preset="h2" weight="b" text={`Restaurants nearby`} />
+          <TextField preset="h2" weight="b" text="Restaurants nearby" />
           <TextField
             className="text-gray-500"
             preset="h6"
