@@ -4,9 +4,9 @@ import { useParams } from 'next/navigation';
 import { IoShareOutline } from 'react-icons/io5';
 import { useEffect, useMemo, useState } from 'react';
 import { Button, globalLoading, TextField, toastHelper } from '@/components';
-import { OverviewSection, BookingSection, Carousel, MiniMap } from '@/modules/venue/components';
+import { OverviewSection, BookingSection, Carousel, MiniMap, ReviewPanel } from '@/modules/venue/components';
 import { RestaurantInfo, supaApiInstance } from '@/services';
-import { useGetAvailableSeats } from '@/hooks';
+import { useGetAvailableSeats, useGetReviews } from '@/hooks';
 import { useVenueInfoStore } from '@/stores';
 import { FaHeart, FaRegHeart, FaStar } from 'react-icons/fa';
 import { FaLocationDot } from 'react-icons/fa6';
@@ -19,6 +19,7 @@ const VenueDetailPage = () => {
   const toggleFavRestaurant = useVenueInfoStore((state) => state.toggleFavRestaurant);
   const [restaurant, setRestaurant] = useState<RestaurantInfo | null>(null);
   const { getAvailableSeats, dataList: availableSeatsList } = useGetAvailableSeats();
+  const { restaurantReviews, fetchRestaurantReviews } = useGetReviews();
 
   const createShareLink = useMemo(() => {
     if (typeof window !== 'undefined') {
@@ -37,6 +38,7 @@ const VenueDetailPage = () => {
       } else {
         setRestaurant(data);
         await getAvailableSeats(data.id);
+        await fetchRestaurantReviews(data.id);
       }
       globalLoading.hide();
     };
@@ -55,7 +57,7 @@ const VenueDetailPage = () => {
 
   return (
     <div className="flex flex-col ipadMini:flex-row gap-5 p-4">
-      <div className="ipadMini:w-3/5 w-full">
+      <div className="ipadMini:w-3/5 w-full flex flex-col gap-12 divide-y-1 divide-gray-400">
         <div className="flex flex-col gap-3">
           <TextField preset="h1" weight="b" text={restaurant.name} />
           <div className="flex justify-between">
@@ -115,6 +117,7 @@ const VenueDetailPage = () => {
           {restaurant && <OverviewSection description={restaurant.overview} />}
           <BookingSection data={restaurant} availableSeatsList={availableSeatsList} />
         </div>
+        <ReviewPanel className="pt-5" data={restaurantReviews} />
       </div>
       <div className="w-full ipadMini:w-2/5">
         <div className="flex h-screen sticky top-0 w-full overflow-x-auto flex-col gap-4 ">

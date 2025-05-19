@@ -64,7 +64,7 @@ export const OpenTablesPanel = () => {
           isOpen={isPopoverOpen}
           onClose={closePopover}
           date={userSelectedDate.format('YYYY-MM-DD')}
-          disableCreate={userSelectedDate.isBefore(dayjs())}
+          disableCreate={userSelectedDate.isBefore(dayjs().startOf('day'))}
         />
       )}
       {isEventSummaryOpen && selectedEvent && (

@@ -1,11 +1,15 @@
+// 'use client';
+
 // import { toastHelper } from '@/components';
-// import { handleError, supaApiInstance } from '@/services';
-// import { useUserStore } from '@/stores';
+// import { handleError } from '@/services';
 // import { DateValue, today, getLocalTimeZone } from '@internationalized/date';
-// import { table } from 'console';
 // import dayjs from 'dayjs';
-// import { useEffect, useState, useMemo } from 'react';
-// import { useBookingStore } from '@/stores/useBookingStore';
+// import { useEffect, useState } from 'react';
+// import { createClient } from '@/utils/supabase/client';
+// import { AMPMTo24Hour } from '@/utils';
+// import { useGetSearchResults } from './useGetSearchResults';
+
+// const supabase = createClient();
 
 // const generateTimeOptions = (selectedDate: DateValue) => {
 //   const times = ['All Day'];
@@ -13,10 +17,7 @@
 //   let start = dayjs().startOf('day');
 
 //   if (selectedDate && dayjs(selectedDate.toString()).isSame(now, 'day')) {
-//     const nextHalfHour =
-//       now.minute() < 30
-//         ? now.minute(30).second(0)
-//         : now.add(1, 'hour').minute(0).second(0);
+//     const nextHalfHour = now.minute() < 30 ? now.minute(30).second(0) : now.add(1, 'hour').minute(0).second(0);
 //     start = nextHalfHour;
 //   }
 
@@ -31,92 +32,85 @@
 //   return times;
 // };
 
-// // Function to convert AM/PM time to 24-hour format
-// const formatTime = (time: string): string => {
-//   if (!time || !time.includes(':')) {
-//     return '00:00:00'; // Default to midnight if invalid time
-//   }
-
-//   const [timePart, period] = time.split(' ');
-//   let [hours, minutes] = timePart.split(':');
-
-//   if (period === 'PM' && hours !== '12') {
-//     hours = (parseInt(hours, 10) + 12).toString();
-//   }
-//   if (period === 'AM' && hours === '12') {
-//     hours = '00';
-//   }
-
-//   return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}:00`;
-// };
-
 // export const useReservation = () => {
 //   const [fetching, setFetching] = useState(false);
 //   const [partySize, setPartySize] = useState(1);
 //   const [occasion, setOccasion] = useState('');
 //   const [additionalInfo, setAdditionalInfo] = useState('');
-//   const [selectedDate, setSelectedDate] = useState<DateValue>(
-//     today(getLocalTimeZone())
-//   );
+//   const [selectedDate, setSelectedDate] = useState<DateValue>(today(getLocalTimeZone()));
 //   const [selectedTime, setSelectedTime] = useState('All Day');
-//   const [timeOptions, setTimeOptions] = useState<string[]>(
-//     generateTimeOptions(selectedDate)
-//   );
+//   const [timeOptions, setTimeOptions] = useState<string[]>(generateTimeOptions(selectedDate));
+
+//   const { getSearchResults } = useGetSearchResults({
+//     seats: partySize.toString(),
+//     date: selectedDate.toString(),
+//     time: selectedTime,
+//   });
 
 //   useEffect(() => {
 //     setTimeOptions(generateTimeOptions(selectedDate));
-//     setSelectedTime('All Day');
 //   }, [selectedDate]);
 
-//   const filteredTimeOptions =
-//     selectedTime !== 'All Day' ? [selectedTime] : timeOptions;
+//   const filteredTimeOptions = selectedTime !== 'All Day' ? [selectedTime] : timeOptions;
 
 //   const getReservationDatetime = () => {
 //     const formattedDate = dayjs(selectedDate.toString()).format('YYYY-MM-DD');
-//     const formattedTime = formatTime(selectedTime);
+//     const formattedTime = selectedTime === 'All Day' ? '00:00' : AMPMTo24Hour(selectedTime ?? '00:00 AM');
 
-//     return dayjs(`${formattedDate} ${formattedTime}`).format(
-//       'YYYY-MM-DD HH:mm:ss'
-//     );
+//     return dayjs(`${formattedDate}T${formattedTime}`).toISOString();
 //   };
 
-//   const createReservation = async (
-//     resId: string,
-//     tableId?: string,
-//     seat_type?: string
-//   ) => {
-//     const data = {
-//       restaurant_id: resId,
-//       table_id: tableId,
-//       status: 'pending',
-//       reservation_time: getReservationDatetime(),
-//       party_size: partySize,
-//       occasion,
-//       additional_info: additionalInfo,
-//       seat_type,
-//       created_at: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-//     };
+//   const createReservation = async (resId: string, tableId: string, seatType?: string) => {
+//     if (selectedTime === 'All Day') {
+//       toastHelper.error('Try again with a specific time');
+//       return;
+//     }
+
+//     const reservationTime = getReservationDatetime();
+//     const reservationDate = dayjs(reservationTime).format('YYYY-MM-DD');
+//     const reservationHour = dayjs(reservationTime).format('HH:mm');
 
 //     try {
 //       setFetching(true);
 
-//       const { error } = await supaApiInstance.createReservation(data);
+//       const user = await supabase.auth.getUser();
+//       const userId = user?.data?.user?.id;
+//       const userEmail = user?.data?.user?.email || '';
+//       const userName = user?.data?.user?.user_metadata?.name || '';
+//       const userPhone = user?.data?.user?.user_metadata?.phone || '';
+
+//       const { error } = await supabase.rpc('reserve_table', {
+//         p_user_id: userId,
+//         p_restaurant_id: resId,
+//         p_table_id: tableId,
+//         p_date: reservationDate,
+//         p_time: reservationHour,
+//         p_party_size: partySize,
+//         p_seat_type: seatType,
+//         p_guest_name: userName,
+//         p_guest_phone: userPhone,
+//         p_guest_email: userEmail,
+//         p_occasion: occasion,
+//         p_additional_info: additionalInfo,
+//       });
+
 //       if (error) {
 //         toastHelper.error(error.message);
 //         return;
 //       }
-//       toastHelper.success('Reservation created successfully');
-//       setFetching(false);
+
+//       toastHelper.success('Reservation created successfully!');
+//       getSearchResults();
 //     } catch (error: any) {
-//       setFetching(false);
 //       handleError(error);
-//       return;
+//     } finally {
+//       setFetching(false);
 //     }
 //   };
 
 //   return {
-//     getReservationDatetime,
 //     createReservation,
+//     getReservationDatetime,
 //     fetching,
 //     partySize,
 //     setPartySize,
@@ -129,6 +123,6 @@
 //     selectedTime,
 //     setSelectedTime,
 //     timeOptions,
-//     filteredTimeOptions,
+// filteredTimeOptions
 //   };
 // };

@@ -25,9 +25,7 @@ export const useWindowContext = () => {
   return context;
 };
 
-const WindowProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+const WindowProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { windowSize, responsiveClassName, isMobileMode } = useWindowSize();
   const value = useMemo(
     () => ({
@@ -38,9 +36,7 @@ const WindowProvider: React.FC<{ children: React.ReactNode }> = ({
     [windowSize, responsiveClassName, isMobileMode]
   );
 
-  return (
-    <WindowContext.Provider value={value}>{children}</WindowContext.Provider>
-  );
+  return <WindowContext.Provider value={value}>{children}</WindowContext.Provider>;
 };
 
 export { WindowContext, WindowProvider };

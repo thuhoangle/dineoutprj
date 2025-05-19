@@ -84,8 +84,9 @@ export const BentoItem = ({
           <div className="flex justify-between">
             <TextField preset="p1" weight="b" className="group-hover:underline" text={name} />
             <div
-              className="self-start"
-              onClick={() => {
+              className="self-start cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
                 _handleFavRestaurant(data.id);
               }}
             >
@@ -108,7 +109,7 @@ export const BentoItem = ({
               {district}
             </div>
           </div>
-          <TextField preset="p3" text={overview} className="mt-2 truncate" />
+          <TextField preset="p3" text={overview} className="mt-2 truncate overflow-x-hidden" />
         </div>
       </div>
       {timeSlots && (

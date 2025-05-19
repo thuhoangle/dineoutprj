@@ -31,6 +31,7 @@ export const BookingSection = ({
     fetching,
     partySize,
     setPartySize,
+    occasion,
     setOccasion,
     setAdditionalInfo,
     selectedDate,
@@ -123,6 +124,7 @@ export const BookingSection = ({
         onReserve={createReservation}
         fetching={fetching}
         quantity={partySize}
+        occasion={occasion}
         setOccasion={setOccasion}
         setAdditionalInfo={setAdditionalInfo}
         timeSlot={getReservationDatetime()}

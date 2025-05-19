@@ -6,13 +6,22 @@ import { useReservationStore } from '@/stores';
 import { useEffect, useState } from 'react';
 import { ReservationCard } from './reservation-card';
 import clsx from 'clsx';
+import { ReservationInfo } from '@/services';
 
-export const TodayReservation = ({ className }: { className?: string }) => {
+export const TodayReservation = ({
+  dataList,
+  className,
+  renderId,
+}: {
+  dataList: ReservationInfo[];
+  className?: string;
+  renderId?: number;
+}) => {
   const [fetching, setFetching] = useState(false);
-  const { todayReservations } = useReservationStore((state) => state);
+
   useEffect(() => {
     _getData();
-  }, []);
+  }, [renderId]);
 
   const _getData = async () => {
     setFetching(true);
@@ -26,8 +35,8 @@ export const TodayReservation = ({ className }: { className?: string }) => {
       <div className="flex flex-wrap gap-4">
         {fetching ? (
           <SimpleLoading />
-        ) : todayReservations?.length ? (
-          todayReservations.map((data) => <ReservationCard data={data} key={data.id} />)
+        ) : dataList?.length ? (
+          dataList.map((data) => <ReservationCard data={data} key={data.id} />)
         ) : (
           <TextField preset="p4" text="You don’t have any reservations for today." />
         )}

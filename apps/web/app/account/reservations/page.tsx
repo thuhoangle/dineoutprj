@@ -1,4 +1,4 @@
-import { ReservationsPanel } from '@/components/pages/profile';
+import { ReservationsPanel } from '@/components';
 
 const Reservations = () => <ReservationsPanel />;
 

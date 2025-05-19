@@ -3,7 +3,6 @@
 import { useUserStore } from '@/stores';
 import { TextField } from '../../../text';
 import { TextInput } from '@/components/simple-input';
-import { useEffect } from 'react';
 import { Button } from '@/components/button';
 import { useUpdateUser } from '@/hooks';
 import { Avatar } from '@/components';
@@ -26,9 +25,10 @@ export const ProfilePanel = () => {
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex flex-col">
+      <div className="flex pt-3 pl-3 flex-col">
         <TextField preset="h3" weight="b" text="Profile" />
         <TextField
+          className="italic"
           preset="p2"
           color="g500"
           text="We only share this information with restaurants you reserve, so they can coordinate with you and know your preferences."
@@ -47,10 +47,7 @@ export const ProfilePanel = () => {
           </div>
         )}
         <div
-          className={clsx(
-            'mt-20 justify-center items-center flex flex-col gap-4',
-            isMobileMode ? ' mx-5' : ' mx-10'
-          )}
+          className={clsx('mt-20 justify-center items-center flex flex-col gap-4', isMobileMode ? ' mx-5' : ' mx-10')}
         >
           <TextInput
             className="w-full"
@@ -79,11 +76,7 @@ export const ProfilePanel = () => {
             onChange={(e) => updateField('bio', e.target.value)}
           />
           <div className="flex w-full gap-2 flex-col">
-            <TextField
-              className="text-gray-500"
-              preset="p5"
-              text="Allergies and Restrictions"
-            />
+            <TextField className="text-gray-500" preset="p5" text="Allergies and Restrictions" />
             <div className="flex gap-2 flex-wrap items-center">
               {ALLERGIES_AND_RESTRICTIONS.map((item) => (
                 <button

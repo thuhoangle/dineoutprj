@@ -6,20 +6,25 @@ import { useReservationStore } from '@/stores';
 import { useEffect, useState } from 'react';
 import { ReservationCard } from './reservation-card';
 import clsx from 'clsx';
+import { ReservationInfo } from '@/services';
 
 export const PassReservation = ({
+  dataList,
   className,
   hideWhenEmpty,
+  renderId,
 }: {
+  dataList: ReservationInfo[];
   className?: string;
   hideWhenEmpty?: boolean;
+  renderId?: number;
 }) => {
+  console.log('🚀 ~ dataList:', dataList);
   const [fetching, setFetching] = useState(false);
-  const { passReservations } = useReservationStore((state) => state);
 
   useEffect(() => {
     _getData();
-  }, []);
+  }, [renderId]);
 
   const _getData = async () => {
     setFetching(true);
@@ -27,7 +32,7 @@ export const PassReservation = ({
     setFetching(false);
   };
 
-  if (hideWhenEmpty && !passReservations?.length) {
+  if (hideWhenEmpty && !dataList?.length) {
     return null;
   }
 
@@ -37,15 +42,10 @@ export const PassReservation = ({
       <div className="flex flex-wrap gap-4">
         {fetching ? (
           <SimpleLoading />
-        ) : passReservations?.length ? (
-          passReservations.map((data) => (
-            <ReservationCard data={data} key={data.id} />
-          ))
+        ) : dataList?.length ? (
+          dataList.map((data) => <ReservationCard data={data} key={data.id} />)
         ) : (
-          <TextField
-            preset="p4"
-            text="You don’t have any reservations that have passed."
-          />
+          <TextField preset="p4" text="You don’t have any reservations that have passed." />
         )}
       </div>
     </div>

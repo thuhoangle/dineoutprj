@@ -52,7 +52,7 @@ export default function VenuesPage() {
   });
 
   return (
-    <div className="grid grid-cols-1 ipadMini:grid-cols-2">
+    <div className="grid grid-cols-1 pt-5 ipadMini:grid-cols-2">
       <div className="flex flex-col gap-4 p-4 !pt-0">
         <div className="flex flex-col">
           <TextField preset="h2" weight="b" text={`Restaurants nearby`} />

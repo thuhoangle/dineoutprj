@@ -1,21 +1,20 @@
 'use client';
 
 import clsx from 'clsx';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { ReactNode, FC, memo } from 'react';
 import { CgProfile } from 'react-icons/cg';
-import { IoIosSettings } from 'react-icons/io';
-import { MdOutlineDateRange, MdOutlineLogin } from 'react-icons/md';
+import { RiRestaurantLine } from 'react-icons/ri';
+import { MdOutlineDateRange } from 'react-icons/md';
 import { TextField } from '../text';
 import { IconType } from 'react-icons';
 import { useWindowContext } from '@/contexts';
 import Link from 'next/link';
+import { VscFeedback } from 'react-icons/vsc';
 
 export const AccountPageLayout = ({ children }: { children: ReactNode }) => {
   const pathnameFromRouter = usePathname();
   const { isMobileMode } = useWindowContext();
-
-  const router = useRouter();
 
   const NAV_ITEMS = [
     {
@@ -27,6 +26,16 @@ export const AccountPageLayout = ({ children }: { children: ReactNode }) => {
       Icon: MdOutlineDateRange,
       label: 'Reservations & Notify',
       value: '/account/reservations',
+    },
+    {
+      Icon: RiRestaurantLine,
+      label: 'Saved Restaurants',
+      value: '/account/saved-venues',
+    },
+    {
+      Icon: VscFeedback,
+      label: 'Feedback History',
+      value: '/account/feedback-history',
     },
 
     // {
@@ -43,9 +52,11 @@ export const AccountPageLayout = ({ children }: { children: ReactNode }) => {
   ];
 
   return (
-    <div className="flex w-full gap-2 px-2 ipadMini:h-0 ipadMini:flex-1">
+    <div className="flex w-full bg-default-100 h-full gap-2 px-2 py-3 ipadMini:flex-1">
       {!isMobileMode && <SideMenu currentTab={pathnameFromRouter} navItems={NAV_ITEMS} />}
-      {children}
+      <div className="rounded-lg shadow-md bg-white dark:bg-gray-900 py-2 px-4 w-full overflow-y-auto flex-1 scrollbar-main">
+        {children}
+      </div>
     </div>
   );
 };
@@ -65,10 +76,12 @@ interface SideMenuProps {
 
 const SideMenu: FC<SideMenuProps> = ({ className, currentTab, navItems }) => {
   return (
-    <div className={clsx('w-96 flex-col rounded-lg bg-bg-primary px-3 py-6', className)}>
-      {navItems.map(
-        (item) => item.value && <NavItem data={item} isSelected={currentTab === item.value} key={item.value} />
-      )}
+    <div className={clsx('w-72 flex-col rounded-lg shadow-md bg-white dark:bg-gray-900 px-3 py-6', className)}>
+      <div className="flex flex-col gap-2">
+        {navItems.map(
+          (item) => item.value && <NavItem data={item} isSelected={currentTab === item.value} key={item.value} />
+        )}
+      </div>
       <div className="flex-1" />
     </div>
   );
@@ -82,12 +95,12 @@ const NavItem = memo(({ data, isSelected }: { data: SideMenuItemType; isSelected
       href={`${value || '/'}`}
       prefetch={true}
       className={clsx(
-        'relative w-full my-0.5 flex items-center gap-2 rounded-md px-4 py-2 transition duration-200 ease-in hover:bg-neutral-950 disabled:opacity-50',
-        isSelected ? 'bg-gray-950 text-red-600 hover:text-red-600' : 'text-gray-500 hover:text-gray-500'
+        ' my-0.5 flex items-center gap-2 rounded-md px-4 py-2 transition duration-200 ease-in hover:bg-default-200 disabled:opacity-50',
+        isSelected ? 'bg-default-100' : 'text-gray-400 hover:text-gray-500'
       )}
     >
       {Icon && <Icon className="w-6 h-6 text-inherit" />}
-      <TextField className="flex-1 text-left" preset="p2" text={label} weight="s" />
+      <TextField className="flex-1 text-left" preset="p2" text={label} weight="m" />
     </Link>
   );
 });

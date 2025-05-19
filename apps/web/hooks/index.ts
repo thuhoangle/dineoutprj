@@ -10,3 +10,5 @@ export * from './useGetSearchResults';
 export * from './useCheckPressOutSide';
 export * from './useEditReservation';
 export * from './useCancelReservation';
+export * from './useGetReviews';
+export * from './useFeedback';

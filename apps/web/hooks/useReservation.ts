@@ -1,13 +1,14 @@
 'use client';
 
 import { toastHelper } from '@/components';
-import { handleError, ReservationInfo, supaApiInstance } from '@/services';
+import { handleError } from '@/services';
 import { DateValue, today, getLocalTimeZone } from '@internationalized/date';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { AMPMTo24Hour } from '@/utils';
 import { useGetSearchResults } from './useGetSearchResults';
+import { useUserStore } from '@/stores';
 
 const supabase = createClient();
 
@@ -55,125 +56,58 @@ export const useReservation = () => {
 
   const getReservationDatetime = () => {
     const formattedDate = dayjs(selectedDate.toString()).format('YYYY-MM-DD');
-    const formattedTime = AMPMTo24Hour(selectedTime);
+    const formattedTime = selectedTime === 'All Day' ? '00:00' : AMPMTo24Hour(selectedTime ?? '00:00 AM');
 
-    return dayjs(`${formattedDate} ${formattedTime}`).format('YYYY-MM-DD HH:mm:ss');
+    return dayjs(`${formattedDate}T${formattedTime}`).toISOString();
   };
 
-  const lockTableSlot = async (resId: string, tableId: string, reservationTime: string) => {
-    try {
-      const reservationDate = dayjs(reservationTime).format('YYYY-MM-DD');
-      const reservationHour = dayjs(reservationTime).format('HH:mm');
-
-      // Times to lock: the reservation time, 30 min before, 30 min after, and 60 min after
-      const timesToLock = [
-        dayjs(reservationTime).subtract(30, 'minute').format('HH:mm'),
-        reservationHour,
-        dayjs(reservationTime).add(30, 'minute').format('HH:mm'),
-        dayjs(reservationTime).add(60, 'minute').format('HH:mm'),
-      ];
-
-      for (const time of timesToLock) {
-        // First check if the time slot exists
-        const { data, error: checkError } = await supabase.from('available_seats').select('*').match({
-          restaurant_id: resId,
-          table_id: tableId,
-          date: reservationDate,
-          time: time,
-        });
-
-        if (checkError) {
-          console.error('Error checking time slot:', checkError);
-          continue;
-        }
-
-        // If the time slot exists, delete it
-        if (data && data.length > 0) {
-          const { error } = await supabase.from('available_seats').delete().match({
-            restaurant_id: resId,
-            table_id: tableId,
-            date: reservationDate,
-            time: time,
-          });
-
-          if (error) {
-            console.error('Error locking timeslot:', error);
-            throw error;
-          }
-        } else {
-          console.log(`Time slot ${time} does not exist, skipping deletion`);
-        }
-      }
-    } catch (error) {
-      console.error('Failed to lock table slots:', error);
-      throw error;
-    }
-  };
-
-  const createReservation = async (resId: string, tableId: string, seat_type?: string) => {
+  const createReservation = async (resId: string, tableId: string, seatType?: string) => {
     if (selectedTime === 'All Day') {
       toastHelper.error('Try again with a specific time');
       return;
     }
 
-    const reservationTime = getReservationDatetime()!;
+    const reservationTime = getReservationDatetime();
     const reservationDate = dayjs(reservationTime).format('YYYY-MM-DD');
     const reservationHour = dayjs(reservationTime).format('HH:mm');
-
-    // Check if the time slot is available
-    const { data: availableSlot, error: checkError } = await supabase
-      .from('available_seats')
-      .select('*')
-      .match({
-        restaurant_id: resId,
-        table_id: tableId,
-        date: reservationDate,
-        time: reservationHour,
-      })
-      .single();
-
-    if (checkError || !availableSlot) {
-      toastHelper.error('This time slot is no longer available. Please select another time.');
-      return;
-    }
-
-    const data: ReservationInfo = {
-      restaurant_id: resId,
-      table_id: tableId,
-      status: 'pending',
-      reservation_time: reservationTime,
-      party_size: partySize,
-      occasion,
-      additional_info: additionalInfo,
-      seat_type,
-      created_at: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-    };
 
     try {
       setFetching(true);
 
-      const { error } = await supaApiInstance.createReservation(data);
+      const userId = await useUserStore.getState().authInfo?.id;
+
+      const { error } = await supabase.rpc('reserve_table', {
+        p_user_id: userId,
+        p_restaurant_id: resId,
+        p_table_id: tableId,
+        p_date: reservationDate,
+        p_time: reservationHour,
+        p_party_size: partySize,
+        p_seat_type: seatType,
+        p_guest_name: null,
+        p_guest_phone: null,
+        p_guest_email: null,
+        p_occasion: occasion,
+        p_additional_info: additionalInfo,
+      });
+
       if (error) {
         toastHelper.error(error.message);
         return;
       }
 
-      // Lock the time slots for this table
-      await lockTableSlot(resId, tableId, data.reservation_time);
-
-      toastHelper.success('Reservation created successfully');
+      toastHelper.success('Reservation created successfully!');
       getSearchResults();
-      setFetching(false);
     } catch (error: any) {
-      setFetching(false);
       handleError(error);
-      return;
+    } finally {
+      setFetching(false);
     }
   };
 
   return {
-    getReservationDatetime,
     createReservation,
+    getReservationDatetime,
     fetching,
     partySize,
     setPartySize,

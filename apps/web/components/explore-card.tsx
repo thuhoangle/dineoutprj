@@ -9,6 +9,7 @@ import { RestaurantInfo } from '@/services';
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { EMPTY_RESTAURANT_IMAGE, getImageUrl } from '@/utils';
+import { Skeleton } from '@heroui/react';
 export const ExploreCard = ({
   Icon,
   title,
@@ -17,6 +18,7 @@ export const ExploreCard = ({
   onSetFav,
   onClick,
   className,
+  loading,
 }: {
   Icon: any;
   title: string;
@@ -27,6 +29,7 @@ export const ExploreCard = ({
   };
   onSetFav: (resId: string) => void;
   className?: string;
+  loading?: boolean;
 }) => {
   const router = useRouter();
 
@@ -37,7 +40,7 @@ export const ExploreCard = ({
   return (
     <div
       className={clsx(
-        'relative z-0 flex w-full ipadPro:max-w-[500px] flex-col rounded-3xl border border-gray-850 bg-gray-1000 pt-8',
+        'relative z-0 bg-white dark:bg-gray-900 flex w-full ipadPro:max-w-[500px] flex-col rounded-3xl border border-gray-850 pt-8',
         className
       )}
     >
@@ -46,51 +49,61 @@ export const ExploreCard = ({
       </div>
       <TextField className="text-center my-2" preset="h5" weight="m" text={title} />
       <div className="flex flex-col border-gray-800 border-t-1 flex-1 justify-start divide-y divide-solid divide-gray-800">
-        {dataList.slice(0, 5).map((data, index) => (
-          <div
-            key={index}
-            className="flex px-5 py-2 gap-3 cursor-pointer"
-            onClick={() => handleOnClick(data?.slug || '')}
-          >
-            <img
-              src={getImageUrl(data?.images?.[0] || EMPTY_RESTAURANT_IMAGE)}
-              alt={data.name}
-              className="object-cover object-center w-20 rounded-md aspect-square"
-            />
-            <div className="flex flex-col flex-1">
-              <div className="flex items-center justify-between">
-                <TextField className="self-center" preset="p1" weight="m">
-                  {data.name}
-                  <span className="text-[13px] pl-1 self-center text-gray-500">
-                    {'\u00A0•\u00A0'} {'$'.repeat(data.price_range)}
-                  </span>
-                </TextField>
-                <Button
-                  preset="linkRed"
-                  size="sm"
-                  RightHeroIcon={isFav[data.id] ? FaHeart : FaRegHeart}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onSetFav(data.id);
-                  }}
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <div className="flex items-center text-center text-[15px] text-red-500 gap-1">
-                  <FaStar className="text-inherit w-5" />
-                  {data?.rating}
-                  {!!data?.review_count && (
-                    <span className="text-gray-500 text-[12px]">{`(${data?.review_count})`}</span>
-                  )}
+        {loading ? (
+          <div className="flex px-5 py-2 gap-3">
+            <Skeleton className="rounded-lg h-20 w-20" isLoaded={!loading}></Skeleton>
+            <div className="flex flex-col gap-3 flex-1">
+              <Skeleton className="rounded-lg h-7" isLoaded={!loading}></Skeleton>
+              <Skeleton className="rounded-lg h-5 w-2/3" isLoaded={!loading}></Skeleton>
+            </div>
+          </div>
+        ) : (
+          dataList.slice(0, 5).map((data, index) => (
+            <div
+              key={index}
+              className="flex px-5 py-2 gap-3 cursor-pointer"
+              onClick={() => handleOnClick(data?.slug || '')}
+            >
+              <img
+                src={getImageUrl(data?.images?.[0] || EMPTY_RESTAURANT_IMAGE)}
+                alt={data.name}
+                className="object-cover object-center w-20 rounded-md aspect-square"
+              />
+              <div className="flex flex-col flex-1">
+                <div className="flex items-center justify-between">
+                  <TextField className="self-center" preset="p1" weight="m">
+                    {data.name}
+                    <span className="text-[13px] pl-1 self-center text-gray-500">
+                      {'\u00A0•\u00A0'} {'$'.repeat(data.price_range)}
+                    </span>
+                  </TextField>
+                  <Button
+                    preset="linkRed"
+                    size="sm"
+                    RightHeroIcon={isFav[data.id] ? FaHeart : FaRegHeart}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onSetFav(data.id);
+                    }}
+                  />
                 </div>
-                <div className="flex items-start text-gray-500 gap-0.5">
-                  <GrLocation className="text-inherit w-5 h-5" />
-                  <TextField preset="p3" text={data.district} />
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center text-center text-[15px] text-red-500 gap-1">
+                    <FaStar className="text-inherit w-5" />
+                    {data?.rating}
+                    {!!data?.review_count && (
+                      <span className="text-gray-500 text-[12px]">{`(${data?.review_count})`}</span>
+                    )}
+                  </div>
+                  <div className="flex items-start text-gray-500 gap-0.5">
+                    <GrLocation className="text-inherit w-5 h-5" />
+                    <TextField preset="p3" text={data.district} />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
       <div
         className="flex border-gray-800 border-t-1 justify-center py-3 items-center cursor-pointer"

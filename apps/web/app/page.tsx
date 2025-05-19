@@ -1,21 +1,24 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { IoFlashOutline } from 'react-icons/io5';
 import { FiStar } from 'react-icons/fi';
 import { HiOutlineSparkles } from 'react-icons/hi';
 import { FaLocationArrow } from 'react-icons/fa';
-import { useGetUserLocation } from '@/hooks';
-import { HorizontalSection, ReservationInput } from '@/modules/homepage/components';
+import { useGetReviews, useGetUserLocation } from '@/hooks';
+import { HorizontalSection, ReservationInput, ReviewCard } from '@/modules/homepage/components';
 import { Button, ExploreCard, SimpleLoading, TextField } from '@/components';
 import { useUserStore, useVenueInfoStore } from '@/stores';
 import { useRouter } from 'next/navigation';
+import { ReviewsList } from '@/services';
 
 export default function Home() {
   const router = useRouter();
   const authInfo = useUserStore((state) => state.authInfo);
   const restaurantList = useVenueInfoStore((state) => state.restaurantList);
   const favRestaurant = useVenueInfoStore((state) => state.favRestaurant);
+  const [fetchingList, setFetchingList] = useState(false);
+  const { allReviews, fetchAllReviews } = useGetReviews();
 
   const toggleFavRestaurant = useVenueInfoStore((state) => state.toggleFavRestaurant);
 
@@ -30,13 +33,16 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    setFetchingList(true);
     useVenueInfoStore.getState().getRestaurantList();
+    setFetchingList(false);
   }, []);
 
   useEffect(() => {
     if (authInfo) {
       useVenueInfoStore.getState().getFavRestaurants();
       useUserStore.getState().getPortfolioDetail();
+      fetchAllReviews();
     }
   }, [authInfo]);
 
@@ -45,7 +51,7 @@ export default function Home() {
   const newData = restaurantList.filter((restaurant) => restaurant.keywords?.includes('new'));
 
   return (
-    <div className="flex flex-col items-center gap-4 px-8">
+    <div className="flex pt-5 flex-col items-center gap-4 px-8">
       <div className="flex flex-col gap-3 items-center justify-center">
         <ReservationInput />
         <div className="flex items-center gap-2">
@@ -65,18 +71,30 @@ export default function Home() {
           />
         </div>
       </div>
-      <div className="flex w-full flex-col py-2 gap-3">
-        {/* <div className="grid grid-cols-4 gap-4">
-          <div className="col-span-3 h-[450px] bg-red-600">
-            <img src="/images/hero.jpg" alt="hero" className="w-full h-96" />
-          </div>
-          <DiscoverSection city="Ho Chi Minh City" />
-        </div> */}
+      <div className="flex w-full flex-col py-2 gap-y-12">
         <HorizontalSection title="Rising Venues" dataList={risingData} />
+        <HorizontalSection
+          title="Recommend for you"
+          subtitle="Because you like The Miffy Diner"
+          dataList={risingData}
+        />
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-col">
+            <TextField preset="h5" weight="b" text="Recent reviews" />
+            <TextField preset="p3" className="italic" text="From verified diners like you" />
+          </div>
+          <div className="flex gap-2 overflow-auto scrollbar-main">
+            {/* <div className="flex gap-4 overflow-x-auto scrollbar-main"> */}
+            {allReviews.map((data: ReviewsList) => (
+              <ReviewCard key={data.id} review={data} />
+            ))}
+          </div>
+        </div>
       </div>
       <div className="w-full ipadPro:max-w-8xl flex-1 py-28">
-        <div className="flex justify-start flex-1 h-max items-center flex-col gap-x-8 gap-y-12 ipadPro:flex-row">
+        <div className="flex justify-start flex-1 h-max flex-col gap-x-8 gap-y-12 ipadPro:flex-row">
           <ExploreCard
+            loading={fetchingList}
             isFav={favRestaurant}
             onSetFav={toggleFavRestaurant}
             Icon={IoFlashOutline}
@@ -85,6 +103,7 @@ export default function Home() {
             onClick={() => router.push('/rising')}
           />
           <ExploreCard
+            loading={fetchingList}
             isFav={favRestaurant}
             onSetFav={toggleFavRestaurant}
             Icon={FiStar}
@@ -93,6 +112,7 @@ export default function Home() {
             onClick={() => router.push('/popular')}
           />
           <ExploreCard
+            loading={fetchingList}
             isFav={favRestaurant}
             onSetFav={toggleFavRestaurant}
             Icon={HiOutlineSparkles}
@@ -105,45 +125,3 @@ export default function Home() {
     </div>
   );
 }
-
-// const DiscoverSection = ({ city }: { city: string }) => {
-//   const SECTIONS = [
-//     {
-//       label: 'The Hit List',
-//       route: '/hit-list',
-//     },
-//     {
-//       label: 'The Best',
-//       route: '/best',
-//     },
-//     {
-//       label: 'The Newcomers',
-//       route: '/newcomers',
-//     },
-//   ];
-//   return (
-//     <div className="flex flex-col gap-3">
-//       <TextField
-//         preset="h3"
-//         weight="b"
-//         text={`Discover restaurants to love in ${city}.`}
-//       />
-//       <TextField
-//         preset="h6"
-//         color="gray"
-//         text="Be the first to know with Dine out’s insider guides, deep dives on old standbys, and vital intel on all the latest and greatest new openings."
-//       />
-//       <div className="flex items-start flex-col gap-2">
-//         {SECTIONS.map((section) => (
-//           <button
-//             className="text-left hover:underline"
-//             key={section.label}
-//             // onClick={() => console.log(section.route)}
-//           >
-//             <TextField preset="h6" weight="m" text={section.label} />
-//           </button>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// };

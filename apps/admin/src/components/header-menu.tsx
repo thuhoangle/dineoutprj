@@ -1,14 +1,21 @@
 'use client';
 
-import { Navbar, NavbarContent, NavbarBrand } from '@heroui/navbar';
-import { Button } from '@heroui/button';
 import NextLink from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { FC, useEffect } from 'react';
 import { useUserStore } from '@/stores/useUserStore';
 import { useLogin } from '@/hooks';
-import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@heroui/dropdown';
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  Navbar,
+  NavbarContent,
+  NavbarBrand,
+  Button,
+} from '@heroui/react';
 
 interface HeaderMenuProps {
   onGoSamePath?: () => void;
@@ -34,7 +41,7 @@ export const HeaderMenu: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
               width={40}
               src="/logo.png"
               priority
-              style={{ width: 'auto', height: 'auto' }}
+              // style={}
               alt="logo"
             />
             <div className="text-2xl font-bold text-red-600">DineOut</div>

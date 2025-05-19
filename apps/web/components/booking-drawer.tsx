@@ -32,6 +32,7 @@ export const BookingDrawer = ({
   fetching,
   onReserve,
   selectedOption,
+  occasion,
 }: {
   isOpen: boolean;
   onOpenChange: () => void;
@@ -43,6 +44,7 @@ export const BookingDrawer = ({
   fetching: boolean;
   onReserve: (resId: string, tableId: string, seat_type?: string) => void;
   selectedOption: AvailableSeats | SlotPickerParamsProps | undefined;
+  occasion?: string;
 }) => {
   const restaurant_id =
     (data as AvailableSeatRestaurant) && 'restaurant_id' in data
@@ -188,7 +190,7 @@ export const BookingDrawer = ({
                       <TextField preset="p2" weight="s" text="Reservation Details" />
                       <Select
                         label="Occasion"
-                        selectedKeys={['']}
+                        selectedKeys={occasion ? [occasion] : ['']}
                         onSelectionChange={(keys) => {
                           setOccasion(Array.from(keys)[0] as string);
                         }}

@@ -22,13 +22,10 @@ export default function RisingPage() {
   }, []);
 
   return (
-    <div className="grid grid-cols-1 ipadMini:grid-cols-2">
+    <div className="grid grid-cols-1 pt-5 ipadMini:grid-cols-2">
       <div className="flex flex-col gap-4 p-4">
         <div className="flex flex-col items-start justify-center gap-4">
-          <NextLink
-            href="/venues"
-            className="flex items-center gap-1 hover:underline"
-          >
+          <NextLink href="/venues" className="flex items-center gap-1 hover:underline">
             <SlArrowLeft className="w-3 h-3" />
             All Results
           </NextLink>
@@ -58,11 +55,7 @@ export default function RisingPage() {
       </div>
       {!isMobileMode && (
         <div className="ipadMini:sticky ipadMini:top-[77px] ipadMini:h-[calc(100vh-77px)]">
-          <CustomMap
-            hoveredId={hoveredId}
-            markers={dataList}
-            center={{ longitude, latitude }}
-          />
+          <CustomMap hoveredId={hoveredId} markers={dataList} center={{ longitude, latitude }} />
         </div>
       )}
     </div>
@@ -77,10 +70,7 @@ const useGetRisingList = () => {
     const supabase = await createClient();
     globalLoading.show();
     setFetching(true);
-    const { data, error } = await supabase
-      .from('restaurants')
-      .select('*')
-      .contains('keywords', ['rising']);
+    const { data, error } = await supabase.from('restaurants').select('*').contains('keywords', ['rising']);
     if (error) {
       toastHelper.error('Error fetching restaurants:');
       console.error(error.message);

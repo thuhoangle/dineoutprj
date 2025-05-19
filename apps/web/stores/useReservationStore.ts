@@ -1,8 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { ReservationInfo, supaApiInstance, UserInfo } from '@/services';
+import { ReservationInfo } from '@/services';
 import { supabase } from '@/utils';
-import { AppSocket } from '@/services/supa-socket';
 import dayjs from 'dayjs';
 import { useUserStore } from '.';
 import { toastHelper } from '@/components';
@@ -10,6 +9,10 @@ import { toastHelper } from '@/components';
 interface ReservationStore {
   rehydrated: boolean;
   setRehydrated: () => void;
+
+  allReservations: ReservationInfo[];
+  setAllReservations: (reservations: ReservationInfo[]) => void;
+  getAllReservations: () => void;
 
   passReservations: ReservationInfo[];
   setPassReservations: (reservations: ReservationInfo[]) => void;
@@ -32,6 +35,34 @@ export const useReservationStore = create<ReservationStore>()(
     (set, get) => ({
       rehydrated: false,
       setRehydrated: () => set({ rehydrated: true }),
+
+      allReservations: [],
+      setAllReservations: (reservations: ReservationInfo[]) => set({ allReservations: reservations }),
+      getAllReservations: async () => {
+        const { data, error } = await supabase
+          .from('reservations')
+          .select('*, restaurants(name, images, locations->address, phone)')
+          .eq('user_id', useUserStore.getState().authInfo?.id);
+        if (error) {
+          toastHelper.error(error.message);
+          return;
+        }
+
+        // Update all filtered states
+        const pass = data.filter((res: ReservationInfo) =>
+          dayjs(res.reservation_time).isBefore(dayjs().startOf('day'))
+        );
+        const today = data.filter((res: ReservationInfo) => dayjs(res.reservation_time).isSame(dayjs(), 'day'));
+        const upcoming = data.filter((res: ReservationInfo) =>
+          dayjs(res.reservation_time).isAfter(dayjs().add(1, 'day').startOf('day'))
+        );
+
+        set({
+          passReservations: pass,
+          todayReservations: today,
+          upcomingReservations: upcoming,
+        });
+      },
 
       passReservations: [],
       setPassReservations: (reservations: ReservationInfo[]) => set({ passReservations: reservations }),

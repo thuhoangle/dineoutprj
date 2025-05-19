@@ -1,8 +1,6 @@
 'use client';
 
 import dayjs from 'dayjs';
-import { useMemo } from 'react';
-
 import { AvailableSeats } from '@/services';
 import { upperFirst } from 'lodash';
 import clsx from 'clsx';
@@ -23,37 +21,17 @@ export const QuickDateSelect = ({
   partySize: number;
   selectedTime: string;
 }) => {
-  // create a stable reference for today's date
-  const todayRef = useMemo(() => dayjs().startOf('day'), []);
+  const validDates = get10DaysFromNow();
 
-  // check if a day has any available seats
-  const hasDayAvailableSeats = (day: dayjs.Dayjs) => {
-    const dayStr = day.format('YYYY-MM-DD');
-    return availableSeatsList.some((seat) => dayjs(seat.date).format('YYYY-MM-DD') === dayStr);
-  };
-
-  // check if a day has available seats that match party size and time requirements
-  const hasDayMatchingRequirements = (day: dayjs.Dayjs) => {
-    const dayStr = day.format('YYYY-MM-DD');
-    return availableSeatsList.some(
-      (seat) =>
-        dayjs(seat.date).format('YYYY-MM-DD') === dayStr &&
-        (selectedTime === 'All Day' || seat.time === AMPMTo24Hour(selectedTime)) &&
-        seat.tables.capacity >= partySize
-    );
-  };
-
-  // check if this day is selected
-  const isDaySelected = (day: dayjs.Dayjs) => {
-    return dayjs(selectedDate.toString()).format('YYYY-MM-DD') === day.format('YYYY-MM-DD');
-  };
+  const filteredSeats = filterAvailableDates(availableSeatsList);
+  const matchingSeats = filterSeatsByRequirements(filteredSeats, partySize, selectedTime);
 
   return (
     <div className="flex justify-between gap-2 items-center transition-all">
-      {get10DaysFromNow().map((day, index) => {
-        const hasAvailSeats = hasDayAvailableSeats(day);
-        const hasMatchingSeats = hasDayMatchingRequirements(day);
-        const isSelected = isDaySelected(day);
+      {validDates.map((day, index) => {
+        const hasAvailSeats = filteredSeats.some((seat) => isSameDay(seat.date, day));
+        const hasMatchingSeats = matchingSeats.some((seat) => isSameDay(seat.date, day));
+        const isSelected = isSameDay(day, selectedDate);
         const displayText = day.format('DD');
 
         return (
@@ -66,10 +44,10 @@ export const QuickDateSelect = ({
                 hasAvailSeats
                   ? hasMatchingSeats
                     ? isSelected
-                      ? 'bg-red-500 text-white border-red-500'
-                      : 'border-red-500'
-                    : 'border-gray-200 text-gray-400'
-                  : 'line-through border-transparent text-gray-400'
+                      ? 'bg-red-500 text-white border-red-500 no-underline'
+                      : 'border-red-500 no-underline'
+                    : 'border-gray-500 text-gray-400 no-underline'
+                  : 'line-through border-transparent text-gray-800'
               )}
               onClick={() => handleClick(day.toString())}
             >
@@ -85,4 +63,26 @@ export const QuickDateSelect = ({
 const get10DaysFromNow = () => {
   const today = dayjs().startOf('day');
   return Array.from({ length: 10 }, (_, i) => today.add(i, 'day'));
+};
+
+// filter the available seats list to only include dates that are in the next 10 days
+const filterAvailableDates = (availableSeatsList: AvailableSeats[]) => {
+  const next10Days = get10DaysFromNow().map((d) => d.format('YYYY-MM-DD'));
+  return availableSeatsList.filter((seat) => next10Days.includes(dayjs(seat.date).format('YYYY-MM-DD')));
+};
+
+// filter the list to match the requirements
+const hasMatchingRequirements = (seat: AvailableSeats, partySize: number, selectedTime: string) => {
+  const timeMatches = selectedTime === 'All Day' || seat.time === AMPMTo24Hour(selectedTime);
+  const capacityMatches = seat.tables.capacity >= partySize;
+  return timeMatches && capacityMatches;
+};
+
+// filter the available seats list to match the selected requirements
+const filterSeatsByRequirements = (seats: AvailableSeats[], partySize: number, selectedTime: string) => {
+  return seats.filter((seat) => hasMatchingRequirements(seat, partySize, selectedTime));
+};
+
+export const isSameDay = (dateA: string | dayjs.Dayjs, dateB: string | dayjs.Dayjs) => {
+  return dayjs(dateA).format('YYYY-MM-DD') === dayjs(dateB).format('YYYY-MM-DD');
 };

@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, TextField, TextInput } from '@/components';
+import { Button, TextField } from '@/components';
 import { useLoginSignup } from '@/hooks';
 import { useUserStore } from '@/stores';
 import { Input } from '@heroui/react';
@@ -33,7 +33,7 @@ export default function LoginPage() {
   }, [portfolioDetail]);
 
   return (
-    <div className="w-full flex items-center flex-col gap-8 justify-center">
+    <div className="w-full flex pt-5 items-center flex-col gap-8 justify-center">
       <TextField preset="h1" text={isSignup ? 'Welcome to Dineout!' : 'Welcome back to Dineout!'} weight="s" />
       <div className="flex flex-col gap-5 w-full max-w-xl">
         <Input isClearable label="Your email" type="email" onValueChange={setEmail} errorMessage={errorEmail} />

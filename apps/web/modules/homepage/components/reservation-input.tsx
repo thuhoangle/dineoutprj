@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import { FaRegUser } from 'react-icons/fa';
 import { useRef, useState } from 'react';
 import { DatePicker, Input, ScrollShadow, type DateValue, Button } from '@heroui/react';
-import { today, getLocalTimeZone, parseDate, toZoned } from '@internationalized/date';
+import { today, getLocalTimeZone, parseDate } from '@internationalized/date';
 import { TextField } from '@/components';
 import { useCheckPressOutSide } from '@/hooks/useCheckPressOutSide';
 import { ChevronDownIcon } from '@heroicons/react/outline';
@@ -61,7 +61,7 @@ export const ReservationInput = ({ className, selectedParams }: ReservationInput
         selectorButtonPlacement="start"
         size="sm"
         variant="bordered"
-        value={selectedDate}
+        value={selectedDate as any}
         onChange={(value) => setSelectedDate(value as unknown as DateValue)}
       />
       <TimePicker selectedTime={selectedTime} setSelectedTime={setSelectedTime} />

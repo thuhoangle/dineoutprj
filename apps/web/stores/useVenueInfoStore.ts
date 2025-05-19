@@ -3,6 +3,9 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { toastHelper } from '@/components';
 import { useUserStore } from '.';
+import { createClient } from '@/utils/supabase/client';
+
+const supabase = createClient();
 
 interface VenueInfoState {
   rehydrated: boolean;
@@ -17,6 +20,10 @@ interface VenueInfoState {
 
   getFavRestaurants: () => void;
   favRestaurant: { [key: string]: boolean };
+
+  allFavRestaurants: RestaurantInfo[];
+  getAllFavRestaurants: () => void;
+
   clearFavRestaurants: () => void;
   toggleFavRestaurant: (restaurantId: string) => void;
 }
@@ -37,16 +44,10 @@ export const useVenueInfoStore = create<VenueInfoState>()(
           } else {
             set({
               restaurantList: data || [],
-              restaurantDetail: data.reduce(
-                (
-                  acc: { [key: string]: RestaurantInfo },
-                  item: RestaurantInfo
-                ) => {
-                  acc[item.id] = item;
-                  return acc;
-                },
-                {}
-              ),
+              restaurantDetail: data.reduce((acc: { [key: string]: RestaurantInfo }, item: RestaurantInfo) => {
+                acc[item.id] = item;
+                return acc;
+              }, {}),
             });
 
             if (useUserStore.getState().authInfo) {
@@ -65,6 +66,21 @@ export const useVenueInfoStore = create<VenueInfoState>()(
         });
       },
 
+      allFavRestaurants: [],
+      getAllFavRestaurants: async () => {
+        const userId = useUserStore.getState().authInfo?.id;
+        if (!userId) return;
+
+        const { data, error } = await supabase
+          .from('favorites')
+          .select('restaurant_id, restaurants(*)')
+          .eq('auth_id', userId);
+
+        if (!error && data) {
+          set({ allFavRestaurants: data.flatMap((f) => f.restaurants) as RestaurantInfo[] });
+        }
+      },
+
       favRestaurant: {},
       getFavRestaurants: async () => {
         if (!useUserStore.getState().authInfo) {
@@ -75,15 +91,11 @@ export const useVenueInfoStore = create<VenueInfoState>()(
           handleError(error);
           return;
         }
-        const favRestaurant =
-          data?.map((item: any) => item.restaurant_id) || [];
-        const favRestaurantObject = favRestaurant.reduce(
-          (acc: any, item: any) => {
-            acc[item] = true;
-            return acc;
-          },
-          {}
-        );
+        const favRestaurant = data?.map((item: any) => item.restaurant_id) || [];
+        const favRestaurantObject = favRestaurant.reduce((acc: any, item: any) => {
+          acc[item] = true;
+          return acc;
+        }, {});
         set({ favRestaurant: favRestaurantObject });
       },
 
@@ -104,8 +116,7 @@ export const useVenueInfoStore = create<VenueInfoState>()(
 
         if (!isFav) {
           // Add favorite
-          const { error } =
-            await supaApiInstance.setFavRestaurant(restaurantId);
+          const { error } = await supaApiInstance.setFavRestaurant(restaurantId);
 
           if (error) {
             toastHelper.error(error.message);
@@ -119,8 +130,7 @@ export const useVenueInfoStore = create<VenueInfoState>()(
           }
         } else {
           // Remove favorite
-          const { error } =
-            await supaApiInstance.setUnFavRestaurant(restaurantId);
+          const { error } = await supaApiInstance.setUnFavRestaurant(restaurantId);
           if (error) {
             toastHelper.error(error.message);
             set({

@@ -8,7 +8,7 @@ import Image from 'next/image';
 
 import { siteConfig } from '@/config/site';
 import { useCheckPressOutSide, useLoginSignup } from '@/hooks';
-import { useUserStore, useVenueInfoStore } from '@/stores';
+import { useReservationStore, useUserStore, useVenueInfoStore } from '@/stores';
 import { RestaurantInfo } from '@/services';
 import { TextField } from '../text';
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
@@ -24,6 +24,9 @@ import {
   NavbarContent,
   NavbarBrand,
   NavbarItem,
+  Chip,
+  Badge,
+  Tooltip,
 } from '@heroui/react';
 import { useWindowContext } from '@/contexts';
 import { MdEventNote } from 'react-icons/md';
@@ -31,6 +34,8 @@ import { IoLogOutOutline } from 'react-icons/io5';
 import { usePathname, useRouter } from 'next/navigation';
 import { SearchIcon } from '../icons';
 import { ThemeSwitch } from '../theme-switch';
+import { FaRegCalendar } from 'react-icons/fa6';
+import dayjs from 'dayjs';
 interface HeaderMenuProps {
   onGoSamePath?: () => void;
 }
@@ -42,6 +47,7 @@ export const HeaderMenu: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
   const { onLogout } = useLoginSignup();
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
+  const allReservations = useReservationStore((state) => state.allReservations);
 
   const [searchString, setSearchString] = useState('');
   const [searchResults, setSearchResults] = useState<RestaurantInfo[]>([]);
@@ -57,6 +63,7 @@ export const HeaderMenu: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
     router.prefetch('/login');
     router.prefetch('/venues');
     router.prefetch('/account/profile');
+    router.prefetch('/account/reservations');
   }, []);
 
   useEffect(() => {
@@ -113,6 +120,10 @@ export const HeaderMenu: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
     setSearchResults([]);
     setIsSearchPanelVisible(false);
   };
+
+  const upcomingReservations = allReservations.filter((reservation) => {
+    return dayjs(reservation.reservation_time).isAfter(dayjs());
+  });
 
   const searchInput = (
     <div ref={searchContainerRef} className="relative w-full max-w-md">
@@ -211,56 +222,91 @@ export const HeaderMenu: FC<HeaderMenuProps> = ({ onGoSamePath }) => {
           {searchInput}
         </NavbarContent>
       )}
-
-      <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
-        {!portfolioDetail && (
-          <Button
-            variant="flat"
-            radius="md"
-            className="!bg-transparent font-semibold !border-2 !border-red-500 !text-red-500 text-medium"
-            onPress={() => router.push('/login')}
+      <NavbarContent className="flex items-center gap-1" justify="center">
+        <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
+          {!portfolioDetail && (
+            <Button
+              variant="flat"
+              radius="md"
+              className="!bg-transparent font-semibold !border-2 !border-red-500 !text-red-500 text-medium"
+              onPress={() => router.push('/login')}
+            >
+              Login
+            </Button>
+          )}
+          {portfolioDetail && (
+            <Dropdown>
+              <DropdownTrigger>
+                <Button
+                  variant="bordered"
+                  color="danger"
+                  className="border-red-600 font-semibold text-red-500"
+                  // endContent={
+                  //   upcomingReservations?.length > 0 && (
+                  //     <Chip size="sm" color="danger" variant="solid" radius="sm">
+                  //       {upcomingReservations?.length || 0}
+                  //     </Chip>
+                  //   )
+                  // }
+                >
+                  {portfolioDetail.name ? portfolioDetail.name : portfolioDetail.email}
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu>
+                <DropdownItem
+                  key="profile"
+                  onPress={() => router.push('/account/profile')}
+                  startContent={
+                    <Image
+                      src={portfolioDetail.profile_image || ''}
+                      alt="Profile Image"
+                      className="w-8 h-8 rounded-full"
+                      width={40} // Specify width
+                      height={40} // Specify height
+                    />
+                  }
+                >
+                  Profile
+                </DropdownItem>
+                <DropdownItem
+                  key="reservations"
+                  onPress={() => router.push('/account/reservations')}
+                  startContent={<MdEventNote />}
+                  endContent={
+                    upcomingReservations?.length > 0 && (
+                      <Chip size="sm" color="danger" variant="solid" radius="sm">
+                        {upcomingReservations?.length || 0}
+                      </Chip>
+                    )
+                  }
+                >
+                  Reservations
+                </DropdownItem>
+                <DropdownItem key={'logout'} onPress={onLogout} startContent={<IoLogOutOutline />}>
+                  Logout
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          )}
+          <Tooltip
+            placement="bottom"
+            content={upcomingReservations?.length > 0 ? 'Upcoming Reservations' : 'No Upcoming Reservations'}
           >
-            Login
-          </Button>
-        )}
-        {portfolioDetail && (
-          <Dropdown>
-            <DropdownTrigger>
-              <Button variant="bordered" color="danger" className="border-red-600 font-semibold text-red-500">
-                {portfolioDetail.name ? portfolioDetail.name : portfolioDetail.email}
+            <Badge
+              color="primary"
+              content={upcomingReservations?.length}
+              isInvisible={upcomingReservations?.length === 0}
+              size="sm"
+            >
+              <Button isIconOnly variant="light" radius="md" onPress={() => router.push('/account/reservations')}>
+                <FaRegCalendar size={22} className="text-default-500" />
               </Button>
-            </DropdownTrigger>
-            <DropdownMenu>
-              <DropdownItem
-                key="profile"
-                onPress={() => router.push('/account/profile')}
-                startContent={
-                  <Image
-                    src={portfolioDetail.profile_image || ''}
-                    alt="Profile Image"
-                    className="w-8 h-8 rounded-full"
-                    width={40} // Specify width
-                    height={40} // Specify height
-                  />
-                }
-              >
-                Profile
-              </DropdownItem>
-              <DropdownItem
-                key="reservations"
-                onPress={() => router.push('/account/reservations')}
-                startContent={<MdEventNote />}
-              >
-                Reservations
-              </DropdownItem>
-              <DropdownItem key={'logout'} onPress={onLogout} startContent={<IoLogOutOutline />}>
-                Logout
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
-        )}
-        <ThemeSwitch />
-        {/* <NavbarMenuToggle /> */}
+            </Badge>
+          </Tooltip>
+          <ThemeSwitch />
+          {/* <NavbarMenuToggle /> */}
+        </NavbarContent>
+        <NavbarContent justify="end"></NavbarContent>
       </NavbarContent>
     </Navbar>
   );

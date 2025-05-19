@@ -1,32 +1,41 @@
 import { BigWidget } from '@/components/big-widget';
 import { TextField } from '../../../components/text';
 import { FaRegMoon } from 'react-icons/fa';
-import { RestaurantData } from '@/interface';
 import { RestaurantInfo } from '@/services';
 import { useVenueInfoStore } from '@/stores';
 
 export const HorizontalSection = ({
   title,
   dataList,
+  subtitle,
   // isFav,
   // onSetFav,
 }: {
   title: string;
   dataList: RestaurantInfo[];
+  subtitle?: string;
 }) => {
   const favRestaurant = useVenueInfoStore((state) => state.favRestaurant);
-  const toggleFavRestaurant = useVenueInfoStore(
-    (state) => state.toggleFavRestaurant
-  );
+  const toggleFavRestaurant = useVenueInfoStore((state) => state.toggleFavRestaurant);
+
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-1 justify-between">
-        <TextField preset="h3" className="flex gap-1 items-center" weight="b">
+        <div className="items-center gap-1 flex">
           <FaRegMoon className="w-10 h-auto text-red-500" />
-          {title}
-        </TextField>
+          <div className="flex flex-col">
+            <TextField preset="h5" weight="b">
+              {title}
+            </TextField>
+            {subtitle && (
+              <TextField preset="p3" className="italic">
+                {subtitle}
+              </TextField>
+            )}
+          </div>
+        </div>
       </div>
-      <div className="flex gap-4 overflow-x-scroll">
+      <div className="flex gap-4 overflow-x-auto scrollbar-main">
         {dataList.map((data: RestaurantInfo) => (
           <BigWidget
             isFav={favRestaurant}

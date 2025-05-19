@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from 'react';
 import { Button } from './button';
-import dayjs from 'dayjs';
 import { AvailableSeatRestaurant, AvailableSeatRestaurantWithTables, RestaurantInfo } from '@/services';
 import { useReservation } from '@/hooks';
 import { BookingDrawer } from './booking-drawer';
@@ -32,6 +31,7 @@ export const SlotPicker = ({ selectParams, classNames, onClick, restaurantData }
     fetching,
     partySize,
     setPartySize,
+    occasion,
     setOccasion,
     setAdditionalInfo,
     setSelectedDate,
@@ -122,6 +122,7 @@ export const SlotPicker = ({ selectParams, classNames, onClick, restaurantData }
           onReserve={createReservation}
           fetching={fetching}
           quantity={partySize}
+          occasion={occasion}
           setOccasion={setOccasion}
           setAdditionalInfo={setAdditionalInfo}
           timeSlot={getReservationDatetime()}

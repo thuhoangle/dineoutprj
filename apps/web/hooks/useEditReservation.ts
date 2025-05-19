@@ -42,6 +42,8 @@ export const useEditReservation = (data: ReservationInfo) => {
 
   const handleUpdate = async () => {
     const id = toastHelper.loading('Updating reservation...');
+    setUpdating(true);
+
     try {
       const { error } = await supabase
         .from('reservations')
@@ -52,12 +54,14 @@ export const useEditReservation = (data: ReservationInfo) => {
         })
         .eq('id', data.id);
 
-      if (error) throw error;
-
-      toastHelper.success('Reservation updated successfully', { id });
-      setIsEditing(false);
-    } catch (error: any) {
-      toastHelper.error(error.message || 'Failed to update reservation', { id });
+      if (error) {
+        toastHelper.error('Update failed', { id });
+      } else {
+        toastHelper.success('Reservation updated successfully', { id });
+      }
+    } catch (error) {
+      console.error('Update error:', error);
+      toastHelper.error('Something went wrong', { id });
     } finally {
       setUpdating(false);
     }

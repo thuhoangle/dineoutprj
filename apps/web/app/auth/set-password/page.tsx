@@ -6,15 +6,8 @@ import { createClient } from '@/utils/supabase/client';
 
 export default function SetPasswordPage() {
   const supabase = createClient();
-  const {
-    pwError,
-    fetching,
-    error,
-    password,
-    handlePasswordChange,
-    isAuthenticated,
-    setAccPassword,
-  } = useSetPasswordFromInvite();
+  const { pwError, fetching, error, password, handlePasswordChange, isAuthenticated, setAccPassword } =
+    useSetPasswordFromInvite();
 
   const handleSubmit = async () => {
     await setAccPassword();
@@ -25,13 +18,10 @@ export default function SetPasswordPage() {
   };
 
   if (!isAuthenticated) return <GlobalLoading />;
-  if (error)
-    return (
-      <div className="text-[18px] p-8 text-red-500 text-center">{error}</div>
-    );
+  if (error) return <div className="text-[18px] p-8 text-red-500 text-center">{error}</div>;
 
   return (
-    <div className="w-full flex flex-col items-center justify-center mt-16 gap-6">
+    <div className="w-full pt-5 flex flex-col items-center justify-center mt-16 gap-6">
       <TextField preset="h2" text="Complete your account setup" />
       <div className="w-full max-w-md flex flex-col gap-3">
         <TextInput
