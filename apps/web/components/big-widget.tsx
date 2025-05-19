@@ -29,7 +29,7 @@ export const BigWidget = ({
   const router = useRouter();
 
   return (
-    <div className={clsx('flex flex-col gap-3', className)} onClick={() => router.push(`/venues/${data.slug}`)}>
+    <div className={clsx('flex flex-col gap-3 mb-2.5', className)} onClick={() => router.push(`/venues/${data.slug}`)}>
       <div className="relative rounded-lg aspect-square w-72">
         <Image
           fill

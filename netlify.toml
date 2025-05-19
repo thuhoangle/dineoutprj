@@ -1,0 +1,23 @@
+# Web app deployment #
+[build]
+  base = "."
+  command = "npm run build:web"
+  publish = "apps/web/.next"
+  environment = { NODE_VERSION = "20" }
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[context.web.environment]
+  NEXT_PRIVATE_TARGET = "web"
+
+# Admin app deployment #
+[context.admin]
+  [context.admin.build]
+    base = "."
+    command = "npm run build:admin"
+    publish = "apps/admin/.next"
+    environment = { NODE_VERSION = "20" }
+
+  [[context.admin.plugins]]
+    package = "@netlify/plugin-nextjs"

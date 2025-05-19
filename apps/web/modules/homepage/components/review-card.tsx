@@ -40,7 +40,7 @@ export const ReviewCard = ({ review }: ReviewCardProps) => {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-900 flex flex-col justify-between min-w-[200px] w-72 min-h-56 gap-4 rounded-md p-4 shadow-sm border border-gray-200">
+    <div className="bg-white mb-4 dark:bg-gray-900 flex flex-col justify-between min-w-96 min-h-56 gap-4 rounded-md p-4 shadow-sm border border-gray-200">
       <div className="flex flex-col w-full ">
         <div className="flex items-start justify-between">
           <div

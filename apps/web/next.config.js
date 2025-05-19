@@ -14,31 +14,26 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'resizer.otstatic.com',
-        port: '',
         pathname: '/v2/photos/xlarge/**',
       },
       {
         protocol: 'https',
         hostname: 'oissfgnrpjfveyjaokgk.supabase.co',
-        port: '',
         pathname: '/storage/v1/object/public/**',
       },
       {
         protocol: 'https',
         hostname: 'images.unsplash.com',
-        port: '',
         pathname: '/**',
       },
       {
         protocol: 'https',
         hostname: 'lh5.googleusercontent.com',
-        port: '',
         pathname: '/**',
       },
       {
         protocol: 'https',
         hostname: 'lh3.googleusercontent.com',
-        port: '',
         pathname: '/**',
       },
     ],
@@ -59,4 +54,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;

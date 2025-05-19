@@ -76,18 +76,19 @@ export default function Home() {
       </div>
       <div className="flex w-full flex-col py-2 gap-y-12">
         <HorizontalSection title="Rising Venues" dataList={risingData} />
-        <HorizontalSection
-          title="Recommend for you"
-          subtitle="Because you like The Miffy Diner"
-          dataList={risingData}
-        />
+        {authInfo && (
+          <HorizontalSection
+            title="Recommend for you"
+            subtitle="Because you like The Miffy Diner"
+            dataList={risingData.reverse()}
+          />
+        )}
         <div className="flex flex-col gap-2">
           <div className="flex flex-col">
             <TextField preset="h5" weight="b" text="Recent reviews" />
             <TextField preset="p3" className="italic" text="From verified diners like you" />
           </div>
-          <div className="flex gap-2 overflow-auto scrollbar-main">
-            {/* <div className="flex gap-4 overflow-x-auto scrollbar-main"> */}
+          <div className="flex gap-4 overflow-auto scrollbar-main">
             {allReviews.map((data: ReviewsList) => (
               <ReviewCard key={data.id} review={data} />
             ))}
