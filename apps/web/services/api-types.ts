@@ -182,3 +182,50 @@ export interface GeoLocationResponse {
     city?: string;
   };
 }
+
+export interface RecommendResult {
+  id: string;
+  name: string;
+  rating?: number;
+  review_count?: number;
+  short_overview?: string;
+  overview?: string;
+  images?: string[];
+  locations?: Locations;
+  keywords?: string[];
+  price_range?: number;
+  slug?: string;
+  cancellation_policy?: string;
+  reservation_policy?: string;
+  favorite?: boolean;
+  temporarily_closed?: boolean;
+  website?: string;
+  ggUrl?: string;
+  phone?: string;
+  opening_hours?: Openinghours;
+  reviews_distribution?: Reviewsdistribution;
+  price?: string;
+  categories?: string[];
+  district?: string;
+  manager_id?: string;
+  geopoint?: string;
+  is_favorite?: boolean;
+}
+
+interface Reviewsdistribution {
+  oneStar: number;
+  twoStar: number;
+  fiveStar: number;
+  fourStar: number;
+  threeStar: number;
+}
+
+interface Openinghours {
+  Friday: string;
+  Monday: string;
+  Sunday: string;
+  Tuesday: string;
+  Saturday: string;
+  Thursday: string;
+  Wednesday: string;
+}

@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import { FaHeart, FaRegHeart, FaStar } from 'react-icons/fa';
 import { GrLocation } from 'react-icons/gr';
 
-import { RestaurantInfo } from '@/services';
+import { RecommendResult, RestaurantInfo } from '@/services';
 import { EMPTY_RESTAURANT_IMAGE, getImageUrl, getPriceRange } from '@/utils';
 
 import { Button } from './button';
@@ -18,7 +18,7 @@ export const BigWidget = ({
   isFav,
   onSetFav,
 }: {
-  data: RestaurantInfo;
+  data: RestaurantInfo | RecommendResult;
   className?: string;
   // onClick: () => void;
   isFav: {

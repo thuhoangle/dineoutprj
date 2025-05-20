@@ -10,7 +10,7 @@ import { HiOutlineSparkles } from 'react-icons/hi';
 import { IoFlashOutline } from 'react-icons/io5';
 
 import { Button, ExploreCard, SimpleLoading, TextField } from '@/components';
-import { useGetReviews, useGetUserLocation } from '@/hooks';
+import { useGetRecommender, useGetReviews, useGetUserLocation } from '@/hooks';
 import { HorizontalSection, ReservationInput, ReviewCard } from '@/modules/homepage/components';
 import { ReviewsList } from '@/services';
 import { useUserStore, useVenueInfoStore } from '@/stores';
@@ -22,6 +22,7 @@ export default function Home() {
   const favRestaurant = useVenueInfoStore((state) => state.favRestaurant);
   const [fetchingList, setFetchingList] = useState(false);
   const { allReviews, fetchAllReviews } = useGetReviews();
+  const { recommender, getRecommender } = useGetRecommender();
 
   const toggleFavRestaurant = useVenueInfoStore((state) => state.toggleFavRestaurant);
 
@@ -38,6 +39,7 @@ export default function Home() {
   useEffect(() => {
     setFetchingList(true);
     useVenueInfoStore.getState().getRestaurantList();
+    fetchAllReviews();
     setFetchingList(false);
   }, []);
 
@@ -45,7 +47,7 @@ export default function Home() {
     if (authInfo) {
       useVenueInfoStore.getState().getFavRestaurants();
       useUserStore.getState().getPortfolioDetail();
-      fetchAllReviews();
+      getRecommender(authInfo.id);
     }
   }, [authInfo]);
 
@@ -79,8 +81,8 @@ export default function Home() {
         {authInfo && (
           <HorizontalSection
             title="Recommend for you"
-            subtitle="Because you like The Miffy Diner"
-            dataList={risingData.reverse()}
+            subtitle={`Because you like ${recommender[0].name}`}
+            dataList={recommender}
           />
         )}
         <div className="flex flex-col gap-2">

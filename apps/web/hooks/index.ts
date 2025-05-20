@@ -12,3 +12,4 @@ export * from './useEditReservation';
 export * from './useCancelReservation';
 export * from './useGetReviews';
 export * from './useFeedback';
+export * from './useGetRecommender';

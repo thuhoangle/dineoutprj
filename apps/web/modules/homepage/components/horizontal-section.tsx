@@ -2,7 +2,7 @@ import { FaRegMoon } from 'react-icons/fa';
 
 import { BigWidget } from '@/components/big-widget';
 
-import { RestaurantInfo } from '@/services';
+import { RecommendResult, RestaurantInfo } from '@/services';
 import { useVenueInfoStore } from '@/stores';
 
 import { TextField } from '../../../components/text';
@@ -15,7 +15,7 @@ export const HorizontalSection = ({
   // onSetFav,
 }: {
   title: string;
-  dataList: RestaurantInfo[];
+  dataList: RestaurantInfo[] | RecommendResult[];
   subtitle?: string;
 }) => {
   const favRestaurant = useVenueInfoStore((state) => state.favRestaurant);
@@ -31,7 +31,7 @@ export const HorizontalSection = ({
               {title}
             </TextField>
             {subtitle && (
-              <TextField preset="p3" className="italic">
+              <TextField preset="p4" className="italic">
                 {subtitle}
               </TextField>
             )}
@@ -39,7 +39,7 @@ export const HorizontalSection = ({
         </div>
       </div>
       <div className="flex gap-4 overflow-x-auto scrollbar-main">
-        {dataList.map((data: RestaurantInfo) => (
+        {dataList.map((data: RestaurantInfo | RecommendResult) => (
           <BigWidget
             isFav={favRestaurant}
             onSetFav={toggleFavRestaurant}
