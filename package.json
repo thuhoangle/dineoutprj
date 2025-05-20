@@ -42,6 +42,7 @@
     "@supabase/supabase-js": "^2.48.1",
     "clsx": "^2.1.1",
     "lodash": "^4.17.21",
+    "netlify-cli": "^21.5.0",
     "next": "14.1.0",
     "react-hot-toast": "^2.4.0",
     "tailwind-config": "^0.1.2",

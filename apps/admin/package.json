@@ -14,6 +14,7 @@
     "@heroui/react": "^2.7.6",
     "@heroui/system": "^2.4.13",
     "@heroui/theme": "^2.4.13",
+    "@netlify/plugin-nextjs": "^5.11.1",
     "@types/node": "^20.11.24",
     "@types/react": "^18.2.61",
     "@types/react-dom": "^18.2.19",

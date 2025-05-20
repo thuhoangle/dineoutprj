@@ -8,7 +8,7 @@
     cd ../../ &&
     npm run build:admin
     """
-  publish = "apps/admin/.next"
+  publish = ".next"
 
 [build.environment]
   NETLIFY_USE_YARN = "false"
