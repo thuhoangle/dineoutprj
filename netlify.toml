@@ -7,7 +7,7 @@
   directory = "apps/web/netlify/functions"
 
 # Web site
-[[context.web]]
+[context.web]
   command = "npm run build:web"
   publish = "apps/web/.next"
   base = "apps/web"
@@ -15,7 +15,7 @@
   ignore = "git diff --quiet HEAD^ HEAD -- apps/web packages"
 
 # Admin site
-[[context.admin]]
+[context.admin]
   command = "npm run build:admin"
   publish = "apps/admin/.next"
   base = "apps/admin"
