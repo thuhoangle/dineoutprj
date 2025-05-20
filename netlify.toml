@@ -22,9 +22,15 @@
   functions = "apps/admin/netlify/functions"
   ignore = "git diff --quiet HEAD^ HEAD -- apps/admin packages"
 
-# Production context
-[context.production]
-  command = "npm run build:web && npm run build:admin"
+# Production contexts
+[context.production.web]
+  command = "npm run build:web"
   publish = "apps/web/.next"
-  base = ""
+  base = "apps/web"
   functions = "apps/web/netlify/functions"
+
+[context.production.admin]
+  command = "npm run build:admin"
+  publish = "apps/admin/.next"
+  base = "apps/admin"
+  functions = "apps/admin/netlify/functions"
