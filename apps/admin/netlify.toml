@@ -1,0 +1,7 @@
+[build]
+  base = ""
+  command = "npm run build:admin"
+  publish = "apps/admin/.next"
+
+[functions]
+  directory = "apps/admin/netlify/functions" 
