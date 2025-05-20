@@ -1,36 +1,35 @@
 [build]
-  base = ""  # root of the repo
-  publish = "apps/web/.next"
-  command = "npm run build:web"
+  base = ""
+  publish = ""
+  command = ""
 
-[functions]
-  directory = "apps/web/netlify/functions"
-
-# Web site
 [context.web]
   command = "npm run build:web"
   publish = "apps/web/.next"
-  base = "apps/web"
+  base = ""
   functions = "apps/web/netlify/functions"
   ignore = "git diff --quiet HEAD^ HEAD -- apps/web packages"
 
-# Admin site
 [context.admin]
   command = "npm run build:admin"
   publish = "apps/admin/.next"
-  base = "apps/admin"
+  base = ""
   functions = "apps/admin/netlify/functions"
   ignore = "git diff --quiet HEAD^ HEAD -- apps/admin packages"
 
-# Production contexts
+[context.production]
+  command = ""
+  publish = ""
+  base = ""
+
 [context.production.web]
   command = "npm run build:web"
   publish = "apps/web/.next"
-  base = "apps/web"
+  base = ""
   functions = "apps/web/netlify/functions"
 
 [context.production.admin]
   command = "npm run build:admin"
   publish = "apps/admin/.next"
-  base = "apps/admin"
+  base = ""
   functions = "apps/admin/netlify/functions"
