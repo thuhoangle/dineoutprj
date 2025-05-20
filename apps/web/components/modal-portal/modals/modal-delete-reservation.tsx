@@ -1,9 +1,9 @@
 import type { FC } from 'react';
 
-import { Button } from 'dineout-ui';
 
 import { ModalHeader, SimpleModal } from '../simple-modal';
 import { ModalBaseProps } from '../types';
+import { Button } from '@/components';
 
 interface ModalDeleteReservationProps extends ModalBaseProps {
   handleDelete: () => void;
