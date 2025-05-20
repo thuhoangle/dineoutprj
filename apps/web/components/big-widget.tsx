@@ -61,10 +61,12 @@ export const BigWidget = ({
             <FaStar className="text-inherit w-5" />
             {data.rating}
           </TextField>
-          <TextField preset="p3" className="text-gray-500">
-            {'\u00A0•\u00A0'}
-            {getPriceRange(data.price_range)}
-          </TextField>
+          {data.price_range && (
+            <TextField preset="p3" className="text-gray-500">
+              {'\u00A0•\u00A0'}
+              {getPriceRange(data.price_range)}
+            </TextField>
+          )}
         </div>
         <div className="flex items-center text-gray-500 gap-0.5">
           <GrLocation className="text-inherit w-5" />
