@@ -36,7 +36,7 @@ export const ReservationCard = ({ data }: { data: ReservationInfo }) => {
   return (
     <>
       <div
-        className="flex relative cursor-pointer gap-5 justify-between items-center rounded-md border border-foreground-500 p-3"
+        className="flex relative cursor-pointer gap-5 justify-between items-center rounded-md border max-w-[362px] w-full border-foreground-500 p-3"
         onClick={_onViewDetail}
       >
         <div className="flex gap-2 items-start">

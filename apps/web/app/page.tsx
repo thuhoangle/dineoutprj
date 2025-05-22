@@ -78,10 +78,10 @@ export default function Home() {
       </div>
       <div className="flex w-full flex-col py-2 gap-y-12">
         <HorizontalSection title="Rising Venues" dataList={risingData} />
-        {authInfo && (
+        {authInfo && recommender.length > 0 && (
           <HorizontalSection
             title="Recommend for you"
-            subtitle={`Because you like ${recommender[0].name}`}
+            subtitle={`Because you like ${recommender[0]?.name}`}
             dataList={recommender}
           />
         )}

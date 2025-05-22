@@ -1,10 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-
-import toast from 'react-hot-toast';
-
 import { RestaurantInfo, supaApiInstance } from '../services';
+import { toastHelper } from '@/components';
 
 export const useGetRestaurantInfo = () => {
   const [dataList, setDataList] = useState<RestaurantInfo[]>([]);
@@ -15,12 +13,12 @@ export const useGetRestaurantInfo = () => {
     try {
       const { data, error } = await supaApiInstance.getRestaurantsList();
       if (error) {
-        toast.error(error.message);
+        toastHelper.error(error.message);
       } else {
         setDataList(data || []);
       }
     } catch (error: any) {
-      toast.error(error.message);
+      toastHelper.error(error.message);
     } finally {
       setFetching(false);
     }

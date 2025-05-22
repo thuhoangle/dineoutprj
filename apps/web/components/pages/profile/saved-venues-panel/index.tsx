@@ -4,16 +4,19 @@ import { useEffect } from 'react';
 
 import { TextField } from '@/components/text';
 
-import { useVenueInfoStore } from '@/stores';
+import { useUserStore, useVenueInfoStore } from '@/stores';
 
 import { VenueCard } from './venue-card';
 
 export const SavedVenuesPanel = () => {
+  const authInfo = useUserStore((state) => state.authInfo);
   const allFavRestaurants = useVenueInfoStore((state) => state.allFavRestaurants);
 
   useEffect(() => {
-    useVenueInfoStore.getState().getAllFavRestaurants();
-  }, []);
+    if (authInfo) { 
+      useVenueInfoStore.getState().getAllFavRestaurants();
+    }
+  }, [authInfo]);
 
   return (
     <div className="flex flex-col gap-5 w-full">

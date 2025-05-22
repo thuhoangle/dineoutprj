@@ -12,13 +12,16 @@ import { TextField } from '@/components/text';
 
 import { useGetReviews } from '@/hooks';
 import { ReviewsList } from '@/services';
+import { useUserStore } from '@/stores';
 
 export const FeedbackHistoryPanel = () => {
   const { myReviews, fetchMyReviews } = useGetReviews();
-
+  const authInfo = useUserStore((state) => state.authInfo);
   useEffect(() => {
-    fetchMyReviews();
-  }, []);
+    if (authInfo) {
+      fetchMyReviews();
+    }
+  }, [authInfo]);
 
   return (
     <div className="flex flex-col gap-5 w-full">

@@ -11,7 +11,7 @@ export const useGetRecommender = () => {
             customer_id: userId,
         });
         if (error) {
-            toastHelper.error(error.message);
+            console.log(error.message);
             return [];
         } else {
             setRecommender(data);

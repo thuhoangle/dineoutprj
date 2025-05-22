@@ -28,7 +28,7 @@ export const AccountPageLayout = ({ children }: { children: ReactNode }) => {
     },
     {
       Icon: MdOutlineDateRange,
-      label: 'Reservations & Notify',
+      label: 'Reservations',
       value: '/account/reservations',
     },
     {

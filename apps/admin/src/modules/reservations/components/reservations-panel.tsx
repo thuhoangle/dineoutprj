@@ -6,6 +6,7 @@ import { Chip, Tab, Tabs } from '@heroui/react';
 
 import { ReservationInfo } from '@/services';
 import { useReservationStore } from '@/stores';
+import { useUserStore } from '@/stores';
 
 import { PassReservation, TodayReservation, UpcomingReservation } from '.';
 
@@ -29,6 +30,9 @@ export const ReservationsPanel = () => {
 
   const handleSwitchTab = async (currentTab: string) => {
     setCurrentTab(currentTab);
+    const authInfo = useUserStore.getState().authInfo;
+    if (!authInfo) return;
+
     switch (currentTab) {
       case 'today':
         await useReservationStore.getState().getTodayReservations();

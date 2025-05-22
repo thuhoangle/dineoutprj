@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 
 import { toastHelper } from '@/components';
-import { supaApiInstance } from '@/services';
 import { useUserStore } from '@/stores';
 
 export const useFeedback = () => {

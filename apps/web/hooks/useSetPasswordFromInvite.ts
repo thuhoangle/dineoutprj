@@ -2,9 +2,8 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
-import toast from 'react-hot-toast';
-
 import { createClient } from '@/utils/supabase/client';
+import { toastHelper } from '@/components';
 
 export const useSetPasswordFromInvite = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -43,12 +42,12 @@ export const useSetPasswordFromInvite = () => {
     try {
       const { error } = await supabase.auth.updateUser({ password });
       if (error) {
-        return toast.error(error.message);
+        return toastHelper.error(error.message);
       }
-      toast.success('Password set successfully');
+      toastHelper.success('Password set successfully');
       return null;
     } catch (error) {
-      return toast.error('Failed to set password');
+      return toastHelper.error('Failed to set password');
     }
   };
 

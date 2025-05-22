@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 
-import toast from 'react-hot-toast';
-
 import { globalLoading, toastHelper } from '@/components';
 import { RestaurantInfo, supaApiInstance } from '@/services';
 

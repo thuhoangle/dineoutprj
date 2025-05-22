@@ -2,10 +2,9 @@
 
 import { useState } from 'react';
 
-import toast from 'react-hot-toast';
-
 import { supaApiInstance } from '@/services';
 import { AvailableSeats } from '@/services';
+import { toastHelper } from '@/components';
 
 export const useGetAvailableSeats = () => {
   const [fetching, setFetching] = useState(false);
@@ -16,12 +15,12 @@ export const useGetAvailableSeats = () => {
     try {
       const { data, error } = await supaApiInstance.getAvailableSeats(restaurantId);
       if (error) {
-        toast.error(error.message);
+        toastHelper.error(error.message);
       } else {
         setDataList(data || []);
       }
     } catch (error: any) {
-      toast.error(error.message);
+      toastHelper.error(error.message);
     } finally {
       setFetching(false);
     }

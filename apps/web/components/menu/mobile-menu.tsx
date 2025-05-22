@@ -130,12 +130,20 @@ export const NAV_ITEMS = [
     value: '/reservation',
   },
   {
-    label: 'Reservations & Notify',
+    label: 'Reservations',
     value: '/account/reservations',
   },
   {
     label: 'Profile',
     value: '/account/profile',
+  },
+  {
+    label: 'Saved Restaurants',
+    value: '/account/saved-venues',
+  },
+  {
+    label: 'Feedback History',
+    value: '/account/feedback-history',
   },
   {
     label: 'Log out',
