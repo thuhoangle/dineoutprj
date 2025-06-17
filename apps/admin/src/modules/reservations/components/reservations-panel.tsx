@@ -2,18 +2,20 @@
 
 import { useCallback, useMemo, useState } from 'react';
 
-import { Chip, Tab, Tabs } from '@heroui/react';
+import { Button, Chip, Tab, Tabs } from '@heroui/react';
 
 import { ReservationInfo } from '@/services';
 import { useReservationStore } from '@/stores';
 import { useUserStore } from '@/stores';
 
 import { PassReservation, TodayReservation, UpcomingReservation } from '.';
+import { useExportCSV } from '@/hooks';
 
 export const ReservationsPanel = () => {
   const todayReservations = useReservationStore((state) => state.todayReservations);
   const upcomingReservations = useReservationStore((state) => state.upcomingReservations);
   const passReservations = useReservationStore((state) => state.passReservations);
+  const { exportCSV } = useExportCSV();
 
   const [renderId, setRenderId] = useState(0);
   const [currentTab, setCurrentTab] = useState('today');
@@ -76,6 +78,16 @@ export const ReservationsPanel = () => {
     [selectedStatus]
   );
 
+  const _onExportCSV = () => {
+    const dataList = currentTab === 'today' 
+      ? todayReservations 
+      : currentTab === 'upcoming'
+      ? upcomingReservations
+      : passReservations;
+    
+    exportCSV(dataList, currentTab);
+  }
+
   return (
     <div className="flex flex-col gap-5 w-full">
       <div className="flex items-center justify-between">
@@ -117,6 +129,7 @@ export const ReservationsPanel = () => {
             <Tab key={item.value} title={<div className="flex items-center gap-1">{item.label}</div>} />
           ))}
         </Tabs>
+        <Button size='sm' className='mb-2' onPress={_onExportCSV}>Export CSV</Button>
       </div>
       {currentTab === 'today' ? (
         <div className="flex flex-col gap-6">
@@ -161,3 +174,5 @@ const STATUS_OPTS = [
     value: 'cancelled',
   },
 ];
+
+

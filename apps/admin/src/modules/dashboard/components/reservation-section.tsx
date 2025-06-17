@@ -25,10 +25,12 @@ import { TbReservedLine } from 'react-icons/tb';
 import { DrawerReservation } from '@/modules/reservations';
 import { ReservationInfo } from '@/services';
 import { useReservationStore, useUserStore } from '@/stores';
+import { useExportCSV } from '@/hooks';
 
 export const ReservationSection = () => {
   const authInfo = useUserStore((state) => state.authInfo);
   const todayReservations = useReservationStore((state) => state.todayReservations);
+  const { exportCSV } = useExportCSV();
 
   const [fetching, setFetching] = useState(false);
   const [displayMode, setDisplayMode] = useState('item');
@@ -108,7 +110,10 @@ export const ReservationSection = () => {
           </Card>
         </div>
 
-        <Table isVirtualized rowHeight={52} maxTableHeight={340} aria-label="Today reservation table">
+        <Table
+          topContent={<Button size='sm' className='mb-2' onPress={() => exportCSV(sortedTodayReservations)}>Export CSV</Button>}
+          topContentPlacement="inside"
+        isVirtualized rowHeight={52} maxTableHeight={340} aria-label="Today reservation table">
           <TableHeader columns={columns}>
             {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
           </TableHeader>

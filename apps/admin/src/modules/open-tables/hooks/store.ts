@@ -21,7 +21,7 @@ type EventStore = {
   closePopover: () => void;
   openEventSummary: (event: AvailableSeats) => void;
   closeEventSummary: () => void;
-  setSelectedTableEvents: (tableNumber: number) => void;
+  setSelectedTableEvents: (tableNumber: number, date: Dayjs) => void;
   clearSelectedTableEvents: () => void;
 };
 
@@ -58,7 +58,10 @@ export const useEventStore = create<EventStore>((set, get) => ({
   closePopover: () => set({ isPopoverOpen: false }),
   openEventSummary: (event) => {
     const { events } = get();
-    const tableEvents = events.filter((e) => e.tables.table_number === event.tables.table_number);
+    const tableEvents = events.filter((e) => 
+      e.tables.table_number === event.tables.table_number && 
+      e.date === event.date
+    );
     set({
       isEventSummaryOpen: true,
       selectedEvent: event,
@@ -71,9 +74,12 @@ export const useEventStore = create<EventStore>((set, get) => ({
       selectedEvent: null,
       selectedTableEvents: [],
     }),
-  setSelectedTableEvents: (tableNumber) => {
+  setSelectedTableEvents: (tableNumber, date) => {
     const { events } = get();
-    const tableEvents = events.filter((e) => e.tables.table_number === tableNumber);
+    const tableEvents = events.filter((e) => 
+      e.tables.table_number === tableNumber &&
+      e.date === date.format('YYYY-MM-DD')
+    );
     set({ selectedTableEvents: tableEvents });
   },
   clearSelectedTableEvents: () => set({ selectedTableEvents: [] }),
