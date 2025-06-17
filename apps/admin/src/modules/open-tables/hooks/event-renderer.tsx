@@ -54,8 +54,16 @@ export function EventRenderer({ date, view, events, className }: EventRendererPr
               key={tableNumber}
               onClick={(e) => {
                 e.stopPropagation();
-                // Open the event summary using the first event for this table
-                openEventSummary(firstEvent);
+                // Get all events for this table on this date
+                const eventsForTableAndDate = filteredEvents.filter(
+                  e => e.tables.table_number === firstEvent.tables.table_number
+                );
+                if (eventsForTableAndDate.length > 0) {
+                  openEventSummary(eventsForTableAndDate[0]);
+                  if (firstEvent.tables.table_number !== undefined) {
+                    setSelectedTableEvents(firstEvent.tables.table_number, date);
+                  }
+                }
               }}
               className={clsx(
                 'px-2 py-1 cursor-pointer rounded-md bg-green-600 text-[10px] text-white mb-1',
@@ -89,7 +97,16 @@ export function EventRenderer({ date, view, events, className }: EventRendererPr
             key={tableNumber}
             onClick={(e) => {
               e.stopPropagation();
-              openEventSummary(firstEvent);
+              // Get all events for this table on this date
+              const eventsForTableAndDate = filteredEvents.filter(
+                e => e.tables.table_number === firstEvent.tables.table_number
+              );
+              if (eventsForTableAndDate.length > 0) {
+                openEventSummary(eventsForTableAndDate[0]);
+                if (firstEvent.tables.table_number !== undefined) {
+                  setSelectedTableEvents(firstEvent.tables.table_number, date);
+                }
+              }
             }}
             className={clsx(
               'px-1.5 py-0.5 cursor-pointer rounded bg-green-600 text-[12px] text-white',

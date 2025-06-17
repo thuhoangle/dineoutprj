@@ -22,6 +22,16 @@ export const ReservationCard = ({ data }: { data: ReservationInfo }) => {
       Component: ModalReservation,
       props: {
         data,
+        onCancel: () => {
+          ModalPortalController.showModal({
+            id: 'modal-delete-reservation',
+            Component: ModalDeleteReservation,
+            props: {
+              isVisible: true,
+              handleDelete: handleCancel,
+            },
+          });
+        },
       },
     });
   };
@@ -76,7 +86,7 @@ export const ReservationCard = ({ data }: { data: ReservationInfo }) => {
             </Button>
           )}
         </div>
-        <Tooltip content="Cancel">
+        {/* <Tooltip content="Cancel">
           <MdOutlineCancel
             className={clsx(
               'absolute outline-none -right-2 -top-2 h-6 w-6 text-red-700 hover:text-red-500',
@@ -93,7 +103,7 @@ export const ReservationCard = ({ data }: { data: ReservationInfo }) => {
               });
             }}
           />
-        </Tooltip>
+        </Tooltip> */}
       </div>
       <DrawerFeedback onClose={onClose} data={data} isOpen={isOpen} onOpenChange={onOpenChange} />
     </>

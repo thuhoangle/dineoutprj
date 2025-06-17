@@ -18,12 +18,14 @@ import { ReservationInfo } from '@/services';
 
 import { ModalBtRow, ModalHeader, SimpleModal } from '../simple-modal';
 import type { ModalBaseProps } from '../types';
+import { Button } from '@heroui/react';
 
 interface ModalReservationProps extends ModalBaseProps {
   data: ReservationInfo;
+  onCancel: () => void;
 }
 
-export const ModalReservation: FC<ModalReservationProps> = ({ isVisible, closeFromController, data }) => {
+export const ModalReservation: FC<ModalReservationProps> = ({ isVisible, closeFromController, data, onCancel }) => {
   const {
     setIsEditing,
     setTableCapacity,
@@ -62,7 +64,10 @@ export const ModalReservation: FC<ModalReservationProps> = ({ isVisible, closeFr
             />
           </div> */}
           <div className="flex flex-col gap-2">
+            <div className="flex items-end gap-3">
             <TextField weight="b" className="text-neutral-400" preset="p1" text={data.restaurants?.name} />
+            <Button size='sm' color='danger' onPress={onCancel}>Cancel</Button>
+            </div>
             {data.restaurants?.address && (
               <div className="flex items-center gap-1">
                 <MdLocationOn className="text-neutral-400" />

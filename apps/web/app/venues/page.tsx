@@ -32,8 +32,8 @@ const SECTION_LIST = [
     icon: IoFlashOutline,
   },
   {
-    title: 'Top Rated',
-    value: 'top-rated',
+    title: 'Rising',
+    value: 'rising',
     icon: FiStar,
   },
   {

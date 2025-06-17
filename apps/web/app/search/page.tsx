@@ -42,7 +42,7 @@ function SearchContent() {
       <div className="flex flex-col gap-4 p-4">
         <div className="flex flex-col"></div>
         <div className="flex flex-col items-start justify-center gap-4">
-          <NextLink href="/venues" className="flex items-center gap-1 hover:underline">
+          <NextLink href="/" className="flex items-center gap-1 hover:underline">
             <SlArrowLeft className="w-3 h-3" />
             All Results
           </NextLink>
