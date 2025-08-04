@@ -1,84 +1,245 @@
-# Turborepo starter
+# DineOut - Project Setup and Run Guide
 
-This is an official starter Turborepo.
+DineOut is a restaurant discovery and reservation platform built as a monorepo with two main applications: a customer-facing web app and an admin dashboard.
 
-## Using this example
+## 🏗️ Project Architecture
 
-Run the following command:
+### Applications
+- **`apps/web`** - Customer-facing Next.js application for restaurant discovery and reservations
+- **`apps/admin`** - Admin dashboard Next.js application for restaurant management
 
-```sh
-npx create-turbo@latest
+### Shared Packages
+- **`packages/ui`** - Shared React component library (`dineout-ui`)
+- **`packages/eslint-config`** - Shared ESLint configuration
+- **`packages/tailwind-config`** - Shared Tailwind CSS configuration  
+- **`packages/typescript-config`** - Shared TypeScript configuration
+
+### Tech Stack
+- **Framework**: Next.js 14.1.0
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS + HeroUI components
+- **Backend**: Supabase (Auth, Database, Storage)
+- **State Management**: Zustand
+- **Build Tool**: Turborepo
+- **Package Manager**: npm
+- **Deployment**: Netlify
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- **Node.js**: >= 18.0.0
+- **npm**: >= 10.9.0 (specified in packageManager)
+
+### 1. Clone and Install
+
+```bash
+# Clone the repository
+git clone <[repository-url](https://github.com/thuhoangle/dineoutprj)>
+cd monodineout
+
+# Install all dependencies
+npm install
 ```
 
-## What's inside?
+### 2. Environment Setup
 
-This Turborepo includes the following packages/apps:
+#### env.local
 
-### Apps and Packages
+```env
+# Supabase Configuration
+NEXT_PUBLIC_SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY
+NEXT_SUPABASE_SERVICE_ROLE_KEY
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm build
+# API Keys
+NEXT_PUBLIC_GEOCODE_API_KEY
+NEXT_PUBLIC_MAPBOX_API_KEY
 ```
 
-### Develop
+### 3. Build Shared Packages
 
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm dev
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
+```bash
+# Build the shared UI package
+cd packages/ui
+npm run build
+cd ../..
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+### 4. Start Development
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+```bash
+# Start all applications in development mode
+npm run dev
+```
+
+This will start:
+- **Web app**: http://localhost:3000
+- **Admin app**: http://localhost:3001
+
+## 📋 Available Scripts
+
+### Root Level Commands
+
+```bash
+# Development
+npm run dev                 # Start all apps in development mode
+
+# Building
+npm run build              # Build all apps and packages
+npm run build:web          # Build only web app
+npm run build:admin        # Build only admin app
+
+# Code Quality
+npm run lint               # Lint all projects
+npm run format             # Format code with Prettier
+```
+
+### Individual App Commands
+
+#### Web App (apps/web)
+```bash
+cd apps/web
+
+npm run dev                # Start in development mode
+npm run build              # Build for production
+npm run start              # Start production server
+npm run lint               # Lint the web app
+npm run check-types        # TypeScript type checking
+```
+
+#### Admin App (apps/admin)
+```bash
+cd apps/admin
+
+npm run dev                # Start in development mode (port 3001)
+npm run build              # Build for production  
+npm run start              # Start production server
+npm run lint               # Lint the admin app
+```
+
+#### UI Package (packages/ui)
+```bash
+cd packages/ui
+
+npm run build              # Build the component library
+npm run dev                # Build in watch mode
+npm run lint               # Lint the UI package
+```
+
+## 🔧 Configuration Details
+
+### Port Configuration
+
+- **Web App**: http://localhost:3000 (default Next.js port)
+- **Admin App**: http://localhost:3001 (configured in package.json)
+
+## 🚢 Deployment
+
+### Netlify Deployment
+
+Both applications are configured for Netlify deployment with separate `netlify.toml` files.
+
+#### Web App Deployment
+- **Base Directory**: `apps/web`
+- **Build Command**: `npm run build` 
+- **Publish Directory**: `.next`
+
+#### Admin App Deployment  
+- **Base Directory**: `apps/admin`
+- **Build Command**: Builds UI package first, then admin app
+- **Publish Directory**: `.next`
+- **Special Configuration**: 
+  - Uses legacy peer deps: `NPM_FLAGS = "--legacy-peer-deps"`
+  - Node.js 18: `NODE_VERSION = "18"`
+
+### Environment Variables for Production
+
+Set the same environment variables in your Netlify dashboard:
+- Go to Site Settings > Environment Variables
+- Add all the variables from your `.env.local` files
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+1. **Port Already in Use**
+   ```bash
+   # Kill processes on specific ports
+   npx kill-port 3000
+   npx kill-port 3001
+   ```
+
+2. **Build Errors with UI Package**
+   ```bash
+   # Rebuild the UI package
+   cd packages/ui
+   npm run build
+   cd ../..
+   npm run dev
+   ```
+
+3. **Dependency Issues**
+   ```bash
+   # Clean install
+   rm -rf node_modules package-lock.json
+   npm install
+   ```
+
+4. **TypeScript Errors**
+   ```bash
+   # Check types across all packages
+   npm run check-types
+   ```
+
+### Environment Variable Issues
+
+- Ensure all required environment variables are set
+- Variables prefixed with `NEXT_PUBLIC_` are exposed to the browser
+- Service role keys should NOT be prefixed with `NEXT_PUBLIC_`
+
+## 📁 Project Structure
 
 ```
-npx turbo link
+monodineout/
+├── apps/
+│   ├── admin/           # Admin dashboard app
+│   │   ├── src/
+│   │   ├── package.json
+│   │   └── netlify.toml
+│   └── web/             # Customer-facing web app  
+│       ├── app/
+│       ├── components/
+│       ├── package.json
+│       └── netlify.toml
+├── packages/
+│   ├── ui/              # Shared component library
+│   ├── eslint-config/   # Shared ESLint config
+│   ├── tailwind-config/ # Shared Tailwind config
+│   └── typescript-config/ # Shared TypeScript config
+├── package.json         # Root package.json with workspaces
+├── turbo.json          # Turborepo configuration
+└── README.md
 ```
 
-## Useful Links
+## 🤝 Development Workflow
 
-Learn more about the power of Turborepo:
+1. **Start Development**: `npm run dev`
+2. **Make Changes**: Edit files in the respective app/package
+3. **Hot Reload**: Changes automatically reload in development
+4. **Build Shared Packages**: If you modify `packages/ui`, run `npm run build` in that directory
+5. **Test**: Ensure both apps work correctly
+6. **Commit**: Follow conventional commit messages
+7. **Deploy**: Push to trigger Netlify deployment
 
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+## 🆘 Getting Help
+
+If you encounter issues:
+
+1. Check this documentation first
+2. Look at the console logs for specific error messages
+3. Verify all environment variables are correctly set
+4. Ensure all dependencies are installed: `npm install`
+5. Try clearing caches and rebuilding: `npm run build`
+
+---
